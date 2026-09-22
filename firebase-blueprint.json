@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "Message": {
+      "title": "Message",
+      "description": "A single chat message in a conversation session",
+      "type": "object",
+      "properties": {
+        "conversationId": {
+          "type": "string",
+          "description": "The unique identifier of the conversation session"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "assistant", "system"],
+          "description": "Role of the message sender"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 10000,
+          "description": "The message body"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO timestamp of when the message was saved"
+        }
+      },
+      "required": ["conversationId", "role", "content", "timestamp"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User memory and persona profile",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique identifier of the user"
+        },
+        "persona": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Detected user persona (e.g., Farmer, Fisherman, Outdoor Athlete)"
+        },
+        "preferences": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "User weather preferences and activity notes"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["userId"]
+    },
+    "ConnectionTest": {
+      "title": "ConnectionTest",
+      "description": "Verification probe document for Firestore connectivity",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Ping status"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages belonging to a conversation session"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Persistent memory and preferences profile for an individual user"
+    },
+    "/test/{testId}": {
+      "schema": "ConnectionTest",
+      "description": "Used by initial boot connection check"
+    }
+  }
+}

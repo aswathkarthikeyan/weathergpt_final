@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global catch-all default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidMessage(data) {
+      return data.keys().hasAll(['conversationId', 'role', 'content', 'timestamp']) &&
+             data.conversationId is string && data.conversationId.size() <= 128 &&
+             data.role is string && (data.role == 'user' || data.role == 'assistant' || data.role == 'system') &&
+             data.content is string && data.content.size() <= 10000 &&
+             data.timestamp is string && data.timestamp.size() <= 64;
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['userId']) &&
+             data.userId is string && data.userId.size() <= 128 &&
+             (!('persona' in data) || (data.persona is string && data.persona.size() <= 200)) &&
+             (!('preferences' in data) || (data.preferences is string && data.preferences.size() <= 1000)) &&
+             (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 64));
+    }
+
+    // Connection validation endpoint
+    match /test/{testId} {
+      allow read, write: if isValidId(testId);
+    }
+
+    // Conversation message storage
+    match /conversations/{conversationId}/messages/{messageId} {
+      allow read: if isValidId(conversationId);
+      allow create: if isValidId(conversationId) && isValidId(messageId) && isValidMessage(request.resource.data);
+      allow update: if isValidId(conversationId) && isValidId(messageId) && isValidMessage(request.resource.data);
+      allow delete: if isValidId(conversationId);
+    }
+
+    // User profile memory
+    match /users/{userId} {
+      allow read: if isValidId(userId);
+      allow create, update: if isValidId(userId) && isValidUserProfile(request.resource.data);
+      allow delete: if isValidId(userId);
+    }
+  }
+}

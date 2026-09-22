@@ -1,0 +1,8 @@
+{
+  "name": "WeatherGPT",
+  "description": "Weather chat service and agent powered by Google Gemini, real-time meteorology APIs, and SACHET disaster monitoring",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
