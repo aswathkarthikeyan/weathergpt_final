@@ -1,5 +1,4 @@
-export function getPortalHtml(): string {
-  return `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
   <meta charset="UTF-8">
@@ -689,7 +688,7 @@ Please submit an inquiry above specifying your location and operational sector (
     function getActiveApiBase() {
       const custom = localStorage.getItem("weathergpt_custom_backend");
       if (custom && custom.trim().length > 0) {
-        return custom.trim().replace(/\/+$/, "");
+        return custom.trim().replace(//+$/, "");
       }
       const host = window.location.hostname;
       // If served directly from the local container, port 3000, or a Cloud Run URL
@@ -719,7 +718,7 @@ Please submit an inquiry above specifying your location and operational sector (
     }
 
     function saveApiEndpoint() {
-      const val = document.getElementById("api-url-input").value.trim().replace(/\/+$/, "");
+      const val = document.getElementById("api-url-input").value.trim().replace(//+$/, "");
       if (val) {
         localStorage.setItem("weathergpt_custom_backend", val);
         API_BASE = val;
@@ -738,7 +737,7 @@ Please submit an inquiry above specifying your location and operational sector (
     async function testApiConnection() {
       const testBtn = document.getElementById("test-conn-btn");
       const resultEl = document.getElementById("api-test-result");
-      const targetUrl = (document.getElementById("api-url-input").value.trim() || DEFAULT_PROD_BACKEND).replace(/\/+$/, "");
+      const targetUrl = (document.getElementById("api-url-input").value.trim() || DEFAULT_PROD_BACKEND).replace(//+$/, "");
 
       testBtn.disabled = true;
       resultEl.innerHTML = "<span class='text-slate-500'>Pinging " + targetUrl + "/health...</span>";
@@ -749,12 +748,12 @@ Please submit an inquiry above specifying your location and operational sector (
         const latency = Date.now() - startTime;
         if (res.ok) {
           const data = await res.json();
-          resultEl.innerHTML = "<span class='text-emerald-700 font-bold'>✓ Connection Verified (" + latency + "ms)</span>\\nService: WeatherGPT | DB: " + data.database + " | Model: " + data.model;
+          resultEl.innerHTML = "<span class='text-emerald-700 font-bold'>✓ Connection Verified (" + latency + "ms)</span>\nService: WeatherGPT | DB: " + data.database + " | Model: " + data.model;
         } else {
-          resultEl.innerHTML = "<span class='text-red-700 font-bold'>✗ HTTP Error " + res.status + "</span>\\nService responded with an error.";
+          resultEl.innerHTML = "<span class='text-red-700 font-bold'>✗ HTTP Error " + res.status + "</span>\nService responded with an error.";
         }
       } catch (err) {
-        resultEl.innerHTML = "<span class='text-red-700 font-bold'>✗ Network Connection Error</span>\\n" + err.message + "\\nVerify backend container is running and allows CORS.";
+        resultEl.innerHTML = "<span class='text-red-700 font-bold'>✗ Network Connection Error</span>\n" + err.message + "\nVerify backend container is running and allows CORS.";
       } finally {
         testBtn.disabled = false;
       }
@@ -953,39 +952,39 @@ Please submit an inquiry above specifying your location and operational sector (
             if (a.severity === "Extreme" || a.severity === "Severe") {
               sevClass = "bg-red-100 text-red-900 border-red-300";
             }
-            return \`
-              <div class="border \${sevClass} p-2.5 rounded-none bg-white">
+            return `
+              <div class="border ${sevClass} p-2.5 rounded-none bg-white">
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="font-bold text-xs text-slate-900">\${a.title}</span>
-                  <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase \${sevClass}">\${a.severity}</span>
+                  <span class="font-bold text-xs text-slate-900">${a.title}</span>
+                  <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase ${sevClass}">${a.severity}</span>
                 </div>
-                <p class="text-[11px] text-slate-700 leading-snug line-clamp-2">\${a.description}</p>
+                <p class="text-[11px] text-slate-700 leading-snug line-clamp-2">${a.description}</p>
                 <div class="text-[10px] text-slate-400 mt-1 flex justify-between">
-                  <span>Source: \${a.source}</span>
-                  <span>ID: \${a.id.substring(0, 8)}...</span>
+                  <span>Source: ${a.source}</span>
+                  <span>ID: ${a.id.substring(0, 8)}...</span>
                 </div>
               </div>
-            \`;
+            `;
           }).join("");
         } else {
           badgeEl.textContent = "0 ADVISORIES";
           badgeEl.className = "text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800";
           tickerEl.textContent = "NATIONAL SYNOPTIC RADAR: No severe disaster bulletins recorded within " + rad + " km of coordinates (" + lat + ", " + lon + "). Standard atmospheric monitoring active.";
-          listEl.innerHTML = \`
+          listEl.innerHTML = `
             <div class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-center">
               <div class="font-bold">✓ Clear Weather Conditions</div>
-              <div class="text-[11px] mt-0.5">No active NDMA/SACHET severe disaster bulletins recorded for radius \${rad} km.</div>
+              <div class="text-[11px] mt-0.5">No active NDMA/SACHET severe disaster bulletins recorded for radius ${rad} km.</div>
             </div>
-          \`;
+          `;
         }
       } catch (err) {
         badgeEl.textContent = "FEED OFFLINE";
         badgeEl.className = "text-[10px] font-bold px-2 py-0.5 bg-slate-200 text-slate-700";
-        listEl.innerHTML = \`
+        listEl.innerHTML = `
           <div class="p-2.5 bg-slate-100 border border-slate-300 text-slate-600 text-center">
             Unable to connect to SACHET feed at this time.
           </div>
-        \`;
+        `;
       }
     }
 
@@ -994,12 +993,12 @@ Please submit an inquiry above specifying your location and operational sector (
       const city = document.getElementById("station-city").value.trim() || "Bangalore";
       const box = document.getElementById("telemetry-box");
 
-      box.innerHTML = \`
+      box.innerHTML = `
         <div class="text-center py-3 text-slate-600">
           <div class="inline-block w-5 h-5 border-2 border-govblue-900 border-t-transparent rounded-full animate-spin mb-1"></div>
-          <div>Resolving grid sensors for \${city}...</div>
+          <div>Resolving grid sensors for ${city}...</div>
         </div>
-      \`;
+      `;
 
       try {
         let latitude = null;
@@ -1029,7 +1028,7 @@ Please submit an inquiry above specifying your location and operational sector (
         }
 
         if (latitude === null || longitude === null) {
-          box.innerHTML = \`<div class="text-red-700 text-center p-2">Could not locate coordinates for \${city}.</div>\`;
+          box.innerHTML = `<div class="text-red-700 text-center p-2">Could not locate coordinates for ${city}.</div>`;
           return;
         }
 
@@ -1066,50 +1065,50 @@ Please submit an inquiry above specifying your location and operational sector (
         const curSoil6 = hourly.soil_temperature_6cm ? hourly.soil_temperature_6cm[0] : "N/A";
         const maxUV = daily.uv_index_max ? daily.uv_index_max[0] : "N/A";
 
-        box.innerHTML = \`
+        box.innerHTML = `
           <div class="space-y-3">
             <div class="flex items-center justify-between border-b border-slate-300 pb-1.5 font-mono text-[11px]">
-              <span class="font-bold text-govblue-900">\${city.toUpperCase()} (\${latitude.toFixed(2)}°, \${longitude.toFixed(2)}°)</span>
-              <span class="text-slate-500">Elevation: \${weather.elevation || 0}m</span>
+              <span class="font-bold text-govblue-900">${city.toUpperCase()} (${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°)</span>
+              <span class="text-slate-500">Elevation: ${weather.elevation || 0}m</span>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-[11px]">
               <div class="p-1.5 bg-white border border-slate-200">
                 <span class="text-slate-500 block text-[10px] uppercase">Temperature</span>
-                <span class="font-bold text-slate-900 text-sm">\${curTemp}°C</span>
-                <span class="text-slate-500 text-[10px]"> (Feels \${curAppTemp}°C)</span>
+                <span class="font-bold text-slate-900 text-sm">${curTemp}°C</span>
+                <span class="text-slate-500 text-[10px]"> (Feels ${curAppTemp}°C)</span>
               </div>
 
               <div class="p-1.5 bg-white border border-slate-200">
                 <span class="text-slate-500 block text-[10px] uppercase">Precipitation Rate</span>
-                <span class="font-bold text-slate-900 text-sm">\${curPrecip} mm/hr</span>
-                <span class="text-slate-500 text-[10px] block">Relative Hum: \${curHumidity}%</span>
+                <span class="font-bold text-slate-900 text-sm">${curPrecip} mm/hr</span>
+                <span class="text-slate-500 text-[10px] block">Relative Hum: ${curHumidity}%</span>
               </div>
 
               <div class="p-1.5 bg-white border border-slate-200">
                 <span class="text-slate-500 block text-[10px] uppercase">Wind Velocity</span>
-                <span class="font-bold text-slate-900">\${curWind} km/h (10m)</span>
-                <span class="text-slate-500 text-[10px] block">\${curWind80} km/h (80m)</span>
+                <span class="font-bold text-slate-900">${curWind} km/h (10m)</span>
+                <span class="text-slate-500 text-[10px] block">${curWind80} km/h (80m)</span>
               </div>
 
               <div class="p-1.5 bg-white border border-slate-200">
                 <span class="text-slate-500 block text-[10px] uppercase">Max UV & Pressure</span>
-                <span class="font-bold text-slate-900">UV Index: \${maxUV}</span>
-                <span class="text-slate-500 text-[10px] block">\${curPress} hPa MSL</span>
+                <span class="font-bold text-slate-900">UV Index: ${maxUV}</span>
+                <span class="text-slate-500 text-[10px] block">${curPress} hPa MSL</span>
               </div>
             </div>
 
             <div class="p-2 bg-white border border-slate-200 text-[11px]">
               <div class="text-slate-500 uppercase text-[10px] font-bold mb-1">Agricultural Soil Temperature Profile:</div>
               <div class="grid grid-cols-2 gap-2 font-mono">
-                <div>Surface (0 cm): <strong>\${curSoil0}°C</strong></div>
-                <div>Root Zone (6 cm): <strong>\${curSoil6}°C</strong></div>
+                <div>Surface (0 cm): <strong>${curSoil0}°C</strong></div>
+                <div>Root Zone (6 cm): <strong>${curSoil6}°C</strong></div>
               </div>
             </div>
           </div>
-        \`;
+        `;
       } catch (err) {
-        box.innerHTML = \`<div class="text-red-700 text-center p-2">Error retrieving telemetry: \${err.message}</div>\`;
+        box.innerHTML = `<div class="text-red-700 text-center p-2">Error retrieving telemetry: ${err.message}</div>`;
       }
     }
 
@@ -1146,5 +1145,4 @@ Please submit an inquiry above specifying your location and operational sector (
     inspectStation();
   </script>
 </body>
-</html>`;
-}
+</html>
