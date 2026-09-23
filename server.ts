@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { executeWeatherAgent, getGeolocation, getWeather } from "./src/weather_agent.js";
 import { getDisasterAlerts } from "./src/disaster/disaster_service.js";
+import { queryHazardAtlas } from "./src/hazard_atlas.js";
+import { translateAlertToRoles } from "./src/disaster/role_alert_translator.js";
 import { startDisasterScheduler } from "./src/disaster/disaster_monitor.js";
 import {
   initDb,
@@ -137,6 +139,54 @@ app.get("/api/tools/disaster", async (req: Request, res: Response) => {
   const radius = parseInt(String(req.query.radius || "50"), 10);
   const result = await getDisasterAlerts(lat, lon, radius);
   res.json(result);
+});
+
+// Climate Hazard & Vulnerability Atlas endpoint (Feature 4.7)
+app.get("/api/tools/hazard_atlas", (req: Request, res: Response) => {
+  const city = String(req.query.city || "Bengaluru");
+  const data = queryHazardAtlas(city);
+  res.json({ city, hazard_profile: data });
+});
+
+// Role-Based Alert Translation endpoint (Feature 4.4 & Section 8.4 Showpiece)
+app.post("/api/tools/role_translate", (req: Request, res: Response) => {
+  const { event, severity, area, extra_details } = req.body;
+  const result = translateAlertToRoles(
+    event || "Severe Cyclonic Storm & Heavy Rainfall",
+    (severity as any) || "Red",
+    area || "Coastal Odisha & Andhra Pradesh",
+    extra_details
+  );
+  res.json(result);
+});
+
+// Rural Accessibility Telephony Gateway Simulator (Feature 4.8 - IVR / SMS / USSD / Krishi Sakhi)
+app.post("/api/tools/telephony_simulate", (req: Request, res: Response) => {
+  const { channel, phone_number, query, language } = req.body;
+  const lang = language || "hi";
+  const userQuery = String(query || "क्या कल बारिश होगी?");
+
+  let responseText = "";
+  let voiceSynthesisRate = 0.95;
+
+  if (lang === "hi") {
+    responseText = "मौसम जीपीटी ग्रामीण सेवा: बेंगलुरु में आज तापमान 27 डिग्री सेल्सियस है। अगले 48 घंटों में भारी बारिश की संभावना नहीं है। कीटनाशक छिड़काव के लिए स्थिति अनुकूल है।";
+  } else if (lang === "ta") {
+    responseText = "வெதர் ஜிபிடி கிராமிய சேவை: கோயம்புத்தூரில் தற்போதைய வெப்பநிலை 28 டிகிரி. அடுத்த 2 நாட்களுக்கு கனமழை எச்சரிக்கை இல்லை. பயிர்களுக்கு மருந்து தெளிக்க சாதகமான வானிலை.";
+  } else {
+    responseText = "WeatherGPT Rural IVR Service: Current temperature in Bengaluru is 27°C. No heavy rain expected in the next 48 hours. Field conditions are safe for agrochemical spraying.";
+  }
+
+  res.json({
+    channel: channel || "IVR",
+    phone_number: phone_number || "+91 98765 43210",
+    caller_language: lang,
+    transcribed_query: userQuery,
+    spoken_response: responseText,
+    sms_payload: channel === "SMS" || channel === "USSD" ? `[WeatherGPT] BLR: 27C, Dry. Rain <10%. Safe to spray. Dial 1800-MAUSAM-AI for voice.` : undefined,
+    ivr_tts_voice: lang === "hi" ? "hi-IN-Neural2-A" : lang === "ta" ? "ta-IN-Neural2-A" : "en-IN-Neural2-B",
+    status: "PROCESSED_SUCCESSFULLY"
+  });
 });
 
 // 4. Reference standards endpoint
