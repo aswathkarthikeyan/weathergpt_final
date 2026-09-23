@@ -31,13 +31,18 @@ console.log(" Generated index.html in dist/, public/, and root /");
 const redirectsContent = `/* /index.html 200\n`;
 fs.writeFileSync(path.join(distDir, "_redirects"), redirectsContent, "utf-8");
 fs.writeFileSync(path.join(publicDir, "_redirects"), redirectsContent, "utf-8");
+fs.writeFileSync(path.join(rootDir, "_redirects"), redirectsContent, "utf-8");
 
 const headersContent = `/*
   Access-Control-Allow-Origin: *
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
 \n`;
 fs.writeFileSync(path.join(distDir, "_headers"), headersContent, "utf-8");
 fs.writeFileSync(path.join(publicDir, "_headers"), headersContent, "utf-8");
+fs.writeFileSync(path.join(rootDir, "_headers"), headersContent, "utf-8");
 
 console.log(" Generated Cloudflare Pages _redirects and _headers");
