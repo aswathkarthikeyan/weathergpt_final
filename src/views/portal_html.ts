@@ -50,7 +50,7 @@ export function getPortalHtml(): string {
   <style>
     body {
       font-family: "Noto Sans", "Noto Sans Devanagari", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #F5F6F3;
+      background-color: #FFFFFF;
       color: #1B2A44;
       line-height: 1.55;
     }
@@ -60,12 +60,49 @@ export function getPortalHtml(): string {
     .ease-dispatch {
       transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
+    #floating-dots-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Aesthetic semi-transparent glass cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.82) !important;
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border: 1px solid rgba(225, 228, 221, 0.75) !important;
+      box-shadow: 0 4px 20px -2px rgba(27, 42, 68, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    }
+    .glass-card:hover {
+      box-shadow: 0 8px 26px -3px rgba(27, 42, 68, 0.08), 0 3px 8px -1px rgba(0, 0, 0, 0.03) !important;
+    }
+    .glass-card-subtle {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(225, 228, 221, 0.65) !important;
+    }
+    .glass-inner-subtle {
+      background: rgba(245, 246, 243, 0.65) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(225, 228, 221, 0.6) !important;
+    }
+    .glass-chat-thread {
+      background: rgba(255, 255, 255, 0.75) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #E1E4DD;
+      background: rgba(225, 228, 221, 0.4);
     }
     ::-webkit-scrollbar-thumb {
       background: #C2C7BD;
@@ -75,7 +112,7 @@ export function getPortalHtml(): string {
       background: #9FA59A;
     }
     @media print {
-      header, .no-print, #chat-composer, #api-modal, #rural-modal, #hazard-modal {
+      header, .no-print, #chat-composer, #api-modal, #rural-modal, #hazard-modal, #floating-dots-canvas {
         display: none !important;
       }
       body, main {
@@ -90,196 +127,203 @@ export function getPortalHtml(): string {
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col bg-[#F5F6F3] text-[#1B2A44] antialiased">
+<body class="min-h-full flex flex-col bg-white text-[#1B2A44] antialiased relative">
+  <!-- Interactive Floating Atmospheric Dots Background Canvas -->
+  <canvas id="floating-dots-canvas"></canvas>
 
-  <!-- ==================== 1. PERSISTENT TOP ALERT TICKER STRIP ==================== -->
-  <div id="alert-ticker-strip" class="bg-[#B8860B] text-white text-xs px-4 sm:px-8 py-2 flex items-center justify-between gap-3 shadow-sm cursor-pointer transition hover:bg-[#a07509]" onclick="toggleTickerDetail()">
-    <div class="flex items-center gap-2 overflow-hidden">
-      <span class="font-bold tracking-wider uppercase text-[10px] bg-black/20 px-2 py-0.5 rounded-sm shrink-0">
-        ▎ ACTIVE SACHET / CAP BULLETIN
-      </span>
-      <div id="ticker-text" class="truncate font-medium">
-        ⚡ Synoptic Alert: Deep depression over West-Central Bay of Bengal. Squally winds 55-65 km/h along coastal corridors. Click to inspect role-based fan-out directives.
-      </div>
-    </div>
-    <div class="flex items-center gap-2 shrink-0 text-[11px] font-semibold">
-      <span class="underline hidden sm:inline">Role Directives</span>
-      <span id="ticker-chevron" class="text-sm">▼</span>
-    </div>
-  </div>
-
-  <!-- Collapsible Ticker Details Drawer -->
-  <div id="ticker-drawer" class="hidden bg-white border-b border-[#E1E4DD] px-4 sm:px-8 py-3.5 shadow-md ease-dispatch">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[#1B2A44]">
-      <div class="space-y-1">
-        <div class="font-bold text-sm text-[#B3261E] flex items-center gap-2">
-          <span>🚨</span> <span>OASIS CAP v1.2 Warning • Cyclone / Heavy Inundation Vector</span>
+  <!-- ==================== 1. UNIFIED SLEEK AESTHETIC NAVBAR & HEADER ==================== -->
+  <header class="sticky top-0 z-40 w-full glass-card border-b border-[#E1E4DD]/80 shadow-xs backdrop-blur-md">
+    <!-- Active Sachet Alert Banner Bar -->
+    <div id="alert-ticker-strip" class="bg-gradient-to-r from-[#B8860B] via-[#C97A2B] to-[#B8860B] text-white text-[11px] px-4 sm:px-8 py-1.5 flex items-center justify-between gap-3 cursor-pointer transition hover:brightness-105 shadow-2xs" onclick="toggleTickerDetail()">
+      <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2 overflow-hidden">
+          <span class="font-bold tracking-wider uppercase text-[9px] bg-black/25 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
+            ACTIVE SACHET / CAP BULLETIN
+          </span>
+          <div id="ticker-text" class="truncate font-medium text-white/95">
+            ⚡ Synoptic Alert: Deep depression over West-Central Bay of Bengal. Squally winds 55-65 km/h along coastal corridors. Click to inspect role-based fan-out directives.
+          </div>
         </div>
-        <p class="text-[#5B6472]">
-          IMD Bulletin & SACHET NDMA RSS feed: Active cyclonic track with ±12km ensemble variance. Role-based automated translation available for Agriculture, Maritime Coastal, and Municipal Urban Local Bodies.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <button onclick="triggerShowpieceFanout('cyclone')" class="px-3.5 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm text-xs font-semibold shadow-sm flex items-center gap-1.5">
-          <span>⚡</span> View Role Fan-Out Cards
-        </button>
+        <div class="flex items-center gap-2 shrink-0 text-[10px] font-semibold">
+          <span class="underline hidden sm:inline" data-i18n="topBarDirectives">Role Directives</span>
+          <span id="ticker-chevron" class="text-xs">▼</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ==================== 2. NATIONAL ACCREDITATION & TELEMETRY CLOCK BAR ==================== -->
-  <div class="bg-[#1B2A44] text-slate-300 text-[11px] px-4 sm:px-8 py-1.5 border-b border-[#132845] flex flex-wrap items-center justify-between gap-2">
-    <div class="flex items-center gap-3">
-      <span class="flex items-center gap-1.5 font-medium text-slate-200">
-        <span class="text-[#C97A2B]">⚡</span> WeatherGPT • Conversational Meteorological Intelligence Layer
-      </span>
-      <span class="hidden md:inline text-slate-600">|</span>
-      <span class="hidden md:inline text-slate-400">
-        Mission Mausam • BharatFS • IMD Nowcast • NDMA SACHET CAP
-      </span>
-    </div>
-    
-    <!-- Language Switcher & Universal Clocks -->
-    <div class="flex items-center gap-3 font-mono text-[11px]">
-      <!-- Multilingual Switcher (Equal Visual Weight) -->
-      <div class="flex items-center bg-black/30 rounded p-0.5 font-sans text-xs">
-        <button onclick="setAppLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded text-white bg-[#C97A2B] font-semibold transition">
-          EN
-        </button>
-        <button onclick="setAppLanguage('hi')" id="lang-btn-hi" class="px-2 py-0.5 rounded text-slate-300 hover:text-white transition">
-          हिन्दी
-        </button>
-        <button onclick="setAppLanguage('ta')" id="lang-btn-ta" class="px-2 py-0.5 rounded text-slate-300 hover:text-white transition">
-          தமிழ்
-        </button>
+    <!-- Collapsible Ticker Details Drawer -->
+    <div id="ticker-drawer" class="hidden bg-white/95 border-b border-[#E1E4DD] px-4 sm:px-8 py-3 shadow-md ease-dispatch backdrop-blur-md">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-[#1B2A44]">
+        <div class="space-y-1">
+          <div class="font-bold text-xs text-[#B3261E] flex items-center gap-1.5">
+            <span>🚨</span> <span data-i18n="drawerWarning">OASIS CAP v1.2 Warning • Cyclone / Heavy Inundation Vector</span>
+          </div>
+          <p class="text-[#5B6472] text-[11px] leading-relaxed" data-i18n="drawerDesc">
+            IMD Bulletin &amp; SACHET NDMA RSS feed: Active cyclonic track with ±12km ensemble variance. Role-based automated translation available for Agriculture, Maritime Coastal, and Municipal Urban Local Bodies.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="triggerRoleDirectives('cyclone')" class="px-3 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm text-xs font-semibold shadow-xs flex items-center gap-1.5">
+            <span>⚡</span> <span data-i18n="viewRoleDirectives">View Role Directives</span>
+          </button>
+        </div>
       </div>
-
-      <span class="hidden sm:inline text-slate-600">|</span>
-      <span id="utc-clock" class="text-slate-400">UTC: --:--:--</span>
-      <span id="local-clock" class="text-[#C97A2B] font-semibold">IST: --:--:--</span>
     </div>
-  </div>
 
-  <!-- ==================== 3. OFFICIAL WEATHERGPT DISPATCH HEADER ==================== -->
-  <header class="bg-white border-b border-[#E1E4DD] px-4 sm:px-8 py-4 shadow-sm">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-center gap-3.5">
+    <!-- Main Navigation Bar -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <!-- Left: Logo & Identity -->
+      <div class="flex items-center gap-3">
         <!-- WeatherGPT Official Emblem -->
-        <div class="w-12 h-12 rounded bg-[#1B2A44] p-0.5 shadow-md flex items-center justify-center shrink-0 border border-[#C97A2B]">
-          <div class="w-full h-full bg-[#1B2A44] rounded flex flex-col items-center justify-center text-[#C97A2B] font-serif font-black text-xl leading-none">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1B2A44] to-[#132845] p-0.5 shadow-sm flex items-center justify-center shrink-0 border border-[#C97A2B]/60">
+          <div class="w-full h-full rounded-md flex flex-col items-center justify-center text-[#C97A2B] font-serif font-black text-base leading-none">
             <span>W</span>
-            <span class="text-[8px] font-sans font-bold tracking-widest text-slate-200">GPT</span>
+            <span class="text-[7px] font-sans font-bold tracking-widest text-slate-200">GPT</span>
           </div>
         </div>
-        <div>
-          <div class="text-[11px] uppercase tracking-widest text-[#C97A2B] font-bold flex items-center gap-2">
-            <span>Conversational Weather & Disaster Intelligence</span>
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#3F6B4A]"></span>
-            <span>All-India Unified Layer</span>
+        
+        <div class="space-y-0.5">
+          <div class="flex items-center flex-wrap gap-2">
+            <span class="text-[10px] uppercase tracking-wider text-[#C97A2B] font-bold flex items-center gap-1">
+              <span>⚡</span> <span data-i18n="headerKicker">WeatherGPT Intelligence</span>
+            </span>
+            <span class="text-slate-300 text-[10px]">•</span>
+            <span class="text-[10px] text-[#3F6B4A] font-semibold flex items-center gap-1">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#3F6B4A]"></span>
+              <span data-i18n="headerLayer">All-India Unified Layer</span>
+            </span>
           </div>
-          <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#1B2A44] dispatch-title">
-            WEATHERGPT • METEOROLOGICAL REASONING ENGINE
+          <h1 class="text-sm sm:text-base font-bold text-[#1B2A44] tracking-tight font-serif" data-i18n="headerTitle">
+            METEOROLOGICAL REASONING ENGINE
           </h1>
-          <p class="text-xs text-[#5B6472] mt-0.5">
-            Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning, and NDMA CAP feeds into role-specific actions
+          <p class="text-[10.5px] text-[#5B6472] hidden sm:block truncate max-w-xl" data-i18n="headerDesc">
+            Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning &amp; NDMA CAP
           </p>
         </div>
       </div>
 
-      <!-- Quick Action Navigation -->
-      <div class="flex flex-wrap items-center gap-2 text-xs">
-        <button onclick="openRoleFanoutModal()" class="px-3 py-1.5 bg-[#C97A2B] hover:bg-[#b0671f] text-white rounded-sm font-semibold transition flex items-center gap-1.5 shadow-sm">
-          <span>⚡</span> Role Fan-Out Demo
-        </button>
-        <button onclick="openRuralModal()" class="px-3 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm font-medium transition flex items-center gap-1.5">
-          <span>📞</span> Rural Access Tier (IVR/SMS)
-        </button>
-        <button onclick="openHazardModal()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-[#1B2A44] border border-[#E1E4DD] rounded-sm font-medium transition flex items-center gap-1.5">
-          <span>🗺️</span> IMD Hazard Atlas
-        </button>
-        <a href="/health" target="_blank" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#3F6B4A] rounded-sm border border-slate-300 font-mono text-[11px] font-semibold">
-          /health
-        </a>
+      <!-- Right: Subscriptions, Telemetry, Controls -->
+      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2.5 text-xs pt-1 lg:pt-0 border-t lg:border-t-0 border-[#E1E4DD]/60">
+        <!-- Telemetry Clock Pill -->
+        <div class="hidden xl:flex items-center gap-2 bg-[#1B2A44]/5 border border-[#E1E4DD] px-2.5 py-1 rounded-sm text-[10.5px] font-mono">
+          <span id="utc-clock" class="text-[#5B6472]">UTC: --:--:--</span>
+          <span class="text-slate-300">|</span>
+          <span id="local-clock" class="text-[#C97A2B] font-semibold">IST: --:--:--</span>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="flex items-center bg-white/90 border border-[#E1E4DD] rounded-sm p-0.5 shadow-2xs text-[11px] font-sans">
+          <button onclick="setAppLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded-xs text-white bg-[#C97A2B] font-semibold transition">
+            EN
+          </button>
+          <button onclick="setAppLanguage('hi')" id="lang-btn-hi" class="px-2 py-0.5 rounded-xs text-[#5B6472] hover:text-[#1B2A44] transition">
+            हिन्दी
+          </button>
+          <button onclick="setAppLanguage('ta')" id="lang-btn-ta" class="px-2 py-0.5 rounded-xs text-[#5B6472] hover:text-[#1B2A44] transition">
+            தமிழ்
+          </button>
+        </div>
+
+        <!-- Action Nav Buttons -->
+        <div class="flex items-center gap-1.5">
+          <button onclick="openRoleFanoutModal()" class="px-2.5 py-1 bg-[#C97A2B] hover:bg-[#b0671f] text-white rounded-sm font-semibold text-xs transition flex items-center gap-1 shadow-2xs">
+            <span>⚡</span> <span data-i18n="navRoleDirectives">Directives</span>
+          </button>
+          <button onclick="openRuralModal()" class="px-2.5 py-1 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm font-medium text-xs transition flex items-center gap-1 shadow-2xs">
+            <span>📞</span> <span data-i18n="navRural">Rural Tier</span>
+          </button>
+          <button onclick="openHazardModal()" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-[#1B2A44] border border-[#E1E4DD] rounded-sm font-medium text-xs transition flex items-center gap-1 shadow-2xs">
+            <span>🗺️</span> <span data-i18n="navHazard">Atlas</span>
+          </button>
+          <button onclick="openApiModal()" title="Configure Backend API Endpoint (Cloudflare / Cloud Run)" class="px-2 py-1 bg-white hover:bg-slate-50 text-[#1B2A44] border border-[#E1E4DD] rounded-sm font-mono text-[11px] font-medium transition flex items-center gap-1 shadow-2xs">
+            <span>⚙️</span> <span>API</span>
+          </button>
+          <a href="/health" target="_blank" class="px-2 py-1 bg-slate-100/90 hover:bg-slate-200 text-[#3F6B4A] rounded-sm border border-slate-300 font-mono text-[10px] font-semibold">
+            /health
+          </a>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- ==================== 4. SHOWPIECE: ROLE-BASED ALERT FAN-OUT WORKBENCH ==================== -->
-  <section id="fanout-workbench" class="max-w-7xl mx-auto w-full px-4 sm:px-8 pt-5 pb-1">
-    <div class="bg-white border border-[#E1E4DD] rounded-sm p-4 shadow-sm space-y-3">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-[#E1E4DD]">
-        <div class="flex items-center gap-2">
-          <span class="w-6 h-6 bg-[#C97A2B] text-white rounded-sm flex items-center justify-center font-bold text-xs shadow-sm">
-            ⚡
-          </span>
-          <div>
-            <h2 class="font-serif font-bold text-sm text-[#1B2A44] tracking-wide flex items-center gap-2">
-              <span>Showpiece Feature: Role-Based Alert Translation Engine</span>
-              <span class="text-[10px] bg-red-100 text-[#B3261E] px-2 py-0.2 font-bold uppercase rounded-sm border border-red-200">
-                CAP Fan-Out
-              </span>
+  <!-- ==================== 2. MAIN OPERATIONAL WORKSPACE ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-5 space-y-6">
+
+    <!-- ==================== ROLE-BASED ALERT DIRECTIVES ENGINE (SEAMLESS INTEGRATED BAR) ==================== -->
+    <section id="fanout-workbench" class="glass-card rounded-xl p-4 sm:p-5 space-y-4 relative z-10 shadow-xs border border-[#E1E4DD]/80">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#E1E4DD]/60">
+        <div class="space-y-0.5">
+          <div class="flex items-center gap-2">
+            <span class="w-5 h-5 bg-[#C97A2B] text-white rounded flex items-center justify-center font-bold text-[11px] shadow-2xs">
+              ⚡
+            </span>
+            <h2 class="font-serif font-bold text-sm text-[#1B2A44] tracking-wide" data-i18n="workbenchTitle">
+              Role-Based Operational Directives Engine
             </h2>
-            <p class="text-[11px] text-[#5B6472]">
-              Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives
-            </p>
           </div>
+          <p class="text-[11.5px] text-[#5B6472]" data-i18n="workbenchDesc">
+            Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives
+          </p>
         </div>
 
-        <!-- Sample Scenarios Trigger -->
-        <div class="flex items-center gap-1.5 flex-wrap">
-          <span class="text-[11px] font-bold text-[#5B6472]">Demo Alert:</span>
-          <button onclick="triggerShowpieceFanout('cyclone')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-[#B3261E] border border-red-300 rounded-sm text-xs font-semibold transition">
-            Cyclone Red Alert (Coast)
-          </button>
-          <button onclick="triggerShowpieceFanout('flood')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-[#B8860B] border border-amber-300 rounded-sm text-xs font-semibold transition">
-            Urban Cloudburst (Bengaluru)
-          </button>
-          <button onclick="triggerShowpieceFanout('heatwave')" class="px-2.5 py-1 bg-orange-50 hover:bg-orange-100 text-[#C97A2B] border border-orange-300 rounded-sm text-xs font-semibold transition">
-            Severe Heatwave (Delhi NCR)
-          </button>
+        <!-- Solid Color Active Scenario Selector Pills -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-[11px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0" data-i18n="scenarioLabel">Active Scenario:</span>
+          <div class="inline-flex rounded-lg p-1 bg-slate-100/90 border border-[#E1E4DD] gap-1 shadow-2xs">
+            <button id="scenario-btn-cyclone" onclick="triggerRoleDirectives('cyclone')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#B3261E] text-white shadow-xs" data-i18n="scenarioCyclone">
+              <span>🔴</span> Cyclone Red Alert (Coast)
+            </button>
+            <button id="scenario-btn-flood" onclick="triggerRoleDirectives('flood')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 text-[#5B6472] hover:text-[#1B2A44] hover:bg-white/60" data-i18n="scenarioFlood">
+              <span>🌧️</span> Urban Cloudburst (Bengaluru)
+            </button>
+            <button id="scenario-btn-heatwave" onclick="triggerRoleDirectives('heatwave')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 text-[#5B6472] hover:text-[#1B2A44] hover:bg-white/60" data-i18n="scenarioHeatwave">
+              <span>☀️</span> Severe Heatwave &amp; Evaporation (Delhi)
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- The 3 Side-By-Side Parallel Role Cards (Section 13.1 Token System) -->
-      <div id="fanout-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+      <!-- The 3 Side-By-Side Parallel Role Cards -->
+      <div id="fanout-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- 1. Farmer Card -->
-        <div class="bg-white border-2 border-[#3F6B4A] rounded-sm p-3.5 flex flex-col justify-between space-y-2.5 shadow-sm ease-dispatch">
+        <div class="glass-card-subtle border-l-4 border-l-[#3F6B4A] border-t border-r border-b border-[#E1E4DD]/70 rounded-lg p-3.5 flex flex-col justify-between space-y-2.5 shadow-2xs hover:shadow-xs transition">
           <div>
-            <div class="flex items-center justify-between pb-1.5 border-b border-emerald-100">
+            <div class="flex items-center justify-between pb-1.5 border-b border-emerald-200/50">
               <span class="font-bold text-xs text-[#3F6B4A] flex items-center gap-1.5">
-                <span>🌾</span> AGRICULTURE &amp; AGROMET
+                <span>🌾</span> <span data-i18n="cardFarmerTitle">AGRICULTURE &amp; AGROMET</span>
               </span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-[#3F6B4A]">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#3F6B4A]" data-i18n="cardFarmerBadge">
                 FARMER ROLE
               </span>
             </div>
-            <div class="mt-2 text-xs font-bold text-slate-900" id="fanout-farmer-directive">
+            <div class="mt-2 text-xs font-bold text-slate-900 leading-snug" id="fanout-farmer-directive">
               Harvest mature paddy immediately; pause all chemical spraying and clear peripheral trenches.
             </div>
             <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-farmer-checklist">
               <li class="flex items-start gap-1.5"><span>•</span><span>30cm drainage trenches along bunds to stop root rot</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Zero pesticide spraying for 48h (drift & wash-off hazard)</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Shift cattle & poultry to elevated pucca shelters</span></li>
+              <li class="flex items-start gap-1.5"><span>•</span><span>Zero pesticide spraying for 48h (drift &amp; wash-off hazard)</span></li>
+              <li class="flex items-start gap-1.5"><span>•</span><span>Shift cattle &amp; poultry to elevated pucca shelters</span></li>
             </ul>
           </div>
-          <div class="pt-2 border-t border-emerald-100 flex items-center justify-between text-[11px]">
+          <div class="pt-2 border-t border-[#E1E4DD]/60 flex items-center justify-between text-[11px]">
             <span class="font-semibold text-emerald-800" id="fanout-farmer-status">Spraying: PAUSED</span>
             <span class="text-[10px] text-slate-400 font-mono">Meghdoot / AMFU</span>
           </div>
         </div>
 
         <!-- 2. Fisherman Card -->
-        <div class="bg-white border-2 border-[#B8860B] rounded-sm p-3.5 flex flex-col justify-between space-y-2.5 shadow-sm ease-dispatch">
+        <div class="glass-card-subtle border-l-4 border-l-[#B8860B] border-t border-r border-b border-[#E1E4DD]/70 rounded-lg p-3.5 flex flex-col justify-between space-y-2.5 shadow-2xs hover:shadow-xs transition">
           <div>
-            <div class="flex items-center justify-between pb-1.5 border-b border-amber-100">
+            <div class="flex items-center justify-between pb-1.5 border-b border-amber-200/50">
               <span class="font-bold text-xs text-[#B8860B] flex items-center gap-1.5">
-                <span>⚓</span> MARITIME &amp; COASTAL SAFETY
+                <span>⚓</span> <span data-i18n="cardFishermanTitle">MARITIME &amp; COASTAL SAFETY</span>
               </span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-[#B8860B]">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-[#B8860B]" data-i18n="cardFishermanBadge">
                 FISHERMAN ROLE
               </span>
             </div>
-            <div class="mt-2 text-xs font-bold text-slate-900" id="fanout-fisherman-directive">
+            <div class="mt-2 text-xs font-bold text-slate-900 leading-snug" id="fanout-fisherman-directive">
               TOTAL SEA BAN: Squalls exceeding 65 km/h with rough sea state. Return to harbor by 18:00 IST.
             </div>
             <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-fisherman-checklist">
@@ -288,24 +332,24 @@ export function getPortalHtml(): string {
               <li class="flex items-start gap-1.5"><span>•</span><span>Keep marine VHF transceiver tuned to Coast Guard Ch 16</span></li>
             </ul>
           </div>
-          <div class="pt-2 border-t border-amber-100 flex items-center justify-between text-[11px]">
+          <div class="pt-2 border-t border-[#E1E4DD]/60 flex items-center justify-between text-[11px]">
             <span class="font-bold text-red-700" id="fanout-fisherman-status">Departure: TOTAL BAN</span>
             <span class="text-[10px] text-slate-400 font-mono">INCOIS / IMD Marine</span>
           </div>
         </div>
 
         <!-- 3. City Operations Card -->
-        <div class="bg-white border-2 border-[#B3261E] rounded-sm p-3.5 flex flex-col justify-between space-y-2.5 shadow-sm ease-dispatch">
+        <div class="glass-card-subtle border-l-4 border-l-[#B3261E] border-t border-r border-b border-[#E1E4DD]/70 rounded-lg p-3.5 flex flex-col justify-between space-y-2.5 shadow-2xs hover:shadow-xs transition">
           <div>
-            <div class="flex items-center justify-between pb-1.5 border-b border-red-100">
+            <div class="flex items-center justify-between pb-1.5 border-b border-red-200/50">
               <span class="font-bold text-xs text-[#B3261E] flex items-center gap-1.5">
-                <span>🏢</span> URBAN LOCAL BODY &amp; OPS
+                <span>🏢</span> <span data-i18n="cardCityTitle">URBAN LOCAL BODY &amp; OPS</span>
               </span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-[#B3261E]">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-[#B3261E]" data-i18n="cardCityBadge">
                 CITY OPS ROLE
               </span>
             </div>
-            <div class="mt-2 text-xs font-bold text-slate-900" id="fanout-city-directive">
+            <div class="mt-2 text-xs font-bold text-slate-900 leading-snug" id="fanout-city-directive">
               ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize 100-HP dewatering pumps to chronic low-lying wards.
             </div>
             <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-city-checklist">
@@ -314,79 +358,74 @@ export function getPortalHtml(): string {
               <li class="flex items-start gap-1.5"><span>•</span><span>Issue arterial traffic diversion bulletins for inundated corridors</span></li>
             </ul>
           </div>
-          <div class="pt-2 border-t border-red-100 flex items-center justify-between text-[11px]">
+          <div class="pt-2 border-t border-[#E1E4DD]/60 flex items-center justify-between text-[11px]">
             <span class="font-bold text-red-700" id="fanout-city-status">Alert: CODE RED</span>
             <span class="text-[10px] text-slate-400 font-mono">NDRF / Municipal Ops</span>
           </div>
         </div>
       </div>
 
-      <!-- Provenance Line for Fan-Out -->
-      <div class="text-[10px] text-[#5B6472] pt-1 flex flex-wrap items-center justify-between gap-2">
+      <!-- Provenance Line for Directives -->
+      <div class="text-[10.5px] text-[#5B6472] pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-[#E1E4DD]/60">
         <span id="fanout-meta-line">
           Source: NDMA SACHET (OASIS CAP v1.2) + BharatFS / IMD Cyclone Bulletin • Confidence: High (Spread ±12km)
         </span>
-        <button onclick="copyFanoutDirectives()" class="text-[#1B2A44] hover:underline font-semibold flex items-center gap-1">
-          <span>📋</span> Copy Multi-Role Briefing
+        <button onclick="copyFanoutDirectives(this)" class="text-[#1B2A44] hover:underline font-semibold flex items-center gap-1">
+          <span>📋</span> <span data-i18n="copyBriefing">Copy Multi-Role Briefing</span>
         </button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ==================== 5. MAIN OPERATIONAL WORKSPACE ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- ==================== SPLIT COLUMNS: CHAT & SENSORS ==================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- ==================== LEFT COLUMN: WEATHERGPT CHATBOT & ADVISORY CONSOLE (7 COLS) ==================== -->
+      <div class="lg:col-span-7 space-y-4">
 
-    <!-- ==================== LEFT COLUMN: WEATHERGPT CHATBOT & ADVISORY CONSOLE (7 COLS) ==================== -->
-    <div class="lg:col-span-7 space-y-4">
-
-      <!-- MAIN CHATBOT CARD -->
-      <div id="weathergpt-chat-card" class="bg-white border border-[#E1E4DD] shadow-sm flex flex-col rounded-sm">
-        <!-- Terminal Header -->
-        <div class="bg-slate-50 px-4 sm:px-5 py-3 border-b border-[#E1E4DD] flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5">
-            <span class="w-7 h-7 bg-[#1B2A44] text-white rounded flex items-center justify-center font-bold text-xs shadow-sm">
-              ⚡
-            </span>
-            <div>
-              <div class="font-serif font-bold text-[#1B2A44] text-sm tracking-wide flex items-center gap-2">
-                <span>WeatherGPT Conversational Meteorologist</span>
-                <span class="inline-flex items-center gap-1 text-[10px] font-sans font-semibold text-[#3F6B4A] bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 rounded">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#3F6B4A] animate-pulse"></span>
-                  AI Online
-                </span>
+        <!-- MAIN CHATBOT CARD -->
+        <div id="weathergpt-chat-card" class="glass-card shadow-sm flex flex-col rounded-xl overflow-hidden relative z-10 border border-[#E1E4DD]/80">
+          <!-- Terminal Header -->
+          <div class="glass-inner-subtle px-4 sm:px-5 py-3 border-b border-[#E1E4DD]/70 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 bg-[#1B2A44] text-white rounded-md flex items-center justify-center font-bold text-xs shadow-2xs">
+                ⚡
+              </span>
+              <div>
+                <div class="font-serif font-bold text-[#1B2A44] text-sm tracking-wide">
+                  <span data-i18n="chatCardTitle">WeatherGPT Conversational Meteorologist</span>
+                </div>
+                <p class="text-[11px] text-[#5B6472]" data-i18n="chatCardSubtitle">Autonomous Synoptic Intelligence &amp; Multi-turn Dialogue</p>
               </div>
-              <p class="text-[11px] text-[#5B6472]">Autonomous Synoptic Intelligence &amp; Multi-turn Dialogue</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="clearChatHistory()" title="Clear conversation history" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white/70 hover:bg-white text-[11px] font-medium transition flex items-center gap-1 rounded-sm shadow-2xs">
+                <span>🗑️</span> <span class="hidden sm:inline" data-i18n="clearChat">Clear Chat</span>
+              </button>
+              <button onclick="printChatTranscript()" title="Print formal meteorological record" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white/70 hover:bg-white text-[11px] font-medium transition flex items-center gap-1 rounded-sm shadow-2xs">
+                <span>🖨️</span> <span class="hidden sm:inline" data-i18n="printRecord">Print Record</span>
+              </button>
             </div>
           </div>
-          
-          <div class="flex items-center gap-2">
-            <button onclick="clearChatHistory()" title="Clear conversation history" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1 rounded-sm">
-              <span>🗑️</span> <span class="hidden sm:inline">Clear Chat</span>
-            </button>
-            <button onclick="printChatTranscript()" title="Print formal meteorological record" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1 rounded-sm">
-              <span>🖨️</span> <span class="hidden sm:inline">Print Record</span>
-            </button>
-          </div>
-        </div>
 
         <!-- Configuration & Targeting Bar -->
-        <div class="p-3.5 bg-[#F5F6F3] border-b border-[#E1E4DD] space-y-2.5 text-xs">
+        <div class="p-3.5 glass-inner-subtle border-b border-[#E1E4DD]/70 space-y-2.5 text-xs">
           <!-- Location Picker Row -->
           <div class="flex flex-wrap items-center gap-2">
-            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0">📍 Target:</span>
+            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0" data-i18n="targetLabel">📍 Target:</span>
             <div class="flex-1 min-w-[180px] flex items-center gap-1.5">
               <input
                 id="location-input"
                 type="text"
                 value="Bangalore"
                 placeholder="City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)..."
-                class="flex-1 bg-white border border-[#E1E4DD] px-2.5 py-1 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] font-medium rounded-sm"
+                data-i18n-placeholder="targetPlaceholder"
+                class="flex-1 bg-white/90 border border-[#E1E4DD] px-2.5 py-1 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] font-medium rounded-sm shadow-2xs"
               />
               <button
                 type="button"
                 onclick="detectUserLocation()"
                 title="Detect current GPS location"
-                class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[#1B2A44] text-[11px] font-semibold shrink-0 flex items-center gap-1 rounded-sm"
+                class="px-2.5 py-1 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] font-semibold shrink-0 flex items-center gap-1 rounded-sm shadow-2xs"
               >
                 <span>🎯</span> <span class="hidden sm:inline">GPS</span>
               </button>
@@ -394,78 +433,78 @@ export function getPortalHtml(): string {
 
             <!-- Quick City Chips (Verified Indian Metropolitan Coordinates) -->
             <div class="flex items-center gap-1 overflow-x-auto py-0.5 max-w-full">
-              <button type="button" onclick="applyPresetCity('Bangalore')" class="px-2 py-0.5 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium">
+              <button type="button" onclick="applyPresetCity('Bangalore')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
                 Bengaluru
               </button>
-              <button type="button" onclick="applyPresetCity('New Delhi')" class="px-2 py-0.5 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium">
+              <button type="button" onclick="applyPresetCity('New Delhi')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
                 Delhi
               </button>
-              <button type="button" onclick="applyPresetCity('Mumbai')" class="px-2 py-0.5 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium">
+              <button type="button" onclick="applyPresetCity('Mumbai')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
                 Mumbai
               </button>
-              <button type="button" onclick="applyPresetCity('Chennai')" class="px-2 py-0.5 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium">
+              <button type="button" onclick="applyPresetCity('Chennai')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
                 Chennai
               </button>
-              <button type="button" onclick="applyPresetCity('Coimbatore')" class="px-2 py-0.5 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium">
+              <button type="button" onclick="applyPresetCity('Coimbatore')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
                 Coimbatore
               </button>
-              <button type="button" onclick="applyPresetCity('Kolkata')" class="px-2 py-0.5 bg-white hover:bg-slate-100 border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium">
+              <button type="button" onclick="applyPresetCity('Kolkata')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
                 Kolkata
               </button>
             </div>
           </div>
 
           <!-- Sector Selection Pills -->
-          <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#E1E4DD]">
-            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0 mr-1">Role Lens:</span>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
+          <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#E1E4DD]/70">
+            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0 mr-1" data-i18n="roleLensLabel">Role Lens:</span>
+            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
               <input type="radio" name="sector" value="farmer" class="sr-only" checked onchange="handleSectorChange('farmer')">
-              <span>🌾</span> <span>Farmer</span>
+              <span>🌾</span> <span data-i18n="roleFarmer">Farmer</span>
             </label>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
+            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
               <input type="radio" name="sector" value="fisherman" class="sr-only" onchange="handleSectorChange('fisherman')">
-              <span>⚓</span> <span>Fisherman</span>
+              <span>⚓</span> <span data-i18n="roleFisherman">Fisherman</span>
             </label>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
+            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
               <input type="radio" name="sector" value="city_ops" class="sr-only" onchange="handleSectorChange('city_ops')">
-              <span>🏢</span> <span>City Ops / ULB</span>
+              <span>🏢</span> <span data-i18n="roleCityOps">City Ops / ULB</span>
             </label>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
+            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
               <input type="radio" name="sector" value="general" class="sr-only" onchange="handleSectorChange('general')">
-              <span>👤</span> <span>Public</span>
+              <span>👤</span> <span data-i18n="rolePublic">Public</span>
             </label>
             <span class="ml-auto text-[10px] font-mono text-[#5B6472]" id="session-id-display">SESSION: READY</span>
           </div>
         </div>
 
         <!-- Chat Stream Conversation Container -->
-        <div id="chat-thread" class="p-4 sm:p-5 space-y-4 max-h-[580px] min-h-[440px] overflow-y-auto bg-white">
+        <div id="chat-thread" class="p-4 sm:p-5 space-y-4 max-h-[580px] min-h-[440px] overflow-y-auto glass-chat-thread">
           <!-- Welcome message rendered via JavaScript -->
         </div>
 
         <!-- Thinking / Loading Indicator -->
-        <div id="chat-thinking" class="hidden px-5 py-3 bg-[#F5F6F3] border-t border-[#E1E4DD] flex items-center gap-3">
+        <div id="chat-thinking" class="hidden px-5 py-3 glass-inner-subtle border-t border-[#E1E4DD]/70 flex items-center gap-3">
           <div class="w-4 h-4 border-2 border-[#1B2A44] border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-xs font-medium text-[#1B2A44]">
+          <span class="text-xs font-medium text-[#1B2A44]" data-i18n="thinkingText">
             WeatherGPT is consulting BharatFS synoptic grids, IMD nowcasts, and generating role directives...
           </span>
         </div>
 
         <!-- Composer & Quick Action Bar -->
-        <div id="chat-composer" class="p-3.5 bg-white border-t border-[#E1E4DD] space-y-2.5">
+        <div id="chat-composer" class="p-3.5 glass-inner-subtle border-t border-[#E1E4DD]/70 space-y-2.5">
           <!-- Suggestion Prompts Carousel (Localized dynamically) -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs" id="suggestion-chips-bar">
-            <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">Suggestions:</span>
-            <button type="button" onclick="quickAsk('Is it safe to spray pesticides on crops today in ' + getTargetCity() + '? Check wind and rain.')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0" data-i18n="suggestionsLabel">Suggestions:</span>
+            <button type="button" onclick="quickAsk('Is it safe to spray pesticides on crops today in ' + getTargetCity() + '? Check wind and rain.')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
               🌾 Agrochemical Spraying
             </button>
-            <button type="button" onclick="quickAsk('Check coastal wind speed at 10m/80m and squall warnings for ' + getTargetCity() + '. Can boats go out?')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            <button type="button" onclick="quickAsk('Check coastal wind speed at 10m/80m and squall warnings for ' + getTargetCity() + '. Can boats go out?')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
               ⚓ Marine Squalls &amp; Wind
             </button>
-            <button type="button" onclick="quickAsk('What is the historical flood record and extreme 24h rainfall for ' + getTargetCity() + ' in Hazard Atlas?')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            <button type="button" onclick="quickAsk('What is the historical flood record and extreme 24h rainfall for ' + getTargetCity() + ' in Hazard Atlas?')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
               🗺️ Hazard Atlas Flood History
             </button>
-            <button type="button" onclick="quickAsk('Scan active disaster warnings, thunderstorms, and rain outlook for ' + getTargetCity() + '.')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            <button type="button" onclick="quickAsk('Scan active disaster warnings, thunderstorms, and rain outlook for ' + getTargetCity() + '.')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
               ⚠️ Disaster Bulletin Scan
             </button>
           </div>
@@ -477,7 +516,8 @@ export function getPortalHtml(): string {
                 id="chat-input"
                 rows="2"
                 placeholder="Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g. Will it rain during harvest?)"
-                class="w-full bg-[#F5F6F3] focus:bg-white border border-[#E1E4DD] p-2.5 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] resize-none font-sans leading-relaxed rounded-sm pr-10"
+                data-i18n-placeholder="inputPlaceholder"
+                class="w-full bg-white/90 focus:bg-white border border-[#E1E4DD] p-2.5 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] resize-none font-sans leading-relaxed rounded-sm pr-10 shadow-2xs"
                 required
               ></textarea>
               
@@ -499,7 +539,7 @@ export function getPortalHtml(): string {
               class="h-[52px] bg-[#1B2A44] hover:bg-[#132845] text-white font-semibold text-xs uppercase tracking-wider px-5 border border-[#132845] transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50 rounded-sm shadow-sm"
             >
               <span id="send-icon">⚡</span>
-              <span id="send-label">TRANSMIT</span>
+              <span id="send-label" data-i18n="transmit">TRANSMIT</span>
             </button>
           </form>
 
@@ -519,15 +559,15 @@ export function getPortalHtml(): string {
     </div>
 
     <!-- ==================== RIGHT COLUMN: DIRECT SENSORS & REGULATORY (5 COLS) ==================== -->
-    <div class="lg:col-span-5 space-y-5">
+    <div class="lg:col-span-5 space-y-5 relative z-10">
 
       <!-- PANEL A: LIVE SACHET / NDMA RADAR -->
-      <div id="disaster-monitor-panel" class="bg-white border border-[#E1E4DD] shadow-sm rounded-sm">
-        <div class="bg-slate-50 px-4 py-2.5 border-b border-[#E1E4DD] flex items-center justify-between">
+      <div id="disaster-monitor-panel" class="glass-card rounded-md shadow-sm overflow-hidden">
+        <div class="glass-inner-subtle px-4 py-2.5 border-b border-[#E1E4DD]/70 flex items-center justify-between">
           <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span class="text-[#B3261E]">🚨</span> SACHET / NDMA DISASTER RADAR
+            <span class="text-[#B3261E]">🚨</span> <span data-i18n="disasterRadarTitle">SACHET / NDMA DISASTER RADAR</span>
           </span>
-          <span id="disaster-badge" class="text-[10px] font-bold px-2 py-0.5 bg-slate-200 text-[#1B2A44] rounded-xs">
+          <span id="disaster-badge" class="text-[10px] font-bold px-2 py-0.5 bg-slate-200/80 text-[#1B2A44] rounded-xs">
             CHECKING...
           </span>
         </div>
@@ -539,22 +579,22 @@ export function getPortalHtml(): string {
               type="text"
               value="12.9719"
               placeholder="Lat"
-              class="w-20 bg-[#F5F6F3] border border-[#E1E4DD] px-2 py-1 text-xs font-mono rounded-sm"
+              class="w-20 bg-white/80 border border-[#E1E4DD] px-2 py-1 text-xs font-mono rounded-sm shadow-2xs"
             />
             <input
               id="disaster-lon"
               type="text"
               value="77.5937"
               placeholder="Lon"
-              class="w-20 bg-[#F5F6F3] border border-[#E1E4DD] px-2 py-1 text-xs font-mono rounded-sm"
+              class="w-20 bg-white/80 border border-[#E1E4DD] px-2 py-1 text-xs font-mono rounded-sm shadow-2xs"
             />
-            <select id="disaster-radius" class="flex-1 bg-[#F5F6F3] border border-[#E1E4DD] px-2 py-1 text-xs rounded-sm">
+            <select id="disaster-radius" class="flex-1 bg-white/80 border border-[#E1E4DD] px-2 py-1 text-xs rounded-sm shadow-2xs">
               <option value="25">Radius: 25 km</option>
               <option value="50" selected>Radius: 50 km</option>
               <option value="100">Radius: 100 km</option>
               <option value="200">Radius: 200 km</option>
             </select>
-            <button onclick="loadDisasterAlerts()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3 py-1 text-xs font-semibold rounded-sm">
+            <button onclick="loadDisasterAlerts()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3 py-1 text-xs font-semibold rounded-sm shadow-xs">
               Scan
             </button>
           </div>
@@ -566,7 +606,7 @@ export function getPortalHtml(): string {
             </div>
           </div>
 
-          <div class="text-[11px] text-[#5B6472] pt-1 border-t border-[#E1E4DD] flex justify-between">
+          <div class="text-[11px] text-[#5B6472] pt-1 border-t border-[#E1E4DD]/70 flex justify-between">
             <span>Protocol: OASIS CAP v1.2</span>
             <span>Feed: SACHET RSS</span>
           </div>
@@ -574,12 +614,12 @@ export function getPortalHtml(): string {
       </div>
 
       <!-- PANEL B: DIRECT SYNOPTIC WEATHER STATION INSPECTOR -->
-      <div id="weather-inspector-panel" class="bg-white border border-[#E1E4DD] shadow-sm rounded-sm">
-        <div class="bg-slate-50 px-4 py-2.5 border-b border-[#E1E4DD] flex items-center justify-between">
+      <div id="weather-inspector-panel" class="glass-card rounded-md shadow-sm overflow-hidden">
+        <div class="glass-inner-subtle px-4 py-2.5 border-b border-[#E1E4DD]/70 flex items-center justify-between">
           <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span>📡</span> SYNOPTIC STATION TELEMETRY
+            <span>📡</span> <span data-i18n="telemetryTitle">SYNOPTIC STATION TELEMETRY</span>
           </span>
-          <span class="text-[10px] font-mono text-[#5B6472]">RAW SENSORS</span>
+          <span class="text-[10px] font-mono text-[#5B6472]" data-i18n="telemetrySub">RAW SENSORS</span>
         </div>
 
         <div class="p-4 space-y-3">
@@ -589,32 +629,32 @@ export function getPortalHtml(): string {
               type="text"
               value="Bangalore"
               placeholder="Enter station name..."
-              class="flex-1 bg-[#F5F6F3] border border-[#E1E4DD] px-2.5 py-1 text-xs font-medium rounded-sm"
+              class="flex-1 bg-white/80 border border-[#E1E4DD] px-2.5 py-1 text-xs font-medium rounded-sm shadow-2xs"
             />
-            <button onclick="inspectStation()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3.5 py-1 text-xs font-semibold rounded-sm">
-              Inspect
+            <button onclick="inspectStation()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3.5 py-1 text-xs font-semibold rounded-sm shadow-xs">
+              <span data-i18n="inspectBtn">Inspect</span>
             </button>
           </div>
 
           <!-- Telemetry Output Box -->
-          <div id="telemetry-box" class="bg-[#F5F6F3] border border-[#E1E4DD] p-3 text-xs rounded-sm">
+          <div id="telemetry-box" class="glass-inner-subtle p-3 text-xs rounded-sm">
             <div class="text-[#5B6472] text-center py-2">Click Inspect to query live sensors...</div>
           </div>
         </div>
       </div>
 
       <!-- PANEL C: WMO & NDMA REGULATORY SCALES -->
-      <div id="regulatory-standards-panel" class="bg-white border border-[#E1E4DD] shadow-sm rounded-sm">
-        <div class="bg-slate-50 px-4 py-2.5 border-b border-[#E1E4DD] flex items-center justify-between">
+      <div id="regulatory-standards-panel" class="glass-card rounded-md shadow-sm overflow-hidden">
+        <div class="glass-inner-subtle px-4 py-2.5 border-b border-[#E1E4DD]/70 flex items-center justify-between">
           <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span>⚖️</span> REGULATORY METEOROLOGICAL SCALES
+            <span>⚖️</span> <span data-i18n="scalesTitle">REGULATORY METEOROLOGICAL SCALES</span>
           </span>
-          <span class="text-[10px] font-mono text-[#5B6472]">STANDARDS</span>
+          <span class="text-[10px] font-mono text-[#5B6472]" data-i18n="scalesSub">STANDARDS</span>
         </div>
 
         <div class="p-4 space-y-3 text-xs">
           <!-- Scale Category Selector -->
-          <div class="flex border-b border-[#E1E4DD] pb-1 gap-2">
+          <div class="flex border-b border-[#E1E4DD]/70 pb-1 gap-2">
             <button onclick="switchScaleTab('uv')" id="tab-btn-uv" class="px-3 py-1 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44] text-xs">
               UV Solar Scale
             </button>
@@ -628,23 +668,23 @@ export function getPortalHtml(): string {
 
           <!-- Tab 1: UV Index -->
           <div id="scale-content-uv" class="space-y-1.5 max-h-44 overflow-y-auto">
-            <div class="flex items-center justify-between p-1.5 bg-emerald-50 border-l-4 border-[#3F6B4A]">
+            <div class="flex items-center justify-between p-1.5 bg-emerald-50/90 border-l-4 border-[#3F6B4A] rounded-xs shadow-2xs">
               <span class="font-bold text-emerald-900">0 – 2: Low</span>
               <span class="text-[11px] text-emerald-800">Minimal danger; normal outdoor work</span>
             </div>
-            <div class="flex items-center justify-between p-1.5 bg-yellow-50 border-l-4 border-yellow-500">
+            <div class="flex items-center justify-between p-1.5 bg-yellow-50/90 border-l-4 border-yellow-500 rounded-xs shadow-2xs">
               <span class="font-bold text-yellow-900">3 – 5: Moderate</span>
               <span class="text-[11px] text-yellow-800">SPF 30+ recommended; seek shade midday</span>
             </div>
-            <div class="flex items-center justify-between p-1.5 bg-amber-50 border-l-4 border-[#B8860B]">
+            <div class="flex items-center justify-between p-1.5 bg-amber-50/90 border-l-4 border-[#B8860B] rounded-xs shadow-2xs">
               <span class="font-bold text-amber-900">6 – 7: High</span>
               <span class="text-[11px] text-amber-800">Mandatory hat &amp; sunglasses; reduce exposure</span>
             </div>
-            <div class="flex items-center justify-between p-1.5 bg-red-50 border-l-4 border-[#B3261E]">
+            <div class="flex items-center justify-between p-1.5 bg-red-50/90 border-l-4 border-[#B3261E] rounded-xs shadow-2xs">
               <span class="font-bold text-red-900">8 – 10: Very High</span>
               <span class="text-[11px] text-red-800">Severe burn hazard; pause field labor</span>
             </div>
-            <div class="flex items-center justify-between p-1.5 bg-purple-50 border-l-4 border-purple-700">
+            <div class="flex items-center justify-between p-1.5 bg-purple-50/90 border-l-4 border-purple-700 rounded-xs shadow-2xs">
               <span class="font-bold text-purple-900">11+: Extreme</span>
               <span class="text-[11px] text-purple-800">Full protective gear; avoid midday outdoors</span>
             </div>
@@ -652,19 +692,19 @@ export function getPortalHtml(): string {
 
           <!-- Tab 2: Precipitation Rate Scale -->
           <div id="scale-content-rain" class="space-y-1.5 max-h-44 overflow-y-auto hidden">
-            <div class="p-1.5 bg-[#F5F6F3] border border-[#E1E4DD]">
+            <div class="p-1.5 glass-inner-subtle rounded-xs">
               <div class="font-bold text-slate-900">0.0 mm/hr: None</div>
               <div class="text-[11px] text-[#5B6472]">Dry operational surface. Safe for agro-chemical spraying.</div>
             </div>
-            <div class="p-1.5 bg-blue-50 border border-blue-200">
+            <div class="p-1.5 bg-blue-50/90 border border-blue-200 rounded-xs shadow-2xs">
               <div class="font-bold text-blue-900">0.25 – 1.0 mm/hr: Light Rain</div>
               <div class="text-[11px] text-blue-800">Individual drops visible; puddles form slowly.</div>
             </div>
-            <div class="p-1.5 bg-blue-100 border border-blue-300">
+            <div class="p-1.5 bg-blue-100/90 border border-blue-300 rounded-xs shadow-2xs">
               <div class="font-bold text-blue-950">1.0 – 4.0 mm/hr: Moderate Rain</div>
               <div class="text-[11px] text-blue-900">Continuous rain; rapid runoff on impervious roads.</div>
             </div>
-            <div class="p-1.5 bg-red-100 border border-red-400">
+            <div class="p-1.5 bg-red-100/90 border border-red-400 rounded-xs shadow-2xs">
               <div class="font-bold text-red-950">&gt; 16.0 mm/hr: Violent / Cloudburst</div>
               <div class="text-[11px] text-red-900">Torrential rain; high flash flood danger.</div>
             </div>
@@ -672,19 +712,19 @@ export function getPortalHtml(): string {
 
           <!-- Tab 3: WMO Codes -->
           <div id="scale-content-wmo" class="space-y-1 max-h-44 overflow-y-auto text-[11px] font-mono hidden">
-            <div class="p-1 bg-white border border-[#E1E4DD] flex justify-between">
+            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
               <span>WMO Code 00:</span> <span class="font-bold">Clear Sky</span>
             </div>
-            <div class="p-1 bg-white border border-[#E1E4DD] flex justify-between">
+            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
               <span>WMO Code 01-03:</span> <span class="font-bold">Mainly Clear / Overcast</span>
             </div>
-            <div class="p-1 bg-white border border-[#E1E4DD] flex justify-between">
+            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
               <span>WMO Code 51-55:</span> <span class="font-bold">Drizzle (Light to Dense)</span>
             </div>
-            <div class="p-1 bg-white border border-[#E1E4DD] flex justify-between">
+            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
               <span>WMO Code 61-65:</span> <span class="font-bold">Continuous Rain</span>
             </div>
-            <div class="p-1 bg-white border border-[#E1E4DD] flex justify-between">
+            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
               <span>WMO Code 95-99:</span> <span class="font-bold text-red-700">Thunderstorm / Hail</span>
             </div>
           </div>
@@ -707,9 +747,9 @@ export function getPortalHtml(): string {
         </div>
       </div>
       <div class="flex items-center gap-4 text-[11px]">
-        <button onclick="openRuralModal()" class="hover:text-white underline">Rural IVR / SMS Simulator</button>
+        <button onclick="openRuralModal()" class="hover:text-white underline" data-i18n="footerRural">Rural IVR &amp; Telephony Gateway</button>
         <span>•</span>
-        <button onclick="openHazardModal()" class="hover:text-white underline">Hazard Atlas</button>
+        <button onclick="openHazardModal()" class="hover:text-white underline" data-i18n="navHazard">Hazard Atlas</button>
         <span>•</span>
         <button onclick="openApiModal()" class="hover:text-white underline">API Routing</button>
       </div>
@@ -717,40 +757,40 @@ export function getPortalHtml(): string {
   </footer>
 
   <!-- ==================== MODAL 1: RURAL ACCESSIBILITY SUITE (IVR, SMS, KRISHI SAKHI) ==================== -->
-  <div id="rural-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white border border-[#E1E4DD] shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-sm">
-      <div class="flex items-center justify-between border-b border-[#E1E4DD] pb-3">
+  <div id="rural-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-lg border border-white/60">
+      <div class="flex items-center justify-between border-b border-[#E1E4DD]/70 pb-3">
         <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
-          <span>📞</span> Rural Accessibility Tier (Non-Smartphone Reach)
+          <span>📞</span> <span data-i18n="ruralModalTitle">Rural Accessibility Tier (Non-Smartphone Reach)</span>
         </h3>
         <button onclick="closeRuralModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
       </div>
 
       <!-- Rural Tabs -->
-      <div class="flex border-b border-[#E1E4DD] gap-2 text-xs">
-        <button onclick="switchRuralTab('ivr')" id="rural-tab-ivr" class="px-3 py-1.5 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44]">
-          1. IVR Phone Call Simulator
+      <div class="flex border-b border-[#E1E4DD]/70 gap-2 text-xs">
+        <button onclick="switchRuralTab('ivr')" id="rural-tab-ivr" class="px-3 py-1.5 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44]" data-i18n="ruralTabIvr">
+          1. Toll-Free IVR Voice Gateway (1800-MAUSAM-AI)
         </button>
-        <button onclick="switchRuralTab('sms')" id="rural-tab-sms" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]">
-          2. SMS &amp; USSD Fallback
+        <button onclick="switchRuralTab('sms')" id="rural-tab-sms" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]" data-i18n="ruralTabSms">
+          2. SMS &amp; USSD Delivery
         </button>
-        <button onclick="switchRuralTab('krishi')" id="rural-tab-krishi" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]">
-          3. Krishi Sakhi Assist Mode
+        <button onclick="switchRuralTab('krishi')" id="rural-tab-krishi" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]" data-i18n="ruralTabKrishi">
+          3. Krishi Sakhi Field Console
         </button>
       </div>
 
-      <!-- Tab Content: IVR Phone Simulator -->
+      <!-- Tab Content: IVR Phone Gateway -->
       <div id="rural-content-ivr" class="space-y-3 text-xs">
         <p class="text-[#5B6472]">
           Allows farmers with basic 2G feature phones to dial a toll-free number (1800-MAUSAM-AI), ask questions in regional languages, and receive spoken meteorological briefings.
         </p>
-        <div class="bg-[#F5F6F3] border border-[#E1E4DD] p-3.5 rounded space-y-2">
+        <div class="glass-inner-subtle p-3.5 rounded-md space-y-2">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold text-[#1B2A44]">Toll-Free Dial-In:</span>
             <span class="font-mono font-bold text-[#C97A2B]">1800-628-7262 (1800-MAUSAM)</span>
           </div>
           <div class="flex items-center gap-2">
-            <select id="ivr-lang" class="bg-white border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm">
+            <select id="ivr-lang" class="bg-white/90 border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm shadow-2xs">
               <option value="hi" selected>Hindi (हिन्दी)</option>
               <option value="ta">Tamil (தமிழ்)</option>
               <option value="en">English (Indian Accent)</option>
@@ -759,14 +799,14 @@ export function getPortalHtml(): string {
               id="ivr-query-input"
               type="text"
               value="क्या आज कीटनाशक का छिड़काव करना ठीक रहेगा?"
-              class="flex-1 bg-white border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm"
+              class="flex-1 bg-white/90 border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm shadow-2xs"
             />
-            <button onclick="simulateIvrCall()" id="ivr-call-btn" class="bg-[#3F6B4A] hover:bg-emerald-800 text-white px-3.5 py-1 font-semibold rounded-sm">
-              📞 Dial Call
+            <button onclick="connectIvrCall()" id="ivr-call-btn" class="bg-[#3F6B4A] hover:bg-emerald-800 text-white px-3.5 py-1 font-semibold rounded-sm shadow-xs">
+              <span data-i18n="ivrCallBtn">📞 Connect Call</span>
             </button>
           </div>
-          <div id="ivr-status-box" class="p-2.5 bg-white border border-[#E1E4DD] text-[11px] font-mono text-[#1B2A44] min-h-[50px] leading-relaxed">
-            Status: On Hook. Click "Dial Call" to simulate interactive voice response.
+          <div id="ivr-status-box" class="p-2.5 bg-white/80 border border-[#E1E4DD] text-[11px] font-mono text-[#1B2A44] min-h-[50px] leading-relaxed rounded-xs shadow-2xs">
+            Status: Line Ready. Click "Connect Call" to dispatch interactive voice response.
           </div>
         </div>
       </div>
@@ -779,14 +819,14 @@ export function getPortalHtml(): string {
         <div class="space-y-2">
           <div>
             <label class="font-bold text-[#1B2A44] block mb-1">Standard USSD Code String:</label>
-            <div class="p-2 bg-[#F5F6F3] border border-[#E1E4DD] font-mono font-bold text-xs text-[#1B2A44] flex justify-between items-center">
+            <div class="p-2 glass-inner-subtle font-mono font-bold text-xs text-[#1B2A44] flex justify-between items-center rounded-xs">
               <span>*99*WEATHER*560001#</span>
               <span class="text-[10px] text-[#5B6472]">PIN-Code Granular</span>
             </div>
           </div>
           <div>
             <label class="font-bold text-[#1B2A44] block mb-1">Generated 160-Character SMS Dispatch:</label>
-            <div class="p-2.5 bg-[#F5F6F3] border border-[#E1E4DD] font-mono text-xs text-slate-800 leading-relaxed">
+            <div class="p-2.5 glass-inner-subtle font-mono text-xs text-slate-800 leading-relaxed rounded-xs">
               [WeatherGPT] BLR: 27°C, Dry. Rain &lt;10%. Wind 11km/h. Safe to spray. No alerts. Dial 1800-MAUSAM for voice advisory.
             </div>
           </div>
@@ -798,19 +838,19 @@ export function getPortalHtml(): string {
         <p class="text-[#5B6472]">
           Designed for village self-help group leaders (Krishi Sakhis) to input a farmer's localized village query, print a card, or play the synthesized audio to the farmer on the spot.
         </p>
-        <div class="bg-emerald-50 border border-emerald-200 p-3 rounded space-y-2">
+        <div class="bg-emerald-50/80 border border-emerald-200 p-3 rounded-md space-y-2">
           <div class="font-bold text-[#3F6B4A]">👩‍🌾 Krishi Sakhi Field Assistant Portal</div>
           <div class="text-[11px] text-slate-700">
             "Farmer: Murugesan, Thondamuthur Village. Crop: Turmeric. Query: Rain risk for root rot."
           </div>
-          <button onclick="speakKrishiSakhi()" class="px-3 py-1 bg-[#3F6B4A] hover:bg-emerald-800 text-white font-semibold rounded-sm text-xs flex items-center gap-1.5">
+          <button onclick="speakKrishiSakhi()" class="px-3 py-1 bg-[#3F6B4A] hover:bg-emerald-800 text-white font-semibold rounded-sm text-xs flex items-center gap-1.5 shadow-xs">
             <span>🔊</span> Play Spoken Vernacular Guidance
           </button>
         </div>
       </div>
 
-      <div class="flex justify-end pt-2 border-t border-[#E1E4DD]">
-        <button onclick="closeRuralModal()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium rounded-sm text-xs">
+      <div class="flex justify-end pt-2 border-t border-[#E1E4DD]/70">
+        <button onclick="closeRuralModal()" class="px-4 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-medium rounded-sm text-xs">
           Close
         </button>
       </div>
@@ -818,9 +858,9 @@ export function getPortalHtml(): string {
   </div>
 
   <!-- ==================== MODAL 2: IMD CLIMATE HAZARD ATLAS EXPLORER ==================== -->
-  <div id="hazard-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white border border-[#E1E4DD] shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-sm">
-      <div class="flex items-center justify-between border-b border-[#E1E4DD] pb-3">
+  <div id="hazard-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-lg border border-white/60">
+      <div class="flex items-center justify-between border-b border-[#E1E4DD]/70 pb-3">
         <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
           <span>🗺️</span> IMD Climate Hazard &amp; Vulnerability Atlas
         </h3>
@@ -838,20 +878,20 @@ export function getPortalHtml(): string {
             type="text"
             value="Bengaluru"
             placeholder="Enter district (e.g. Bengaluru, Chennai, Mumbai, Coimbatore, Delhi)..."
-            class="flex-1 bg-[#F5F6F3] border border-[#E1E4DD] px-2.5 py-1.5 text-xs text-[#1B2A44] font-medium rounded-sm"
+            class="flex-1 bg-white/90 border border-[#E1E4DD] px-2.5 py-1.5 text-xs text-[#1B2A44] font-medium rounded-sm shadow-2xs"
           />
-          <button onclick="searchHazardAtlas()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-4 py-1.5 font-semibold rounded-sm text-xs">
+          <button onclick="searchHazardAtlas()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-4 py-1.5 font-semibold rounded-sm text-xs shadow-xs">
             Query Atlas
           </button>
         </div>
 
-        <div id="hazard-results-box" class="bg-[#F5F6F3] border border-[#E1E4DD] p-3.5 rounded text-xs space-y-2 min-h-[140px]">
+        <div id="hazard-results-box" class="glass-inner-subtle p-3.5 rounded-md text-xs space-y-2 min-h-[140px]">
           <div class="text-center text-[#5B6472] py-4">Click "Query Atlas" to fetch official hazard benchmarks...</div>
         </div>
       </div>
 
-      <div class="flex justify-end pt-2 border-t border-[#E1E4DD]">
-        <button onclick="closeHazardModal()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium rounded-sm text-xs">
+      <div class="flex justify-end pt-2 border-t border-[#E1E4DD]/70">
+        <button onclick="closeHazardModal()" class="px-4 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-medium rounded-sm text-xs">
           Close
         </button>
       </div>
@@ -859,9 +899,9 @@ export function getPortalHtml(): string {
   </div>
 
   <!-- ==================== MODAL 3: BACKEND API ROUTING ==================== -->
-  <div id="api-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white border border-[#E1E4DD] shadow-2xl max-w-lg w-full p-6 space-y-4 rounded-sm">
-      <div class="flex items-center justify-between border-b border-[#E1E4DD] pb-3">
+  <div id="api-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card shadow-2xl max-w-lg w-full p-6 space-y-4 rounded-lg border border-white/60">
+      <div class="flex items-center justify-between border-b border-[#E1E4DD]/70 pb-3">
         <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
           <span>⚡</span> Backend API Routing Configuration
         </h3>
@@ -876,22 +916,22 @@ export function getPortalHtml(): string {
             id="api-url-input"
             type="url"
             placeholder="https://..."
-            class="w-full bg-[#F5F6F3] border border-[#E1E4DD] px-3 py-2 text-xs font-mono text-[#1B2A44] focus:outline-none focus:border-[#1B2A44] rounded-sm"
+            class="w-full bg-white/90 border border-[#E1E4DD] px-3 py-2 text-xs font-mono text-[#1B2A44] focus:outline-none focus:border-[#1B2A44] rounded-sm shadow-2xs"
           />
         </div>
-        <div id="api-test-result" class="p-2.5 bg-[#F5F6F3] border border-[#E1E4DD] text-[11px] font-mono text-[#1B2A44] min-h-[44px]">
+        <div id="api-test-result" class="p-2.5 glass-inner-subtle text-[11px] font-mono text-[#1B2A44] min-h-[44px] rounded-xs">
           Click "Test Connection" to ping target /health endpoint.
         </div>
       </div>
 
-      <div class="flex items-center justify-between pt-2 border-t border-[#E1E4DD] text-xs">
+      <div class="flex items-center justify-between pt-2 border-t border-[#E1E4DD]/70 text-xs">
         <div class="flex gap-2">
-          <button onclick="testApiConnection()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium rounded-sm">
+          <button onclick="testApiConnection()" class="px-3 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-medium rounded-sm">
             Test Ping
           </button>
         </div>
         <div class="flex gap-2">
-          <button onclick="closeApiModal()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-sm">
+          <button onclick="closeApiModal()" class="px-3 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-700 rounded-sm">
             Cancel
           </button>
           <button onclick="saveApiEndpoint()" class="px-4 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white font-medium rounded-sm">
@@ -906,6 +946,7 @@ export function getPortalHtml(): string {
   <script>
     // 0. Active Language State (en, hi, ta)
     let currentLanguage = "en";
+    let currentScenario = "cyclone";
 
     const I18N_STRINGS = {
       en: {
@@ -916,7 +957,60 @@ export function getPortalHtml(): string {
         quickHeat: "Heat stress & UV index analysis",
         quickFlood: "Emergency flood & hazard scan",
         inputPlaceholder: "Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g. Will it rain during harvest?)",
-        transmit: "TRANSMIT"
+        transmit: "TRANSMIT",
+        topBarDirectives: "Operational Directives",
+        drawerWarning: "Synoptic Warning: Deep depression over West-Central Bay of Bengal. Squally winds 55-65 km/h along coastal corridors.",
+        drawerDesc: "National Disaster Management Authority (NDMA) Common Alerting Protocol (CAP v1.2) active advisory. Multi-agency operational fan-out deployed across Agriculture, Maritime Coastal Fisheries, and Urban Local Bodies.",
+        viewRoleDirectives: "View Role Directives",
+        topBarSub: "Conversational Meteorological Intelligence Layer",
+        topBarTag: "Mission Mausam • BharatFS • IMD Nowcast • NDMA SACHET CAP",
+        headerKicker: "WEATHERGPT • METEOROLOGICAL REASONING ENGINE",
+        headerLayer: "All-India Unified Layer",
+        headerTitle: "Conversational Weather & Disaster Intelligence",
+        headerDesc: "Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning, and NDMA CAP feeds into role-specific actions",
+        navRoleDirectives: "Role Directives",
+        navRural: "Rural Access Tier (IVR/SMS)",
+        navHazard: "IMD Hazard Atlas",
+        workbenchTitle: "Role-Based Operational Directives Engine",
+        workbenchBadge: "CAP FAN-OUT",
+        workbenchDesc: "Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives",
+        scenarioLabel: "Active Scenario:",
+        scenarioCyclone: "Cyclone Red Alert (Coast)",
+        scenarioFlood: "Urban Cloudburst (Bengaluru)",
+        scenarioHeatwave: "Severe Heatwave & Evaporation (Delhi)",
+        cardFarmerTitle: "AGRICULTURE & AGROMET",
+        cardFarmerBadge: "FARMER ROLE",
+        cardFishermanTitle: "MARITIME & COASTAL SAFETY",
+        cardFishermanBadge: "FISHERMAN ROLE",
+        cardCityTitle: "URBAN LOCAL BODY & OPS",
+        cardCityBadge: "CITY OPS ROLE",
+        copyBriefing: "Copy Multi-Role Briefing",
+        chatCardTitle: "WeatherGPT Conversational Meteorologist",
+        aiOnline: "AI Online",
+        chatCardSubtitle: "Autonomous Synoptic Intelligence & Multi-turn Dialogue",
+        clearChat: "Clear Chat",
+        printRecord: "Print Record",
+        targetLabel: "📍 Target:",
+        targetPlaceholder: "City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)...",
+        roleLensLabel: "Role Lens:",
+        roleFarmer: "Farmer",
+        roleFisherman: "Fisherman",
+        roleCityOps: "City Ops / ULB",
+        rolePublic: "Public",
+        thinkingText: "WeatherGPT is consulting BharatFS synoptic grids, IMD nowcasts, and generating role directives...",
+        suggestionsLabel: "Suggestions:",
+        disasterRadarTitle: "SACHET / NDMA DISASTER RADAR",
+        telemetryTitle: "SYNOPTIC STATION TELEMETRY",
+        telemetrySub: "RAW SENSORS",
+        inspectBtn: "Inspect",
+        scalesTitle: "REGULATORY METEOROLOGICAL SCALES",
+        scalesSub: "STANDARDS",
+        footerRural: "Rural IVR & Telephony Gateway",
+        ruralModalTitle: "Rural Accessibility Tier (Non-Smartphone Reach)",
+        ruralTabIvr: "1. Toll-Free IVR Voice Gateway (1800-MAUSAM-AI)",
+        ruralTabSms: "2. SMS & USSD Delivery",
+        ruralTabKrishi: "3. Krishi Sakhi Field Console",
+        ivrCallBtn: "📞 Connect Call"
       },
       hi: {
         welcomeTitle: "मौसम जीपीटी केंद्रीय मौसम सलाह टर्मिनल",
@@ -926,7 +1020,60 @@ export function getPortalHtml(): string {
         quickHeat: "लू का खतरा और पराबैंगनी (UV) सूचकांक विश्लेषण",
         quickFlood: "सचेत आपदा चेतावनी और भारी बारिश का पूर्वानुमान",
         inputPlaceholder: "मौसम जीपीटी से हिंदी में पूछें (उदा. क्या आज बारिश होगी और फसल काटना ठीक है?)",
-        transmit: "भेजें"
+        transmit: "भेजें",
+        topBarDirectives: "परिचालन निर्देश",
+        drawerWarning: "सिनॉप्टिक चेतावनी: पश्चिम-मध्य बंगाल की खाड़ी पर गहरा दबाव। तटीय क्षेत्रों में 55-65 किमी/घंटा की तूफानी हवाएँ।",
+        drawerDesc: "राष्ट्रीय आपदा प्रबंधन प्राधिकरण (NDMA) कॉमन अलर्टिंग प्रोटोकॉल (CAP v1.2) सक्रिय चेतावनी। कृषि, समुद्री मत्स्य पालन और नगर निगमों के लिए समन्वित परिचालन निर्देश जारी।",
+        viewRoleDirectives: "भूमिका-आधारित निर्देश देखें",
+        topBarSub: "संवादात्मक मौसम विज्ञान व आपदा आसूचना प्रणाली",
+        topBarTag: "मिशन मौसम • भारत-एफएस • आईएमडी नाउकास्ट • सचेत एनडीएमए",
+        headerKicker: "वेदर जीपीटी • मौसम विज्ञान विश्लेषण इंजन",
+        headerLayer: "अखिल भारतीय एकीकृत प्रणाली",
+        headerTitle: "संवादात्मक मौसम और आपदा आसूचना",
+        headerDesc: "भारत-एफएस संख्यात्मक ग्रिड, मेघदूत कृषि मौसम, दामिनी आकाशीय बिजली और एनडीएमए सचेत अलर्ट को भूमिका-विशिष्ट निर्णयों में परिवर्तित करना",
+        navRoleDirectives: "भूमिका निर्देश",
+        navRural: "ग्रामीण पहुंच स्तर (IVR/SMS)",
+        navHazard: "आईएमडी आपदा एटलस",
+        workbenchTitle: "भूमिका-आधारित परिचालन निर्देश इंजन",
+        workbenchBadge: "सचेत अलर्ट विभाजन",
+        workbenchDesc: "एकल रेड/ऑरेंज चेतावनी को स्वतः समानांतर, क्षेत्र-विशिष्ट परिचालन निर्देशों में प्रसारित किया जाता है",
+        scenarioLabel: "सक्रिय परिदृश्य:",
+        scenarioCyclone: "चक्रवात रेड अलर्ट (तटीय)",
+        scenarioFlood: "शहरी अतिवृष्टि व बाढ़ (बेंगलुरु)",
+        scenarioHeatwave: "भीषण लू व जल वाष्पीकरण (दिल्ली)",
+        cardFarmerTitle: "कृषि एवं कृषि मौसम विज्ञान",
+        cardFarmerBadge: "किसान भूमिका",
+        cardFishermanTitle: "समुद्री एवं तटीय सुरक्षा",
+        cardFishermanBadge: "मछुआरा भूमिका",
+        cardCityTitle: "शहरी स्थानीय निकाय एवं आपदा प्रबंधन",
+        cardCityBadge: "नगर निगम भूमिका",
+        copyBriefing: "निर्देश कॉपी करें",
+        chatCardTitle: "मौसम जीपीटी संवादात्मक मौसम विज्ञानी",
+        aiOnline: "एआई सक्रिय",
+        chatCardSubtitle: "स्वायत्त सिनॉप्टिक आसूचना एवं बहु-चरणीय संवाद",
+        clearChat: "बातचीत साफ़ करें",
+        printRecord: "प्रिंट रिकॉर्ड",
+        targetLabel: "📍 लक्षित स्थान:",
+        targetPlaceholder: "शहर या जिला दर्ज करें (उदा. बेंगलुरु, दिल्ली, मुंबई)...",
+        roleLensLabel: "भूमिका दृष्टिकोण:",
+        roleFarmer: "किसान",
+        roleFisherman: "मछुआरा",
+        roleCityOps: "नगर निगम / यूएलबी",
+        rolePublic: "नागरिक",
+        thinkingText: "मौसम जीपीटी भारत-एफएस ग्रिड और आईएमडी नाउकास्ट का विश्लेषण कर भूमिका निर्देश तैयार कर रहा है...",
+        suggestionsLabel: "सुझाव:",
+        disasterRadarTitle: "सचेत / एनडीएमए आपदा रडार",
+        telemetryTitle: "सिनॉप्टिक मौसम केंद्र टेलीमेट्री",
+        telemetrySub: "सेंसर डेटा",
+        inspectBtn: "जांचें",
+        scalesTitle: "मानक मौसम विज्ञान पैमाने",
+        scalesSub: "मानक",
+        footerRural: "ग्रामीण आईवीआर एवं टेलीफोनी गेटवे",
+        ruralModalTitle: "ग्रामीण पहुंच स्तर (फीचर फोन उपयोगकर्ताओं हेतु)",
+        ruralTabIvr: "1. टोल-फ्री आईवीआर वॉयस गेटवे (1800-MAUSAM-AI)",
+        ruralTabSms: "2. एसएमएस एवं यूएसएसडी सेवा",
+        ruralTabKrishi: "3. कृषि सखी फील्ड कंसोल",
+        ivrCallBtn: "📞 कॉल कनेक्ट करें"
       },
       ta: {
         welcomeTitle: "வெதர் ஜிபிடி வானிலை மற்றும் பேரிடர் முனையம்",
@@ -936,12 +1083,67 @@ export function getPortalHtml(): string {
         quickHeat: "வெப்ப அலை மற்றும் புற ஊதாக் கதிர்வீச்சு தாக்கம்",
         quickFlood: "பேரிடர் எச்சரிக்கை மற்றும் கனமழை முன்னறிவிப்பு",
         inputPlaceholder: "தமிழில் கேளுங்கள் (उदा. இன்று மழை பெய்யுமா? அறுவடை செய்யலாமா?)",
-        transmit: "அனுப்புக"
+        transmit: "அனுப்புக",
+        topBarDirectives: "செயல்பாட்டு வழிமுறைகள்",
+        drawerWarning: "வானிலை எச்சரிக்கை: மேற்கு-மத்திய வங்காள விரிகுடாவில் ஆழ்ந்த காற்றழுத்த தாழ்வு மண்டலம். கடலோரப் பகுதிகளில் 55-65 கிமீ/மணி வேகத்தில் பலத்த காற்று.",
+        drawerDesc: "தேசிய பேரிடர் மேலாண்மை ஆணையம் (NDMA) பொது எச்சரிக்கை நெறிமுறை (CAP v1.2) நேரடி ஆலோசனை. விவசாயம், கடலோர மீன்பிடி மற்றும் நகர்ப்புற உள்ளாட்சி அமைப்புகளுக்கான வழிகாட்டுதல்கள் தீவிரப்படுத்தப்பட்டுள்ளன.",
+        viewRoleDirectives: "பணி வழிகாட்டுதல்களைக் காண்க",
+        topBarSub: "உரையாடல் வானிலை மற்றும் பேரிடர் நுண்ணறிவு தளம்",
+        topBarTag: "மிஷன் மௌசம் • பாரத்-எஃப்எஸ் • ஐஎம்டி வானிலை • என்டிஎம்ஏ சச்செட்",
+        headerKicker: "வெதர் ஜிபிடி • வானிலை பகுப்பாய்வு இயந்திரம்",
+        headerLayer: "அனைத்திந்திய ஒருங்கிணைந்த தளம்",
+        headerTitle: "உரையாடல் வானிலை மற்றும் பேரிடர் நுண்ணறிவு",
+        headerDesc: "பாரத்-எஃப்எஸ் வானிலை மாதிரி, மேக்தூத் வேளாண் வானிலை, தாமினி மின்னல் மற்றும் என்டிஎம்ஏ பேரிடர் எச்சரிக்கைகளை துறைசார் வழிகாட்டுதல்களாக மாற்றுகிறது",
+        navRoleDirectives: "பணி வழிகாட்டுதல்கள்",
+        navRural: "கிராமப்புற தொலைபேசி சேவை (IVR/SMS)",
+        navHazard: "ஐஎம்டி பேரிடர் அட்லஸ்",
+        workbenchTitle: "பணி அடிப்படையிலான செயல்பாட்டு வழிகாட்டு இயந்திரம்",
+        workbenchBadge: "எச்சரிக்கை பகுப்பாய்வு",
+        workbenchDesc: "ஒற்றை சிவப்பு/ஆரஞ்சு எச்சரிக்கை ஒரே நேரத்தில் துறைசார்ந்த செயல்பாட்டு வழிகாட்டுதல்களாக மாற்றப்படுகிறது",
+        scenarioLabel: "செயல்பாட்டு சூழல்:",
+        scenarioCyclone: "புயல் சிவப்பு எச்சரிக்கை (கடற்கரை)",
+        scenarioFlood: "நகர்ப்புற பெருமழை (பெங்களூரு)",
+        scenarioHeatwave: "கடும் வெப்ப அலை (தில்லி)",
+        cardFarmerTitle: "விவசாயம் மற்றும் வேளாண் வானிலை",
+        cardFarmerBadge: "விவசாயி பணி",
+        cardFishermanTitle: "கடல் மற்றும் கடலோர பாதுகாப்பு",
+        cardFishermanBadge: "மீனவர் பணி",
+        cardCityTitle: "நகர்ப்புற உள்ளாட்சி மற்றும் பேரிடர் மேலாண்மை",
+        cardCityBadge: "நகராட்சி பணி",
+        copyBriefing: "அனைத்து வழிகாட்டுதல்களையும் நகலெடு",
+        chatCardTitle: "வெதர் ஜிபிடி உரையாடல் வானிலை ஆய்வாளர்",
+        aiOnline: "செயற்கை நுண்ணறிவு தயார்",
+        chatCardSubtitle: "தன்னாட்சி வானிலை நுண்ணறிவு மற்றும் உரையாடல்",
+        clearChat: "உரையாடலை அழிக்க",
+        printRecord: "பதிவை அச்சிட",
+        targetLabel: "📍 இடம்:",
+        targetPlaceholder: "நகரம் அல்லது மாவட்டத்தை உள்ளிடவும் (எ.கா. பெங்களூரு, சென்னை, தில்லி)...",
+        roleLensLabel: "பார்வை நோக்கம்:",
+        roleFarmer: "விவசாயி",
+        roleFisherman: "மீனவர்",
+        roleCityOps: "நகராட்சி / நிர்வாகம்",
+        rolePublic: "பொதுமக்கள்",
+        thinkingText: "வெதர் ஜிபிடி பாரத்-எஃப்எஸ் மாதிரிகள் மற்றும் ஐஎம்டி புள்ளிவிவரங்களை பகுப்பாய்வு செய்கிறது...",
+        suggestionsLabel: "பரிந்துரைகள்:",
+        disasterRadarTitle: "சச்செட் / என்டிஎம்ஏ பேரிடர் ரேடார்",
+        telemetryTitle: "வானிலை ஆய்வு மைய நேரடி தகவல்கள்",
+        telemetrySub: "சென்சார் தகவல்கள்",
+        inspectBtn: "ஆராய்க",
+        scalesTitle: "வானிலை அளவீட்டு அளவுகோல்கள்",
+        scalesSub: "தரநிலைகள்",
+        footerRural: "கிராமப்புற ஐவிஆர் மற்றும் தொலைபேசி சேவை",
+        ruralModalTitle: "கிராமப்புற தொலைபேசி சேவை (சாதாரண மொபைல் போன்கள்)",
+        ruralTabIvr: "1. கட்டணமில்லா தொலைபேசி சேவை (1800-MAUSAM-AI)",
+        ruralTabSms: "2. எஸ்எம்எஸ் & யுஎஸ்எஸ்டி தகவல்",
+        ruralTabKrishi: "3. கிருஷி சகி கள உதவி",
+        ivrCallBtn: "📞 இணைப்பைத் தொடங்கு"
       }
     };
 
     function setAppLanguage(lang) {
       currentLanguage = lang;
+      document.documentElement.lang = lang;
+      
       ["en", "hi", "ta"].forEach(l => {
         const btn = document.getElementById("lang-btn-" + l);
         if (btn) {
@@ -954,9 +1156,26 @@ export function getPortalHtml(): string {
       });
 
       const strings = I18N_STRINGS[lang] || I18N_STRINGS.en;
+      
+      // Update all elements with data-i18n
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (strings[key]) {
+          el.textContent = strings[key];
+        }
+      });
+
+      // Update all elements with data-i18n-placeholder
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (strings[key]) {
+          el.setAttribute("placeholder", strings[key]);
+        }
+      });
+
       const city = getTargetCity();
       const input = document.getElementById("chat-input");
-      if (input) {
+      if (input && !input.value.trim()) {
         input.placeholder = strings.inputPlaceholder;
       }
       const sendLabel = document.getElementById("send-label");
@@ -964,24 +1183,33 @@ export function getPortalHtml(): string {
         sendLabel.textContent = strings.transmit;
       }
 
-      // Re-render suggestions if empty
+      // Re-render suggestions
       const chipsBar = document.getElementById("suggestion-chips-bar");
       if (chipsBar) {
+        const qP = strings.quickPesticide.replace('{city}', city);
+        const qM = strings.quickMarine;
+        const qH = strings.quickHeat;
+        const qF = strings.quickFlood;
         chipsBar.innerHTML = \`
-          <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">Suggestions:</span>
-          <button type="button" onclick="quickAsk('\${strings.quickPesticide.replace('{city}', city)}')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            🌾 \${strings.quickPesticide.replace('{city}', city)}
+          <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">\${strings.suggestionsLabel}</span>
+          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qP)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            🌾 \${qP}
           </button>
-          <button type="button" onclick="quickAsk('\${strings.quickMarine}')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            ⚓ \${strings.quickMarine}
+          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qM)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            ⚓ \${qM}
           </button>
-          <button type="button" onclick="quickAsk('\${strings.quickHeat}')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            🏃 \${strings.quickHeat}
+          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qH)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            🏃 \${qH}
           </button>
-          <button type="button" onclick="quickAsk('\${strings.quickFlood}')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            ⚠️ \${strings.quickFlood}
+          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qF)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
+            ⚠️ \${qF}
           </button>
         \`;
+      }
+
+      // Refresh directives cards in selected language
+      if (typeof triggerRoleDirectives === "function") {
+        triggerRoleDirectives(currentScenario);
       }
     }
 
@@ -1060,7 +1288,9 @@ export function getPortalHtml(): string {
 
     function detectUserLocation() {
       if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser.");
+        console.warn("Geolocation is not supported by your browser.");
+        const locInput = document.getElementById("location-input");
+        if (locInput) locInput.placeholder = "GPS unavailable - enter city manually";
         return;
       }
       const locInput = document.getElementById("location-input");
@@ -1078,7 +1308,7 @@ export function getPortalHtml(): string {
         },
         (err) => {
           locInput.value = orig;
-          console.warn("Geolocation denied:", err);
+          console.warn("Geolocation denied or unavailable:", err);
         },
         { timeout: 8000 }
       );
@@ -1188,30 +1418,34 @@ export function getPortalHtml(): string {
     function renderWelcomeMessage() {
       const city = getTargetCity();
       const strings = I18N_STRINGS[currentLanguage] || I18N_STRINGS.en;
+      const qPesticide = strings.quickPesticide.replace('{city}', city);
+      const qMarine = strings.quickMarine;
+      const qHeat = strings.quickHeat;
+      const qFlood = strings.quickFlood;
       return \`
-        <div class="border border-[#E1E4DD] bg-[#F5F6F3] p-4 rounded-sm shadow-xs space-y-3">
-          <div class="flex items-center gap-2 pb-2 border-b border-[#E1E4DD]">
-            <span class="w-6 h-6 bg-[#1B2A44] text-white rounded flex items-center justify-center text-xs font-bold">W</span>
+        <div class="glass-card-subtle p-4 rounded-md shadow-xs space-y-3">
+          <div class="flex items-center gap-2 pb-2 border-b border-[#E1E4DD]/70">
+            <span class="w-6 h-6 bg-[#1B2A44] text-white rounded flex items-center justify-center text-xs font-bold shadow-xs">W</span>
             <div class="font-bold text-xs text-[#1B2A44] font-serif">\${strings.welcomeTitle}</div>
             <span class="ml-auto text-[10px] text-[#5B6472] font-mono">READY</span>
           </div>
           <p class="text-xs text-[#1B2A44] leading-relaxed">
             \${strings.welcomeDesc}
           </p>
-          <div class="bg-white border border-[#E1E4DD] p-2.5 space-y-1.5 rounded-sm">
+          <div class="glass-inner-subtle p-2.5 space-y-1.5 rounded-md">
             <div class="text-[11px] font-bold text-[#5B6472] uppercase tracking-wider">Quick Action Queries:</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
-              <button onclick="quickAsk('\${strings.quickPesticide.replace('{city}', city)}')" class="text-left p-1.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] rounded text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition">
-                <span>🌾</span> <span>\${strings.quickPesticide.replace('{city}', city)}</span>
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qPesticide)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+                <span>🌾</span> <span>\${qPesticide}</span>
               </button>
-              <button onclick="quickAsk('\${strings.quickMarine}')" class="text-left p-1.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] rounded text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition">
-                <span>⚓</span> <span>\${strings.quickMarine}</span>
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qMarine)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+                <span>⚓</span> <span>\${qMarine}</span>
               </button>
-              <button onclick="quickAsk('\${strings.quickHeat}')" class="text-left p-1.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] rounded text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition">
-                <span>🏃</span> <span>\${strings.quickHeat}</span>
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qHeat)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+                <span>🏃</span> <span>\${qHeat}</span>
               </button>
-              <button onclick="quickAsk('\${strings.quickFlood}')" class="text-left p-1.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] rounded text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition">
-                <span>⚠️</span> <span>\${strings.quickFlood}</span>
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qFlood)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+                <span>⚠️</span> <span>\${qFlood}</span>
               </button>
             </div>
           </div>
@@ -1230,13 +1464,13 @@ export function getPortalHtml(): string {
           <div class="flex items-center gap-1.5 text-[10px] text-[#5B6472] mr-1">
             <span class="font-bold text-[#1B2A44] uppercase">You</span>
             <span>•</span>
-            <span class="bg-[#E1E4DD] px-1.5 py-0.2 rounded font-medium text-[#1B2A44]">📍 \${metadata.city || getTargetCity()}</span>
+            <span class="bg-white/80 border border-[#E1E4DD] px-1.5 py-0.2 rounded font-medium text-[#1B2A44]">📍 \${metadata.city || getTargetCity()}</span>
             <span>•</span>
-            <span class="bg-blue-100 text-[#1B2A44] px-1.5 py-0.2 rounded font-medium uppercase">\${metadata.sector || getSelectedSector()}</span>
+            <span class="bg-blue-100/90 text-[#1B2A44] px-1.5 py-0.2 rounded font-medium uppercase">\${metadata.sector || getSelectedSector()}</span>
             <span>•</span>
             <span>\${timeStr}</span>
           </div>
-          <div class="max-w-[88%] bg-[#1B2A44] text-white px-4 py-2.5 rounded-sm shadow-xs text-xs leading-relaxed">
+          <div class="max-w-[88%] bg-[#1B2A44] text-white px-4 py-2.5 rounded-md shadow-xs text-xs leading-relaxed">
             \${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
           </div>
         \`;
@@ -1248,16 +1482,16 @@ export function getPortalHtml(): string {
 
         asstDiv.innerHTML = \`
           <div class="flex items-center gap-1.5 text-[10px] text-[#5B6472] ml-1">
-            <span class="w-4 h-4 bg-[#C97A2B] text-white font-bold rounded-full flex items-center justify-center text-[9px]">⚡</span>
+            <span class="w-4 h-4 bg-[#C97A2B] text-white font-bold rounded-full flex items-center justify-center text-[9px] shadow-2xs">⚡</span>
             <span class="font-bold text-[#1B2A44] uppercase">WeatherGPT Dispatch</span>
             <span>•</span>
             <span class="text-[#3F6B4A] font-semibold font-mono">BharatFS / Gemini</span>
             <span>•</span>
             <span>\${timeStr}</span>
           </div>
-          <div class="max-w-[94%] bg-white border border-[#E1E4DD] p-4 rounded-sm shadow-xs text-slate-800 text-xs leading-relaxed space-y-2">
+          <div class="max-w-[94%] glass-card p-4 rounded-md shadow-sm text-slate-800 text-xs leading-relaxed space-y-2">
             \${formattedHtml}
-            <div class="pt-2 mt-2 border-t border-[#E1E4DD] flex items-center justify-between text-[10px] text-[#5B6472]">
+            <div class="pt-2 mt-2 border-t border-[#E1E4DD]/70 flex items-center justify-between text-[10px] text-[#5B6472]">
               <span class="font-mono">WMO SYNOPTIC COMPLIANT</span>
               <div class="flex items-center gap-3">
                 <button onclick="speakWeatherMessage(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1 text-[#C97A2B]">
@@ -1291,7 +1525,9 @@ export function getPortalHtml(): string {
       try {
         const text = decodeURIComponent(btn.getAttribute("data-text"));
         if (!window.speechSynthesis) {
-          alert("Speech synthesis is not supported on this browser.");
+          console.warn("Speech synthesis is not supported on this browser.");
+          btn.innerHTML = "<span>⚠️</span> Audio Unavailable";
+          setTimeout(() => { btn.innerHTML = "<span>🔊</span> Listen"; }, 2000);
           return;
         }
         window.speechSynthesis.cancel(); // stop previous
@@ -1311,6 +1547,7 @@ export function getPortalHtml(): string {
         const orig = btn.innerHTML;
         btn.innerHTML = "<span>🔊</span> Speaking...";
         utterance.onend = () => { btn.innerHTML = orig; };
+        utterance.onerror = () => { btn.innerHTML = orig; };
       } catch(e) {
         console.warn("TTS error:", e);
       }
@@ -1322,14 +1559,19 @@ export function getPortalHtml(): string {
 
     function toggleVoiceRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert("Speech recognition is not supported in this browser. Please use Google Chrome.");
-        return;
-      }
-
       const micBtn = document.getElementById("voice-mic-btn");
       const micIcon = document.getElementById("mic-icon");
       const input = document.getElementById("chat-input");
+
+      if (!SpeechRecognition) {
+        console.warn("Speech recognition is not supported in this browser.");
+        if (input) {
+          const origPlaceholder = input.placeholder;
+          input.placeholder = "Speech dictation unavailable in this browser — type here";
+          setTimeout(() => { input.placeholder = origPlaceholder; }, 3000);
+        }
+        return;
+      }
 
       if (isRecording && recognitionInstance) {
         recognitionInstance.stop();
@@ -1392,11 +1634,9 @@ export function getPortalHtml(): string {
     }
 
     function clearChatHistory() {
-      if (confirm("Reset conversation history and clear local record?")) {
-        chatHistory = [];
-        localStorage.removeItem("weathergpt_chat_history");
-        initChatUI();
-      }
+      chatHistory = [];
+      localStorage.removeItem("weathergpt_chat_history");
+      initChatUI();
     }
 
     function printChatTranscript() {
@@ -1404,9 +1644,23 @@ export function getPortalHtml(): string {
     }
 
     function quickAsk(promptText) {
+      if (!promptText) return;
+      let decoded = promptText;
+      try {
+        if (typeof promptText === "string" && (promptText.includes("%20") || promptText.includes("%"))) {
+          decoded = decodeURIComponent(promptText);
+        }
+      } catch (e) {
+        decoded = promptText;
+      }
       const input = document.getElementById("chat-input");
-      input.value = promptText;
-      document.getElementById("chat-form").dispatchEvent(new Event("submit", { cancelable: true }));
+      if (input) {
+        input.value = decoded;
+        const form = document.getElementById("chat-form");
+        if (form) {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      }
     }
 
     async function handleChatSubmit(event) {
@@ -1469,7 +1723,11 @@ export function getPortalHtml(): string {
         saveChatHistory();
       } catch (err) {
         console.error("Chat error:", err);
-        const errReply = "⚠️ **Connection Notice:** Unable to reach WeatherGPT backend at " + backendUrl + ". Error: " + (err.message || err);
+        const isCloudflareOrStatic = window.location.hostname.includes("pages.dev") || window.location.hostname.includes("cloudflare");
+        const helperNote = isCloudflareOrStatic && !localStorage.getItem("weathergpt_backend_url")
+          ? "\\n\\n💡 Tip for Cloudflare Pages: Click the ⚙️ API button in the navbar to configure your live backend service URL."
+          : "";
+        const errReply = "⚠️ **Connection Notice:** Unable to reach WeatherGPT backend at " + backendUrl + ". " + (err.message || err) + helperNote;
         appendMessageToThread("assistant", errReply, { city, sector });
       } finally {
         thinking.classList.add("hidden");
@@ -1478,137 +1736,400 @@ export function getPortalHtml(): string {
       }
     }
 
-    // 5. Showpiece Role Fan-Out Controller (Section 4.4 & 8.4)
-    const FANOUT_SCENARIOS = {
+    // 5. Role-Based Operational Directives Controller (Section 4.4 & 8.4)
+    const ROLE_DIRECTIVE_SCENARIOS = {
       cyclone: {
-        event: "Extremely Severe Cyclonic Storm & Storm Surge (Red Alert)",
-        area: "Coastal Odisha & Northern Andhra Pradesh",
-        meta: "Source: NDMA SACHET CAP v1.2 + BharatFS Cyclone Track (±12km ensemble spread)",
-        farmer: {
-          directive: "Emergency harvest of mature paddy within 18 hours; pause all agro-chemical spraying and secure livestock.",
-          checklist: [
-            "Dig 30cm peripheral trenches to stop prolonged root submergence",
-            "Zero pesticide or fertilizer application (drift & immediate washout risk)",
-            "Evacuate livestock to high-ground pucca shelters with stored dry fodder"
-          ],
-          status: "Spraying: SUSPENDED"
+        en: {
+          event: "Extremely Severe Cyclonic Storm & Storm Surge (Red Alert)",
+          area: "Coastal Odisha & Northern Andhra Pradesh",
+          meta: "Source: NDMA SACHET CAP v1.2 + BharatFS Cyclone Track (±12km ensemble spread)",
+          farmer: {
+            directive: "Emergency harvest of mature paddy within 18 hours; pause all agro-chemical spraying and secure livestock.",
+            checklist: [
+              "Dig 30cm peripheral trenches to stop prolonged root submergence",
+              "Zero pesticide or fertilizer application (drift & immediate washout risk)",
+              "Evacuate livestock to high-ground pucca shelters with stored dry fodder"
+            ],
+            status: "Spraying: SUSPENDED"
+          },
+          fisherman: {
+            directive: "TOTAL SEA BAN: Coastal squalls exceeding 75 km/h with rough sea state. Return to harbor by 18:00 IST.",
+            checklist: [
+              "Total suspension of deep-sea and coastal fishing operations",
+              "Moor fiber boats and catamarans securely above high spring-tide line",
+              "Keep marine VHF tuned to Coast Guard Channel 16 for SAR updates"
+            ],
+            status: "Departure: TOTAL BAN"
+          },
+          city_ops: {
+            directive: "ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize heavy dewatering pumps to chronic low-lying wards.",
+            checklist: [
+              "Station 100-HP diesel pumps at known inundation railway underpasses",
+              "Pre-position NDRF and Civil Defense boats in vulnerable wards",
+              "Broadcast real-time road diversion alerts for submerged arterial routes"
+            ],
+            status: "Alert: CODE RED"
+          }
         },
-        fisherman: {
-          directive: "TOTAL SEA BAN: Coastal squalls exceeding 75 km/h with rough sea state. Return to harbor by 18:00 IST.",
-          checklist: [
-            "Total suspension of deep-sea and coastal fishing operations",
-            "Moor fiber boats and catamarans securely above high spring-tide line",
-            "Keep marine VHF tuned to Coast Guard Channel 16 for SAR updates"
-          ],
-          status: "Departure: TOTAL BAN"
+        hi: {
+          event: "अत्यंत गंभीर चक्रवाती तूफान और तूफानी लहरें (रेड अलर्ट)",
+          area: "तटीय ओडिशा एवं उत्तरी आंध्र प्रदेश",
+          meta: "स्रोत: एनडीएमए सचेत सीएपी v1.2 + भारत-एफएस चक्रवात पथ (±12 किमी फैलाव)",
+          farmer: {
+            directive: "18 घंटों के भीतर पकी धान की फसल की आपातकालीन कटाई करें; सभी कीटनाशक छिड़काव रोकें और मवेशियों को सुरक्षित रखें।",
+            checklist: [
+              "जड़ों के जलभराव को रोकने के लिए मेड़ों के किनारे 30 सेमी गहरी जल निकासी नालियां बनाएं",
+              "48 घंटों तक किसी भी कीटनाशक या उर्वरक का छिड़काव न करें (हवा में बहने और धुलने का खतरा)",
+              "मवेशियों को सूखे चारे के साथ ऊंचे पक्के आश्रयों में स्थानांतरित करें"
+            ],
+            status: "छिड़काव: स्थगित"
+          },
+          fisherman: {
+            directive: "समुद्र में जाने पर पूर्ण प्रतिबंध: 75 किमी/घंटे से अधिक तेज तूफानी हवाएं। शाम 18:00 बजे तक बंदरगाह लौटें।",
+            checklist: [
+              "गहरे समुद्र और तटीय मछली पकड़ने के सभी कार्य तुरंत स्थगित करें",
+              "फाइबर नौकाओं और नावों को उच्च ज्वार रेखा से ऊपर सुरक्षित बांधें",
+              "तटरक्षक खोज व बचाव हेतु मरीन वीएचएफ चैनल 16 चालू रखें"
+            ],
+            status: "रवानगी: पूर्ण प्रतिबंध"
+          },
+          city_ops: {
+            directive: "नगर निगम जल निकासी प्रोटोकॉल सक्रिय करें: जलभराव वाले निचले वार्डों में भारी पंप तैनात करें।",
+            checklist: [
+              "रेलवे अंडरपास और संवेदनशील चौराहों पर 100-एचपी डीजल पंप तैनात करें",
+              "संवेदनशील वार्डों में एनडीआरएफ और नागरिक सुरक्षा बचाव नौकाएं पहले से तैनात करें",
+              "जलमग्न मुख्य मार्गों के लिए वास्तविक समय में यातायात डायवर्जन जारी करें"
+            ],
+            status: "चेतावनी: कोड रेड"
+          }
         },
-        city_ops: {
-          directive: "ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize heavy dewatering pumps to chronic low-lying wards.",
-          checklist: [
-            "Station 100-HP diesel pumps at known inundation railway underpasses",
-            "Pre-position NDRF and Civil Defense boats in vulnerable wards",
-            "Broadcast real-time road diversion alerts for submerged arterial routes"
-          ],
-          status: "Alert: CODE RED"
+        ta: {
+          event: "மிக தீவிர புயல் மற்றும் கடல் கொந்தளிப்பு (சிவப்பு எச்சரிக்கை)",
+          area: "கடலோர ஒடிசா மற்றும் வடக்கு ஆந்திர பிரதேசம்",
+          meta: "ஆதாரம்: என்டிஎம்ஏ சச்செட் சிஏபி v1.2 + பாரத்-எஃப்எஸ் புயல் பாதை (±12 கிமீ)",
+          farmer: {
+            directive: "18 மணி நேரத்திற்குள் பழுத்த நெல் பயிரை அவசரமாக அறுவடை செய்யவும்; பூச்சிக்கொல்லி மருந்து தெளிப்பதை நிறுத்தி கால்நடைகளைப் பாதுகாக்கவும்.",
+            checklist: [
+              "வேர் அழுகலைத் தடுக்க வரப்புகளில் 30 செ.மீ வடிகால் வாய்க்கால்களை வெட்டவும்",
+              "பூச்சிக்கொல்லி அல்லது உரமிடுவதை உடனடியாக தவிர்க்கவும் (காற்று மற்றும் மழையால் அடித்துச் செல்லப்படும் அபாயம்)",
+              "கால்நடைகளை மேடான கான்கிரீட் கொட்டகைகளுக்கு மாற்றவும்"
+            ],
+            status: "மருந்து தெளித்தல்: நிறுத்திவைப்பு"
+          },
+          fisherman: {
+            directive: "கடலுக்குச் செல்ல முழு தடை: 75 கிமீ/மணி வேகத்தில் பலத்த சூறாவளி காற்று. மாலை 18:00 மணிக்குள் கரை திரும்புங்கள்.",
+            checklist: [
+              "ஆழ்கடல் மற்றும் கடலோர மீன்பிடி நடவடிக்கைகளை முழுமையாக நிறுத்தவும்",
+              "படகுகளை உயர் அலை வரம்பிற்கு மேல் பாதுகாப்பாக கட்டி வைக்கவும்",
+              "கடலோர காவல்படை சேனல் 16-ஐ தொடர்ந்து கவனிக்கவும்"
+            ],
+            status: "புறப்பாடு: முழு தடை"
+          },
+          city_ops: {
+            directive: "நகராட்சி வடிகால் அவசர திட்டத்தை செயல்படுத்துக: தாழ்வான பகுதிகளில் அதிக திறன் கொண்ட நீர் இறைக்கும் பம்புகளை தயார் செய்க.",
+            checklist: [
+              "தண்ணீர் தேங்கும் ரயில்வே பாலங்கள் அருகே 100-HP பம்புகளை நிறுவவும்",
+              "பாதிக்கப்படக்கூடிய பகுதிகளில் பேரிடர் மீட்புப் படகுகளை முன்கூட்டியே தயார் நிலையில் வைக்கவும்",
+              "போக்குவரத்து மாற்று வழிகள் குறித்த அறிவிப்புகளை வெளியிடவும்"
+            ],
+            status: "எச்சரிக்கை: ரெட் அலர்ட்"
+          }
         }
       },
       flood: {
-        event: "Monsoon Convective Torrential Downpour & Flash Floods",
-        area: "Bengaluru Urban & Hebbal Catchment",
-        meta: "Source: IMD Doppler Radar & Nowcast (14:00 IST) + Hazard Atlas Historical Normals",
-        farmer: {
-          directive: "Drain excess water from horticultural and vegetable beds; delay fertilizer application by 48 hours.",
-          checklist: [
-            "Clear soil drainage furrows to prevent seedling root asphyxiation",
-            "Suspend foliar fungicide sprays until rainfall ceases completely",
-            "Inspect bund structural stability along field margins"
-          ],
-          status: "Spraying: DELAYED"
+        en: {
+          event: "Monsoon Convective Torrential Downpour & Flash Floods",
+          area: "Bengaluru Urban & Hebbal Catchment",
+          meta: "Source: IMD Doppler Radar & Nowcast (14:00 IST) + Hazard Atlas Historical Normals",
+          farmer: {
+            directive: "Drain excess water from horticultural and vegetable beds; delay fertilizer application by 48 hours.",
+            checklist: [
+              "Clear soil drainage furrows to prevent seedling root asphyxiation",
+              "Suspend foliar fungicide sprays until rainfall ceases completely",
+              "Inspect bund structural stability along field margins"
+            ],
+            status: "Spraying: DELAYED"
+          },
+          fisherman: {
+            directive: "INLAND RESERVOIR WARNING: High surface turbulence and sudden surge in lake and reservoir outfalls.",
+            checklist: [
+              "Halt coracle and freshwater artisanal netting on lakes and dams",
+              "Watch for rapid reservoir spillway shutter openings",
+              "Secure nylon gill nets away from flooded shorelines"
+            ],
+            status: "Freshwater: RESTRICTED"
+          },
+          city_ops: {
+            directive: "ACTIVATE WARD SUMP PUMPING: High risk of underpass waterlogging on Outer Ring Road.",
+            checklist: [
+              "Switch on automatic sump pumps at chronic underpasses",
+              "Alert traffic police to divert traffic around flooded lake overflows",
+              "Desilt stormwater drain entry grates from urban debris"
+            ],
+            status: "Alert: CODE ORANGE"
+          }
         },
-        fisherman: {
-          directive: "INLAND RESERVOIR WARNING: High surface turbulence and sudden surge in lake and reservoir outfalls.",
-          checklist: [
-            "Halt coracle and freshwater artisanal netting on lakes and dams",
-            "Watch for rapid reservoir spillway shutter openings",
-            "Secure nylon gill nets away from flooded shorelines"
-          ],
-          status: "Freshwater: RESTRICTED"
+        hi: {
+          event: "मानसून की मूसलाधार बारिश और अचानक बाढ़ का खतरा",
+          area: "बेंगलुरु शहरी एवं हेब्बल जलग्रहण क्षेत्र",
+          meta: "स्रोत: आईएमडी डॉपलर रडार व नाउकास्ट + आपदा एटलस ऐतिहासिक रिकॉर्ड",
+          farmer: {
+            directive: "सब्जियों और बागवानी क्यारियों से अतिरिक्त पानी निकालें; उर्वरक का प्रयोग 48 घंटे टालें।",
+            checklist: [
+              "पौधों की जड़ों को गलने से बचाने के लिए जल निकासी नालियों को तुरंत साफ करें",
+              "बारिश पूरी तरह रुकने तक पत्तियों पर फफूंदनाशक का छिड़काव स्थगित रखें",
+              "खेत की मेड़ों की स्थिरता की जांच करें"
+            ],
+            status: "छिड़काव: स्थगित"
+          },
+          fisherman: {
+            directive: "जलाशय चेतावनी: झीलों और जलाशयों में भारी उफान और तेज बहाव की संभावना।",
+            checklist: [
+              "झीलों और बांधों में छोटी नावों और मछली पकड़ने के जालों का उपयोग रोकें",
+              "जलाशय के स्पिलवे गेट तेजी से खुलने पर सतर्क रहें",
+              "बाढ़ वाले किनारों से नायलॉन के जालों को सुरक्षित ऊंचाई पर रखें"
+            ],
+            status: "जलाशय: प्रतिबंधित"
+          },
+          city_ops: {
+            directive: "वार्ड संप पंपिंग सक्रिय करें: आउटर रिंग रोड और अंडरपासों में गंभीर जलभराव का खतरा।",
+            checklist: [
+              "प्रमुख अंडरपासों पर स्वचालित संप पंप तुरंत चालू करें",
+              "झीलों के ओवरफ्लो होने पर ट्रैफिक पुलिस को मार्ग मोड़ने के निर्देश दें",
+              "तूफानी नालों की जालियों से कचरा साफ करें"
+            ],
+            status: "चेतावनी: कोड ऑरेंज"
+          }
         },
-        city_ops: {
-          directive: "ACTIVATE WARD SUMP PUMPING: High risk of underpass waterlogging on Outer Ring Road.",
-          checklist: [
-            "Switch on automatic sump pumps at chronic underpasses",
-            "Alert traffic police to divert traffic around flooded lake overflows",
-            "Desilt stormwater drain entry grates from urban debris"
-          ],
-          status: "Alert: CODE ORANGE"
+        ta: {
+          event: "பருவமழை பெருவெள்ளம் மற்றும் மேகவெடிப்பு எச்சரிக்கை",
+          area: "பெங்களூரு நகர்ப்புறம் மற்றும் ஹெப்பல் வடிநிலம்",
+          meta: "ஆதாரம்: ஐஎம்டி டாப்ளர் ரேடார் மற்றும் வானிலை முன்னறிவிப்பு",
+          farmer: {
+            directive: "தோட்டக்கலை மற்றும் காய்கறி பயிர்களில் இருந்து தேங்கிய நீரை வெளியேற்றவும்; உரமிடுவதை 48 மணி நேரம் தள்ளிப்போடவும்.",
+            checklist: [
+              "நாற்றுகள் அழுகாமல் இருக்க வயல் வடிகால்களை உடனடியாக தூர்வாரவும்",
+              "மழை முழுமையாக நிற்கும் வரை பூஞ்சாணக் கொல்லி மருந்து தெளிக்க வேண்டாம்",
+              "வயல் வரப்புகளின் உறுதியை சரிபார்க்கவும்"
+            ],
+            status: "மருந்து தெளித்தல்: தள்ளிவைப்பு"
+          },
+          fisherman: {
+            directive: "உள்நாட்டு நீர்நிலை எச்சரிக்கை: ஏரிகள் மற்றும் அணைகளில் நீர்மட்டம் உயர்வு.",
+            checklist: [
+              "ஏரிகளில் பரிசல் மற்றும் மீன்பிடி வலைகளைப் பயன்படுத்துவதை தவிர்க்கவும்",
+              "அணை மதகுகள் திறக்கப்படும் அபாயத்தை கண்காணிக்கவும்",
+              "மீன்பிடி வலைகளை பாதுகாப்பான இடங்களுக்கு மாற்றவும்"
+            ],
+            status: "உள்நாட்டு மீன்பிடி: தடை"
+          },
+          city_ops: {
+            directive: "நகர நீர் இறைக்கும் பம்புகளை இயக்கவும்: முக்கிய சாலைகள் மற்றும் சுரங்கப்பாதைகளில் நீர் தேங்கும் அபாயம்.",
+            checklist: [
+              "சுரங்கப்பாதைகளில் தானியங்கி நீர் இறைக்கும் பம்புகளை இயக்கவும்",
+              "போக்குவரத்து நெரிசலைத் தவிர்க்க மாற்று வழிகளை அறிவிக்கவும்",
+              "மழைநீர் வடிகால் வாயில்களில் உள்ள குப்பைகளை அகற்றவும்"
+            ],
+            status: "எச்சரிக்கை: ஆரஞ்சு அலர்ட்"
+          }
         }
       },
       heatwave: {
-        event: "Severe Heatwave & Evapotranspiration Surge (Loo Conditions)",
-        area: "New Delhi & NCR Region",
-        meta: "Source: IMD Heat Action Plan Bulletin + BharatFS Thermal Forecast",
-        farmer: {
-          directive: "Apply nocturnal irrigation (03:00 - 06:00 IST); mulch topsoil to preserve root zone moisture.",
-          checklist: [
-            "Apply straw mulch to conserve 0-6cm topsoil moisture",
-            "Provide shaded shelters and continuous cool water for milch cattle",
-            "Strictly avoid field labor during peak thermal window (11:30 - 15:30)"
-          ],
-          status: "Labor: NOCTURNAL SHIFT"
+        en: {
+          event: "Severe Heatwave & Evapotranspiration Surge (Loo Conditions)",
+          area: "New Delhi & NCR Region",
+          meta: "Source: IMD Heat Action Plan Bulletin + BharatFS Thermal Forecast",
+          farmer: {
+            directive: "Apply nocturnal irrigation (03:00 - 06:00 IST); mulch topsoil to preserve root zone moisture.",
+            checklist: [
+              "Apply straw mulch to conserve 0-6cm topsoil moisture",
+              "Provide shaded shelters and continuous cool water for milch cattle",
+              "Strictly avoid field labor during peak thermal window (11:30 - 15:30)"
+            ],
+            status: "Labor: NOCTURNAL SHIFT"
+          },
+          fisherman: {
+            directive: "AQUACULTURE ADVISORY: Pond water temperature exceeding 33°C. Risk of dissolved oxygen depletion.",
+            checklist: [
+              "Run pond paddle aerators during early dawn hours",
+              "Add freshwater recharge to maintain pond depth > 1.5m",
+              "Reduce feed ration by 30% to prevent unconsumed waste decomposition"
+            ],
+            status: "Aquaculture: HIGH STRESS"
+          },
+          city_ops: {
+            directive: "ACTIVATE HEAT ACTION PLAN (HAP): Open public hydration stations and misting shelters.",
+            checklist: [
+              "Establish ORS kiosks at major transit interchanges",
+              "Ensure uninterrupted municipal power supply to emergency hospital wards",
+              "Enforce mandatory rest breaks for outdoor construction laborers"
+            ],
+            status: "Alert: CODE ORANGE"
+          }
         },
-        fisherman: {
-          directive: "AQUACULTURE ADVISORY: Pond water temperature exceeding 33°C. Risk of dissolved oxygen depletion.",
-          checklist: [
-            "Run pond paddle aerators during early dawn hours",
-            "Add freshwater recharge to maintain pond depth > 1.5m",
-            "Reduce feed ration by 30% to prevent unconsumed waste decomposition"
-          ],
-          status: "Aquaculture: HIGH STRESS"
+        hi: {
+          event: "भीषण लू एवं अत्यधिक वाष्पीकरण की स्थिति",
+          area: "नई दिल्ली एवं राष्ट्रीय राजधानी क्षेत्र (NCR)",
+          meta: "स्रोत: आईएमडी हीट एक्शन प्लान बुलेटिन + भारत-एफएस थर्मल पूर्वानुमान",
+          farmer: {
+            directive: "रात के समय सिंचाई करें (03:00 - 06:00 बजे); नमी बनाए रखने के लिए मिट्टी में पुआल की मल्चिंग करें।",
+            checklist: [
+              "मिट्टी की नमी बचाने के लिए 0-6 सेमी पुआल या पत्तों की मल्चिंग करें",
+              "दुधारू पशुओं के लिए छायादार बाड़े और स्वच्छ शीतल जल की व्यवस्था करें",
+              "दोपहर 11:30 से 15:30 के बीच खेत में शारीरिक श्रम से पूरी तरह बचें"
+            ],
+            status: "श्रम: रात्रि पाली"
+          },
+          fisherman: {
+            directive: "मत्स्य पालन सलाह: तालाब का तापमान 33°C से अधिक। ऑक्सीजन की कमी का गंभीर खतरा।",
+            checklist: [
+              "सुबह तड़के तालाब के पैडल एरेटर चलाकर ऑक्सीजन स्तर बढ़ाएं",
+              "तालाब की गहराई 1.5 मीटर से अधिक बनाए रखने के लिए ताजा पानी डालें",
+              "भोजन की मात्रा में 30% की कटौती करें ताकि अपशिष्ट न सड़े"
+            ],
+            status: "मत्स्य पालन: अत्यधिक तनाव"
+          },
+          city_ops: {
+            directive: "हीट एक्शन प्लान (HAP) लागू करें: सार्वजनिक पेयजल केंद्र और ओआरएस स्टॉल शुरू करें।",
+            checklist: [
+              "बस स्टैंड और मेट्रो स्टेशनों पर ओआरएस और शीतल जल कियोस्क स्थापित करें",
+              "अस्पतालों के आपातकालीन वार्डों में निर्बाध बिजली व कूलिंग सुनिश्चित करें",
+              "निर्माण श्रमिकों के लिए दोपहर में अनिवार्य विश्राम लागू करें"
+            ],
+            status: "चेतावनी: कोड ऑरेंज"
+          }
         },
-        city_ops: {
-          directive: "ACTIVATE HEAT ACTION PLAN (HAP): Open public hydration stations and misting shelters.",
-          checklist: [
-            "Establish ORS kiosks at major transit interchanges",
-            "Ensure uninterrupted municipal power supply to emergency hospital wards",
-            "Enforce mandatory rest breaks for outdoor construction laborers"
-          ],
-          status: "Alert: CODE ORANGE"
+        ta: {
+          event: "கடும் வெப்ப அலை மற்றும் நிலத்தடி நீர் ஆவியாதல் நிலை",
+          area: "புது தில்லி மற்றும் தேசிய தலைநகர் பகுதி (NCR)",
+          meta: "ஆதாரம்: ஐஎம்டி வெப்ப அலை திட்டம் மற்றும் பாரத்-எஃப்எஸ் மாதிரி",
+          farmer: {
+            directive: "இரவு அல்லது விடியற்காலை வேளையில் பாசனம் செய்யவும் (03:00 - 06:00); மண் ஈரப்பதத்தை பாதுகாக்க தழைக்கூளம் இடவும்.",
+            checklist: [
+              "மண்ணின் ஈரப்பதத்தை பாதுகாக்க வைக்கோல் கொண்டு மூடாக்கு இடவும்",
+              "கால்நடைகளுக்கு நிழலான கொட்டகை மற்றும் தொடர்ச்சியான குடிநீர் வசதி அளிக்கவும்",
+              "நண்பகல் 11:30 முதல் 15:30 வரை வெயிலில் கடுமையான வேலை செய்வதைத் தவிர்க்கவும்"
+            ],
+            status: "பணி: இரவு நேர மாற்றம்"
+          },
+          fisherman: {
+            directive: "மீன் பண்ணை வழிகாட்டுதல்: குட்டை நீர் வெப்பநிலை 33°C-க்கு மேல் உயர்வு. ஆக்சிஜன் பற்றாக்குறை ஆபத்து.",
+            checklist: [
+              "விடியற்காலையில் குட்டைகளில் காற்று காற்றோட்ட கருவிகளை இயக்கவும்",
+              "குட்டை ஆழத்தை 1.5 மீட்டருக்கு மேல் வைத்திருக்க புதிய நீரை நிரப்பவும்",
+              "தீவன அளவை 30% குறைத்து நீர் மாசடைவதை தடுக்கவும்"
+            ],
+            status: "மீன்வளர்ப்பு: அதிக வெப்ப அழுத்தம்"
+          },
+          city_ops: {
+            directive: "வெப்ப அலை தணிப்பு திட்டம் (HAP) செயல்படுத்துக: பொது குடிநீர் மற்றும் நிழல் கூடாரங்களை அமைக்கவும்.",
+            checklist: [
+              "முக்கிய போக்குவரத்து மையங்களில் ORS மற்றும் குடிநீர் மையங்களை திறக்கவும்",
+              "மருத்துவமனைகளில் தொடர்ச்சியான மின்சாரம் மற்றும் குளிர்சாதன வசதியை உறுதி செய்க",
+              "கட்டுமானத் தொழிலாளர்களுக்கு நண்பகல் கட்டாய ஓய்வு வழங்கவும்"
+            ],
+            status: "எச்சரிக்கை: ஆரஞ்சு அலர்ட்"
+          }
         }
       }
     };
 
-    function triggerShowpieceFanout(scenarioKey) {
-      const data = FANOUT_SCENARIOS[scenarioKey] || FANOUT_SCENARIOS.cyclone;
+    function triggerRoleDirectives(scenarioKey) {
+      currentScenario = scenarioKey || currentScenario || "cyclone";
+      const scenarioBundle = ROLE_DIRECTIVE_SCENARIOS[currentScenario] || ROLE_DIRECTIVE_SCENARIOS.cyclone;
+      const data = scenarioBundle[currentLanguage] || scenarioBundle.en;
 
-      document.getElementById("fanout-meta-line").textContent = data.meta;
+      // Update Scenario Buttons Active Visual State
+      const btnCyclone = document.getElementById("scenario-btn-cyclone");
+      const btnFlood = document.getElementById("scenario-btn-flood");
+      const btnHeatwave = document.getElementById("scenario-btn-heatwave");
+
+      const inactiveBaseClass = "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 text-[#5B6472] hover:text-[#1B2A44] hover:bg-white/60";
+
+      if (btnCyclone) {
+        btnCyclone.className = (currentScenario === "cyclone") 
+          ? "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#B3261E] text-white shadow-xs" 
+          : inactiveBaseClass;
+      }
+      if (btnFlood) {
+        btnFlood.className = (currentScenario === "flood") 
+          ? "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#B8860B] text-white shadow-xs" 
+          : inactiveBaseClass;
+      }
+      if (btnHeatwave) {
+        btnHeatwave.className = (currentScenario === "heatwave") 
+          ? "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#C97A2B] text-white shadow-xs" 
+          : inactiveBaseClass;
+      }
+
+      const metaEl = document.getElementById("fanout-meta-line");
+      if (metaEl) metaEl.textContent = data.meta;
 
       // Update Farmer Card
-      document.getElementById("fanout-farmer-directive").textContent = data.farmer.directive;
-      document.getElementById("fanout-farmer-checklist").innerHTML = data.farmer.checklist.map(item => \`<li class="flex items-start gap-1.5"><span>•</span><span>\${item}</span></li>\`).join("");
-      document.getElementById("fanout-farmer-status").textContent = data.farmer.status;
+      const farmDir = document.getElementById("fanout-farmer-directive");
+      if (farmDir) farmDir.textContent = data.farmer.directive;
+      const farmList = document.getElementById("fanout-farmer-checklist");
+      if (farmList) {
+        farmList.innerHTML = data.farmer.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
+      }
+      const farmStat = document.getElementById("fanout-farmer-status");
+      if (farmStat) farmStat.textContent = data.farmer.status;
 
       // Update Fisherman Card
-      document.getElementById("fanout-fisherman-directive").textContent = data.fisherman.directive;
-      document.getElementById("fanout-fisherman-checklist").innerHTML = data.fisherman.checklist.map(item => \`<li class="flex items-start gap-1.5"><span>•</span><span>\${item}</span></li>\`).join("");
-      document.getElementById("fanout-fisherman-status").textContent = data.fisherman.status;
+      const fishDir = document.getElementById("fanout-fisherman-directive");
+      if (fishDir) fishDir.textContent = data.fisherman.directive;
+      const fishList = document.getElementById("fanout-fisherman-checklist");
+      if (fishList) {
+        fishList.innerHTML = data.fisherman.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
+      }
+      const fishStat = document.getElementById("fanout-fisherman-status");
+      if (fishStat) fishStat.textContent = data.fisherman.status;
 
       // Update City Ops Card
-      document.getElementById("fanout-city-directive").textContent = data.city_ops.directive;
-      document.getElementById("fanout-city-checklist").innerHTML = data.city_ops.checklist.map(item => \`<li class="flex items-start gap-1.5"><span>•</span><span>\${item}</span></li>\`).join("");
-      document.getElementById("fanout-city-status").textContent = data.city_ops.status;
+      const cityDir = document.getElementById("fanout-city-directive");
+      if (cityDir) cityDir.textContent = data.city_ops.directive;
+      const cityList = document.getElementById("fanout-city-checklist");
+      if (cityList) {
+        cityList.innerHTML = data.city_ops.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
+      }
+      const cityStat = document.getElementById("fanout-city-status");
+      if (cityStat) cityStat.textContent = data.city_ops.status;
 
       // Scroll to workbench
-      document.getElementById("fanout-workbench").scrollIntoView({ behavior: "smooth" });
+      const workbench = document.getElementById("fanout-workbench");
+      if (workbench) workbench.scrollIntoView({ behavior: "smooth" });
     }
 
-    function copyFanoutDirectives() {
+    // Backwards compatibility alias
+    const triggerShowpieceFanout = triggerRoleDirectives;
+    const FANOUT_SCENARIOS = ROLE_DIRECTIVE_SCENARIOS;
+
+    function openRoleFanoutModal(scenario) {
+      triggerRoleDirectives(scenario || currentScenario || "cyclone");
+      const workbench = document.getElementById("fanout-workbench");
+      if (workbench) {
+        workbench.scrollIntoView({ behavior: "smooth", block: "start" });
+        workbench.classList.add("ring-2", "ring-[#C97A2B]");
+        setTimeout(() => workbench.classList.remove("ring-2", "ring-[#C97A2B]"), 1600);
+      }
+    }
+    const openRoleDirectivesModal = openRoleFanoutModal;
+    window.openRoleFanoutModal = openRoleFanoutModal;
+    window.openRoleDirectivesModal = openRoleDirectivesModal;
+
+    function copyFanoutDirectives(btn) {
       const farmer = document.getElementById("fanout-farmer-directive").textContent;
       const fisherman = document.getElementById("fanout-fisherman-directive").textContent;
       const city = document.getElementById("fanout-city-directive").textContent;
-      const text = "=== WEATHERGPT ROLE-BASED ALERT FAN-OUT ===\\n\\n[FARMER]: " + farmer + "\\n\\n[FISHERMAN]: " + fisherman + "\\n\\n[CITY OPS]: " + city;
+      const text = "=== WEATHERGPT ROLE-BASED OPERATIONAL DIRECTIVES ===\\n\\n[FARMER]: " + farmer + "\\n\\n[FISHERMAN]: " + fisherman + "\\n\\n[CITY OPS]: " + city;
       navigator.clipboard.writeText(text);
-      alert("Role fan-out briefing copied to clipboard!");
+      
+      if (btn) {
+        const orig = btn.innerHTML;
+        const msg = currentLanguage === 'hi' ? 'कॉपी हो गया' : (currentLanguage === 'ta' ? 'நகலெடுக்கப்பட்டது' : 'Copied');
+        btn.innerHTML = "<span>✓</span> <span>" + msg + "</span>";
+        setTimeout(() => { btn.innerHTML = orig; }, 1800);
+      }
     }
 
     function toggleTickerDetail() {
@@ -1691,7 +2212,7 @@ export function getPortalHtml(): string {
         badge.className = "text-[10px] font-bold px-2 py-0.5 bg-slate-200 text-slate-700 rounded-xs";
         listEl.innerHTML = \`
           <div class="text-xs text-slate-500 text-center py-3">
-            Simulated SACHET Radar online. Connect backend for live RSS sync.
+            SACHET Radar standby. Connecting backend for live RSS sync.
           </div>
         \`;
       }
@@ -1779,7 +2300,7 @@ export function getPortalHtml(): string {
       });
     }
 
-    // 9. Rural Accessibility Suite (IVR Simulator & Krishi Sakhi)
+    // 9. Rural Accessibility Suite (IVR Telephony & Krishi Sakhi)
     function openRuralModal() {
       document.getElementById("rural-modal").classList.remove("hidden");
     }
@@ -1801,7 +2322,7 @@ export function getPortalHtml(): string {
       });
     }
 
-    async function simulateIvrCall() {
+    async function connectIvrCall() {
       const lang = document.getElementById("ivr-lang").value;
       const query = document.getElementById("ivr-query-input").value;
       const statusBox = document.getElementById("ivr-status-box");
@@ -1810,7 +2331,7 @@ export function getPortalHtml(): string {
 
       try {
         const backendUrl = getActiveBackendUrl();
-        const res = await fetch(backendUrl + "/api/tools/telephony_simulate", {
+        const res = await fetch(backendUrl + "/api/tools/telephony", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ channel: "IVR", language: lang, query })
@@ -1837,6 +2358,9 @@ export function getPortalHtml(): string {
         statusBox.innerHTML = "<span class='text-red-600'>IVR Telephony error: " + e.message + "</span>";
       }
     }
+
+    // Backwards compatibility alias
+    const simulateIvrCall = connectIvrCall;
 
     function speakKrishiSakhi() {
       const text = "வணக்கம் முருகேசன். அடுத்த 24 மணி நேரத்திற்கு உங்கள் கிராமத்தில் கனமழைக்கு வாய்ப்பு குறைவு. மஞ்சள் பயிரில் வேர் அழுகல் ஏற்படாமல் இருக்க வடிகால் வாய்க்கால்களை சுத்தமாக வைத்திருங்கள்.";
@@ -1943,7 +2467,110 @@ export function getPortalHtml(): string {
       inspectStation();
     }
 
-    // 12. Clocks & Bootstrapping
+    // 12. Floating Atmospheric Dots Background Engine (Lots of small grey floating dots)
+    function initFloatingDotsBackground() {
+      const canvas = document.getElementById("floating-dots-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      // High density of small, soft grey dots for pure white canvas
+      const count = Math.min(Math.floor((width * height) / 5500), 220);
+      const dots = [];
+
+      for (let i = 0; i < count; i++) {
+        dots.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 1.3 + 0.6, // small subtle dots
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35 - 0.08, // gentle buoyant updraft
+          opacity: Math.random() * 0.3 + 0.12,
+          baseOpacity: Math.random() * 0.3 + 0.12,
+          pulseSpeed: Math.random() * 0.015 + 0.005,
+          pulseAngle: Math.random() * Math.PI * 2,
+          color: "148, 163, 184" // elegant neutral slate grey
+        });
+      }
+
+      // Mouse interactive repelling field
+      let mouseX = -1000;
+      let mouseY = -1000;
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      window.addEventListener("mouseleave", () => {
+        mouseX = -1000;
+        mouseY = -1000;
+      });
+
+      function render() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw connecting faint grey filaments between nearby dots
+        for (let i = 0; i < dots.length; i++) {
+          for (let j = i + 1; j < dots.length; j++) {
+            const dx = dots[i].x - dots[j].x;
+            const dy = dots[i].y - dots[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 75) {
+              const alpha = (1 - dist / 75) * 0.08;
+              ctx.strokeStyle = "rgba(148, 163, 184, " + alpha + ")";
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(dots[i].x, dots[i].y);
+              ctx.lineTo(dots[j].x, dots[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Draw & update each floating grey dot
+        for (let i = 0; i < dots.length; i++) {
+          const d = dots[i];
+
+          d.x += d.vx;
+          d.y += d.vy;
+
+          d.pulseAngle += d.pulseSpeed;
+          d.opacity = d.baseOpacity + Math.sin(d.pulseAngle) * 0.08;
+
+          const mdx = d.x - mouseX;
+          const mdy = d.y - mouseY;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < 70 && mdist > 0) {
+            const push = (70 - mdist) / 70 * 0.9;
+            d.x += (mdx / mdist) * push;
+            d.y += (mdy / mdist) * push;
+          }
+
+          if (d.x < -10) d.x = width + 10;
+          if (d.x > width + 10) d.x = -10;
+          if (d.y < -10) d.y = height + 10;
+          if (d.y > height + 10) d.y = -10;
+
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(" + d.color + ", " + Math.max(0.04, d.opacity) + ")";
+          ctx.fill();
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      render();
+    }
+
+    // 13. Clocks & Bootstrapping
     function updateClocks() {
       const now = new Date();
       const utc = now.toUTCString().split(" ").slice(4, 5)[0];
@@ -1955,9 +2582,11 @@ export function getPortalHtml(): string {
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      initFloatingDotsBackground();
       initChatUI();
       setInterval(updateClocks, 1000);
       updateClocks();
+      triggerRoleDirectives(currentScenario || "cyclone");
       loadDisasterAlerts();
       inspectStation();
     });

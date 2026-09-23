@@ -12,13 +12,13 @@ export interface DistrictHazardProfile {
   monsoon_onset_normal: string;
   monsoon_withdrawal_normal: string;
   annual_rainfall_normal_mm: number;
-  cyclone_vulnerability: "Very High" | "High" | "Moderate" | "Low" | "Nil";
-  flood_hazard_level: "Severe / Recurrent" | "High" | "Moderate" | "Localized / Low";
+  cyclone_vulnerability: string;
+  flood_hazard_level: string;
   flood_history: string;
   extreme_24h_rainfall_record_mm: number;
   extreme_rainfall_record_date: string;
-  heatwave_vulnerability: "High" | "Moderate" | "Low";
-  thunderstorm_lightning_hazard: "High" | "Moderate" | "Low";
+  heatwave_vulnerability: string;
+  thunderstorm_lightning_hazard: string;
   soil_type_primary: string;
 }
 

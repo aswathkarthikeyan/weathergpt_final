@@ -4,6 +4,13 @@ import { db } from "../firebase.js";
 // Local cache store
 const userMemoryStore = new Map<string, Record<string, string>>();
 
+function withTimeout<T>(promise: Promise<T>, ms = 1500): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Firestore operation timed out")), ms))
+  ]);
+}
+
 export async function initUserMemoryDb(): Promise<void> {
   return Promise.resolve();
 }
@@ -17,7 +24,7 @@ export async function loadUserMemories(userId: string): Promise<Record<string, s
 
   try {
     const userDocRef = doc(db, "users", safeUserId);
-    const snap = await getDoc(userDocRef);
+    const snap = await withTimeout(getDoc(userDocRef), 1500);
     if (snap.exists()) {
       const data = snap.data();
       const memories: Record<string, string> = {};
@@ -27,7 +34,7 @@ export async function loadUserMemories(userId: string): Promise<Record<string, s
       return memories;
     }
   } catch (error) {
-    console.warn(`Firestore loadUserMemories fallback for user ${safeUserId}:`, error);
+    console.warn(`Firestore loadUserMemories fallback for user ${safeUserId}:`, (error as any)?.message || error);
   }
 
   return userMemoryStore.get(safeUserId) || {};
@@ -49,9 +56,9 @@ export async function saveUserMemory(userId: string, key: string, value: string)
       [key]: value,
       updatedAt: new Date().toISOString(),
     };
-    await setDoc(userDocRef, updateData, { merge: true });
+    await withTimeout(setDoc(userDocRef, updateData, { merge: true }), 1500);
   } catch (error) {
-    console.warn(`Firestore saveUserMemory error for user ${safeUserId}:`, error);
+    console.warn(`Firestore saveUserMemory warning for user ${safeUserId}:`, (error as any)?.message || error);
   }
 }
 

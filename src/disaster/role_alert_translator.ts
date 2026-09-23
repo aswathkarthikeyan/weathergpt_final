@@ -1,6 +1,6 @@
 /**
  * Role-Based Alert Translation Engine
- * Mapped directly to SIH Build Spec Section 4.4 & Section 8.4 (Showpiece Feature):
+ * Mapped directly to SIH Build Spec Section 4.4 & Section 8.4:
  * Closes the loop from raw meteorological warnings (CAP/SACHET) into role-specific actions:
  *   - Farmer (Agro-meteorological protection, spray clearance, harvest window)
  *   - Fisherman (Sea departure clearance, squall hazard, boat mooring)

@@ -18,6 +18,13 @@ export interface ChatMessage {
 // Local cache store
 const conversationStore = new Map<string, ChatMessage[]>();
 
+function withTimeout<T>(promise: Promise<T>, ms = 1500): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error("Firestore operation timed out")), ms))
+  ]);
+}
+
 export async function initDb(): Promise<void> {
   return Promise.resolve();
 }
@@ -51,10 +58,10 @@ export async function saveMessage(
   const path = `conversations/${safeConvId}/messages/${messageId}`;
   try {
     const docRef = doc(db, "conversations", safeConvId, "messages", messageId);
-    await setDoc(docRef, messageData);
+    await withTimeout(setDoc(docRef, messageData), 1500);
   } catch (error) {
-    // If permissions or network issues happen, report error per guidelines but do not crash user chat
-    console.warn(`Firestore saveMessage warning for path: ${path}`, error);
+    // If permissions, timeout, or network issues happen, fallback cleanly without crashing chat
+    console.warn(`Firestore saveMessage warning for path: ${path}`, (error as any)?.message || error);
   }
 }
 
@@ -69,7 +76,7 @@ export async function loadMessages(
   try {
     const messagesCol = collection(db, "conversations", safeConvId, "messages");
     const q = query(messagesCol, orderBy("timestamp", "asc"), firestoreLimit(limitCount));
-    const snapshot = await getDocs(q);
+    const snapshot = await withTimeout(getDocs(q), 1500);
 
     if (!snapshot.empty) {
       const messages: Array<[string, string]> = [];
@@ -82,7 +89,7 @@ export async function loadMessages(
       return messages;
     }
   } catch (error) {
-    console.warn(`Firestore loadMessages fallback for ${path}:`, error);
+    console.warn(`Firestore loadMessages fallback for ${path}:`, (error as any)?.message || error);
   }
 
   // Fallback to in-memory store

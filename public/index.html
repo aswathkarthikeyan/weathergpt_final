@@ -102,7 +102,7 @@
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0 text-[11px] font-semibold">
-      <span class="underline hidden sm:inline">Role Directives</span>
+      <span class="underline hidden sm:inline" data-i18n="topBarDirectives">Role Directives</span>
       <span id="ticker-chevron" class="text-sm">▼</span>
     </div>
   </div>
@@ -112,15 +112,15 @@
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[#1B2A44]">
       <div class="space-y-1">
         <div class="font-bold text-sm text-[#B3261E] flex items-center gap-2">
-          <span>🚨</span> <span>OASIS CAP v1.2 Warning • Cyclone / Heavy Inundation Vector</span>
+          <span>🚨</span> <span data-i18n="drawerWarning">OASIS CAP v1.2 Warning • Cyclone / Heavy Inundation Vector</span>
         </div>
-        <p class="text-[#5B6472]">
-          IMD Bulletin & SACHET NDMA RSS feed: Active cyclonic track with ±12km ensemble variance. Role-based automated translation available for Agriculture, Maritime Coastal, and Municipal Urban Local Bodies.
+        <p class="text-[#5B6472]" data-i18n="drawerDesc">
+          IMD Bulletin &amp; SACHET NDMA RSS feed: Active cyclonic track with ±12km ensemble variance. Role-based automated translation available for Agriculture, Maritime Coastal, and Municipal Urban Local Bodies.
         </p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <button onclick="triggerShowpieceFanout('cyclone')" class="px-3.5 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm text-xs font-semibold shadow-sm flex items-center gap-1.5">
-          <span>⚡</span> View Role Fan-Out Cards
+        <button onclick="triggerRoleDirectives('cyclone')" class="px-3.5 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm text-xs font-semibold shadow-sm flex items-center gap-1.5">
+          <span>⚡</span> <span data-i18n="viewRoleDirectives">View Role Directives</span>
         </button>
       </div>
     </div>
@@ -130,10 +130,10 @@
   <div class="bg-[#1B2A44] text-slate-300 text-[11px] px-4 sm:px-8 py-1.5 border-b border-[#132845] flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-3">
       <span class="flex items-center gap-1.5 font-medium text-slate-200">
-        <span class="text-[#C97A2B]">⚡</span> WeatherGPT • Conversational Meteorological Intelligence Layer
+        <span class="text-[#C97A2B]">⚡</span> <span data-i18n="topBarSub">WeatherGPT • Conversational Meteorological Intelligence Layer</span>
       </span>
       <span class="hidden md:inline text-slate-600">|</span>
-      <span class="hidden md:inline text-slate-400">
+      <span class="hidden md:inline text-slate-400" data-i18n="topBarTag">
         Mission Mausam • BharatFS • IMD Nowcast • NDMA SACHET CAP
       </span>
     </div>
@@ -172,14 +172,14 @@
         </div>
         <div>
           <div class="text-[11px] uppercase tracking-widest text-[#C97A2B] font-bold flex items-center gap-2">
-            <span>Conversational Weather & Disaster Intelligence</span>
+            <span data-i18n="headerKicker">Conversational Weather &amp; Disaster Intelligence</span>
             <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#3F6B4A]"></span>
-            <span>All-India Unified Layer</span>
+            <span data-i18n="headerLayer">All-India Unified Layer</span>
           </div>
-          <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#1B2A44] dispatch-title">
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#1B2A44] dispatch-title" data-i18n="headerTitle">
             WEATHERGPT • METEOROLOGICAL REASONING ENGINE
           </h1>
-          <p class="text-xs text-[#5B6472] mt-0.5">
+          <p class="text-xs text-[#5B6472] mt-0.5" data-i18n="headerDesc">
             Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning, and NDMA CAP feeds into role-specific actions
           </p>
         </div>
@@ -188,13 +188,13 @@
       <!-- Quick Action Navigation -->
       <div class="flex flex-wrap items-center gap-2 text-xs">
         <button onclick="openRoleFanoutModal()" class="px-3 py-1.5 bg-[#C97A2B] hover:bg-[#b0671f] text-white rounded-sm font-semibold transition flex items-center gap-1.5 shadow-sm">
-          <span>⚡</span> Role Fan-Out Demo
+          <span>⚡</span> <span data-i18n="navRoleDirectives">Role Directives</span>
         </button>
         <button onclick="openRuralModal()" class="px-3 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm font-medium transition flex items-center gap-1.5">
-          <span>📞</span> Rural Access Tier (IVR/SMS)
+          <span>📞</span> <span data-i18n="navRural">Rural Access Tier (IVR/SMS)</span>
         </button>
         <button onclick="openHazardModal()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-[#1B2A44] border border-[#E1E4DD] rounded-sm font-medium transition flex items-center gap-1.5">
-          <span>🗺️</span> IMD Hazard Atlas
+          <span>🗺️</span> <span data-i18n="navHazard">IMD Hazard Atlas</span>
         </button>
         <a href="/health" target="_blank" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#3F6B4A] rounded-sm border border-slate-300 font-mono text-[11px] font-semibold">
           /health
@@ -203,7 +203,7 @@
     </div>
   </header>
 
-  <!-- ==================== 4. SHOWPIECE: ROLE-BASED ALERT FAN-OUT WORKBENCH ==================== -->
+  <!-- ==================== 4. ROLE-BASED ALERT DIRECTIVES WORKBENCH ==================== -->
   <section id="fanout-workbench" class="max-w-7xl mx-auto w-full px-4 sm:px-8 pt-5 pb-1">
     <div class="bg-white border border-[#E1E4DD] rounded-sm p-4 shadow-sm space-y-3">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-[#E1E4DD]">
@@ -213,27 +213,24 @@
           </span>
           <div>
             <h2 class="font-serif font-bold text-sm text-[#1B2A44] tracking-wide flex items-center gap-2">
-              <span>Showpiece Feature: Role-Based Alert Translation Engine</span>
-              <span class="text-[10px] bg-red-100 text-[#B3261E] px-2 py-0.2 font-bold uppercase rounded-sm border border-red-200">
-                CAP Fan-Out
-              </span>
+              <span data-i18n="workbenchTitle">Role-Based Operational Directives Engine</span>
             </h2>
-            <p class="text-[11px] text-[#5B6472]">
-              Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives
+            <p class="text-[11px] text-[#5B6472]" data-i18n="workbenchDesc">
+              Automated domain-calibrated operational directives for Agriculture, Coastal Maritime, and Municipal City Operations
             </p>
           </div>
         </div>
 
-        <!-- Sample Scenarios Trigger -->
+        <!-- Scenarios Trigger -->
         <div class="flex items-center gap-1.5 flex-wrap">
-          <span class="text-[11px] font-bold text-[#5B6472]">Demo Alert:</span>
-          <button onclick="triggerShowpieceFanout('cyclone')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-[#B3261E] border border-red-300 rounded-sm text-xs font-semibold transition">
+          <span class="text-[11px] font-bold text-[#5B6472]" data-i18n="scenarioLabel">Active Scenario:</span>
+          <button onclick="triggerRoleDirectives('cyclone')" class="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-[#B3261E] border border-red-300 rounded-sm text-xs font-semibold transition" data-i18n="scenarioCyclone">
             Cyclone Red Alert (Coast)
           </button>
-          <button onclick="triggerShowpieceFanout('flood')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-[#B8860B] border border-amber-300 rounded-sm text-xs font-semibold transition">
+          <button onclick="triggerRoleDirectives('flood')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-[#B8860B] border border-amber-300 rounded-sm text-xs font-semibold transition" data-i18n="scenarioFlood">
             Urban Cloudburst (Bengaluru)
           </button>
-          <button onclick="triggerShowpieceFanout('heatwave')" class="px-2.5 py-1 bg-orange-50 hover:bg-orange-100 text-[#C97A2B] border border-orange-300 rounded-sm text-xs font-semibold transition">
+          <button onclick="triggerRoleDirectives('heatwave')" class="px-2.5 py-1 bg-orange-50 hover:bg-orange-100 text-[#C97A2B] border border-orange-300 rounded-sm text-xs font-semibold transition" data-i18n="scenarioHeatwave">
             Severe Heatwave (Delhi NCR)
           </button>
         </div>
@@ -246,9 +243,9 @@
           <div>
             <div class="flex items-center justify-between pb-1.5 border-b border-emerald-100">
               <span class="font-bold text-xs text-[#3F6B4A] flex items-center gap-1.5">
-                <span>🌾</span> AGRICULTURE &amp; AGROMET
+                <span>🌾</span> <span data-i18n="cardFarmerTitle">AGRICULTURE &amp; AGROMET</span>
               </span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-[#3F6B4A]">
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-[#3F6B4A]" data-i18n="cardFarmerBadge">
                 FARMER ROLE
               </span>
             </div>
@@ -257,8 +254,8 @@
             </div>
             <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-farmer-checklist">
               <li class="flex items-start gap-1.5"><span>•</span><span>30cm drainage trenches along bunds to stop root rot</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Zero pesticide spraying for 48h (drift & wash-off hazard)</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Shift cattle & poultry to elevated pucca shelters</span></li>
+              <li class="flex items-start gap-1.5"><span>•</span><span>Zero pesticide spraying for 48h (drift &amp; wash-off hazard)</span></li>
+              <li class="flex items-start gap-1.5"><span>•</span><span>Shift cattle &amp; poultry to elevated pucca shelters</span></li>
             </ul>
           </div>
           <div class="pt-2 border-t border-emerald-100 flex items-center justify-between text-[11px]">
@@ -272,9 +269,9 @@
           <div>
             <div class="flex items-center justify-between pb-1.5 border-b border-amber-100">
               <span class="font-bold text-xs text-[#B8860B] flex items-center gap-1.5">
-                <span>⚓</span> MARITIME &amp; COASTAL SAFETY
+                <span>⚓</span> <span data-i18n="cardFishermanTitle">MARITIME &amp; COASTAL SAFETY</span>
               </span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-[#B8860B]">
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-[#B8860B]" data-i18n="cardFishermanBadge">
                 FISHERMAN ROLE
               </span>
             </div>
@@ -298,9 +295,9 @@
           <div>
             <div class="flex items-center justify-between pb-1.5 border-b border-red-100">
               <span class="font-bold text-xs text-[#B3261E] flex items-center gap-1.5">
-                <span>🏢</span> URBAN LOCAL BODY &amp; OPS
+                <span>🏢</span> <span data-i18n="cardCityTitle">URBAN LOCAL BODY &amp; OPS</span>
               </span>
-              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-[#B3261E]">
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-[#B3261E]" data-i18n="cardCityBadge">
                 CITY OPS ROLE
               </span>
             </div>
@@ -320,13 +317,13 @@
         </div>
       </div>
 
-      <!-- Provenance Line for Fan-Out -->
+      <!-- Provenance Line for Directives -->
       <div class="text-[10px] text-[#5B6472] pt-1 flex flex-wrap items-center justify-between gap-2">
         <span id="fanout-meta-line">
           Source: NDMA SACHET (OASIS CAP v1.2) + BharatFS / IMD Cyclone Bulletin • Confidence: High (Spread ±12km)
         </span>
-        <button onclick="copyFanoutDirectives()" class="text-[#1B2A44] hover:underline font-semibold flex items-center gap-1">
-          <span>📋</span> Copy Multi-Role Briefing
+        <button onclick="copyFanoutDirectives(this)" class="text-[#1B2A44] hover:underline font-semibold flex items-center gap-1">
+          <span>📋</span> <span data-i18n="copyBriefing">Copy Multi-Role Briefing</span>
         </button>
       </div>
     </div>
@@ -348,22 +345,22 @@
             </span>
             <div>
               <div class="font-serif font-bold text-[#1B2A44] text-sm tracking-wide flex items-center gap-2">
-                <span>WeatherGPT Conversational Meteorologist</span>
+                <span data-i18n="chatCardTitle">WeatherGPT Conversational Meteorologist</span>
                 <span class="inline-flex items-center gap-1 text-[10px] font-sans font-semibold text-[#3F6B4A] bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 rounded">
                   <span class="w-1.5 h-1.5 rounded-full bg-[#3F6B4A] animate-pulse"></span>
-                  AI Online
+                  <span data-i18n="aiOnline">AI Online</span>
                 </span>
               </div>
-              <p class="text-[11px] text-[#5B6472]">Autonomous Synoptic Intelligence &amp; Multi-turn Dialogue</p>
+              <p class="text-[11px] text-[#5B6472]" data-i18n="chatCardSubtitle">Autonomous Synoptic Intelligence &amp; Multi-turn Dialogue</p>
             </div>
           </div>
           
           <div class="flex items-center gap-2">
             <button onclick="clearChatHistory()" title="Clear conversation history" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1 rounded-sm">
-              <span>🗑️</span> <span class="hidden sm:inline">Clear Chat</span>
+              <span>🗑️</span> <span class="hidden sm:inline" data-i18n="clearChat">Clear Chat</span>
             </button>
             <button onclick="printChatTranscript()" title="Print formal meteorological record" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1 rounded-sm">
-              <span>🖨️</span> <span class="hidden sm:inline">Print Record</span>
+              <span>🖨️</span> <span class="hidden sm:inline" data-i18n="printRecord">Print Record</span>
             </button>
           </div>
         </div>
@@ -372,13 +369,14 @@
         <div class="p-3.5 bg-[#F5F6F3] border-b border-[#E1E4DD] space-y-2.5 text-xs">
           <!-- Location Picker Row -->
           <div class="flex flex-wrap items-center gap-2">
-            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0">📍 Target:</span>
+            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0" data-i18n="targetLabel">📍 Target:</span>
             <div class="flex-1 min-w-[180px] flex items-center gap-1.5">
               <input
                 id="location-input"
                 type="text"
                 value="Bangalore"
                 placeholder="City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)..."
+                data-i18n-placeholder="targetPlaceholder"
                 class="flex-1 bg-white border border-[#E1E4DD] px-2.5 py-1 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] font-medium rounded-sm"
               />
               <button
@@ -416,22 +414,22 @@
 
           <!-- Sector Selection Pills -->
           <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#E1E4DD]">
-            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0 mr-1">Role Lens:</span>
+            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0 mr-1" data-i18n="roleLensLabel">Role Lens:</span>
             <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
               <input type="radio" name="sector" value="farmer" class="sr-only" checked onchange="handleSectorChange('farmer')">
-              <span>🌾</span> <span>Farmer</span>
+              <span>🌾</span> <span data-i18n="roleFarmer">Farmer</span>
             </label>
             <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
               <input type="radio" name="sector" value="fisherman" class="sr-only" onchange="handleSectorChange('fisherman')">
-              <span>⚓</span> <span>Fisherman</span>
+              <span>⚓</span> <span data-i18n="roleFisherman">Fisherman</span>
             </label>
             <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
               <input type="radio" name="sector" value="city_ops" class="sr-only" onchange="handleSectorChange('city_ops')">
-              <span>🏢</span> <span>City Ops / ULB</span>
+              <span>🏢</span> <span data-i18n="roleCityOps">City Ops / ULB</span>
             </label>
             <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white hover:bg-slate-100 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition">
               <input type="radio" name="sector" value="general" class="sr-only" onchange="handleSectorChange('general')">
-              <span>👤</span> <span>Public</span>
+              <span>👤</span> <span data-i18n="rolePublic">Public</span>
             </label>
             <span class="ml-auto text-[10px] font-mono text-[#5B6472]" id="session-id-display">SESSION: READY</span>
           </div>
@@ -445,7 +443,7 @@
         <!-- Thinking / Loading Indicator -->
         <div id="chat-thinking" class="hidden px-5 py-3 bg-[#F5F6F3] border-t border-[#E1E4DD] flex items-center gap-3">
           <div class="w-4 h-4 border-2 border-[#1B2A44] border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-xs font-medium text-[#1B2A44]">
+          <span class="text-xs font-medium text-[#1B2A44]" data-i18n="thinkingText">
             WeatherGPT is consulting BharatFS synoptic grids, IMD nowcasts, and generating role directives...
           </span>
         </div>
@@ -454,7 +452,7 @@
         <div id="chat-composer" class="p-3.5 bg-white border-t border-[#E1E4DD] space-y-2.5">
           <!-- Suggestion Prompts Carousel (Localized dynamically) -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs" id="suggestion-chips-bar">
-            <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">Suggestions:</span>
+            <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0" data-i18n="suggestionsLabel">Suggestions:</span>
             <button type="button" onclick="quickAsk('Is it safe to spray pesticides on crops today in ' + getTargetCity() + '? Check wind and rain.')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
               🌾 Agrochemical Spraying
             </button>
@@ -476,6 +474,7 @@
                 id="chat-input"
                 rows="2"
                 placeholder="Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g. Will it rain during harvest?)"
+                data-i18n-placeholder="inputPlaceholder"
                 class="w-full bg-[#F5F6F3] focus:bg-white border border-[#E1E4DD] p-2.5 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] resize-none font-sans leading-relaxed rounded-sm pr-10"
                 required
               ></textarea>
@@ -498,7 +497,7 @@
               class="h-[52px] bg-[#1B2A44] hover:bg-[#132845] text-white font-semibold text-xs uppercase tracking-wider px-5 border border-[#132845] transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50 rounded-sm shadow-sm"
             >
               <span id="send-icon">⚡</span>
-              <span id="send-label">TRANSMIT</span>
+              <span id="send-label" data-i18n="transmit">TRANSMIT</span>
             </button>
           </form>
 
@@ -524,7 +523,7 @@
       <div id="disaster-monitor-panel" class="bg-white border border-[#E1E4DD] shadow-sm rounded-sm">
         <div class="bg-slate-50 px-4 py-2.5 border-b border-[#E1E4DD] flex items-center justify-between">
           <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span class="text-[#B3261E]">🚨</span> SACHET / NDMA DISASTER RADAR
+            <span class="text-[#B3261E]">🚨</span> <span data-i18n="disasterRadarTitle">SACHET / NDMA DISASTER RADAR</span>
           </span>
           <span id="disaster-badge" class="text-[10px] font-bold px-2 py-0.5 bg-slate-200 text-[#1B2A44] rounded-xs">
             CHECKING...
@@ -576,9 +575,9 @@
       <div id="weather-inspector-panel" class="bg-white border border-[#E1E4DD] shadow-sm rounded-sm">
         <div class="bg-slate-50 px-4 py-2.5 border-b border-[#E1E4DD] flex items-center justify-between">
           <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span>📡</span> SYNOPTIC STATION TELEMETRY
+            <span>📡</span> <span data-i18n="telemetryTitle">SYNOPTIC STATION TELEMETRY</span>
           </span>
-          <span class="text-[10px] font-mono text-[#5B6472]">RAW SENSORS</span>
+          <span class="text-[10px] font-mono text-[#5B6472]" data-i18n="telemetrySub">RAW SENSORS</span>
         </div>
 
         <div class="p-4 space-y-3">
@@ -591,7 +590,7 @@
               class="flex-1 bg-[#F5F6F3] border border-[#E1E4DD] px-2.5 py-1 text-xs font-medium rounded-sm"
             />
             <button onclick="inspectStation()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3.5 py-1 text-xs font-semibold rounded-sm">
-              Inspect
+              <span data-i18n="inspectBtn">Inspect</span>
             </button>
           </div>
 
@@ -606,9 +605,9 @@
       <div id="regulatory-standards-panel" class="bg-white border border-[#E1E4DD] shadow-sm rounded-sm">
         <div class="bg-slate-50 px-4 py-2.5 border-b border-[#E1E4DD] flex items-center justify-between">
           <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span>⚖️</span> REGULATORY METEOROLOGICAL SCALES
+            <span>⚖️</span> <span data-i18n="scalesTitle">REGULATORY METEOROLOGICAL SCALES</span>
           </span>
-          <span class="text-[10px] font-mono text-[#5B6472]">STANDARDS</span>
+          <span class="text-[10px] font-mono text-[#5B6472]" data-i18n="scalesSub">STANDARDS</span>
         </div>
 
         <div class="p-4 space-y-3 text-xs">
@@ -706,9 +705,9 @@
         </div>
       </div>
       <div class="flex items-center gap-4 text-[11px]">
-        <button onclick="openRuralModal()" class="hover:text-white underline">Rural IVR / SMS Simulator</button>
+        <button onclick="openRuralModal()" class="hover:text-white underline" data-i18n="footerRural">Rural IVR &amp; Telephony Gateway</button>
         <span>•</span>
-        <button onclick="openHazardModal()" class="hover:text-white underline">Hazard Atlas</button>
+        <button onclick="openHazardModal()" class="hover:text-white underline" data-i18n="navHazard">Hazard Atlas</button>
         <span>•</span>
         <button onclick="openApiModal()" class="hover:text-white underline">API Routing</button>
       </div>
@@ -720,25 +719,25 @@
     <div class="bg-white border border-[#E1E4DD] shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-sm">
       <div class="flex items-center justify-between border-b border-[#E1E4DD] pb-3">
         <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
-          <span>📞</span> Rural Accessibility Tier (Non-Smartphone Reach)
+          <span>📞</span> <span data-i18n="ruralModalTitle">Rural Accessibility Tier (Non-Smartphone Reach)</span>
         </h3>
         <button onclick="closeRuralModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
       </div>
 
       <!-- Rural Tabs -->
       <div class="flex border-b border-[#E1E4DD] gap-2 text-xs">
-        <button onclick="switchRuralTab('ivr')" id="rural-tab-ivr" class="px-3 py-1.5 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44]">
-          1. IVR Phone Call Simulator
+        <button onclick="switchRuralTab('ivr')" id="rural-tab-ivr" class="px-3 py-1.5 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44]" data-i18n="ruralTabIvr">
+          1. Toll-Free IVR Voice Gateway (1800-MAUSAM-AI)
         </button>
-        <button onclick="switchRuralTab('sms')" id="rural-tab-sms" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]">
-          2. SMS &amp; USSD Fallback
+        <button onclick="switchRuralTab('sms')" id="rural-tab-sms" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]" data-i18n="ruralTabSms">
+          2. SMS &amp; USSD Delivery
         </button>
-        <button onclick="switchRuralTab('krishi')" id="rural-tab-krishi" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]">
-          3. Krishi Sakhi Assist Mode
+        <button onclick="switchRuralTab('krishi')" id="rural-tab-krishi" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]" data-i18n="ruralTabKrishi">
+          3. Krishi Sakhi Field Console
         </button>
       </div>
 
-      <!-- Tab Content: IVR Phone Simulator -->
+      <!-- Tab Content: IVR Phone Gateway -->
       <div id="rural-content-ivr" class="space-y-3 text-xs">
         <p class="text-[#5B6472]">
           Allows farmers with basic 2G feature phones to dial a toll-free number (1800-MAUSAM-AI), ask questions in regional languages, and receive spoken meteorological briefings.
@@ -760,12 +759,12 @@
               value="क्या आज कीटनाशक का छिड़काव करना ठीक रहेगा?"
               class="flex-1 bg-white border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm"
             />
-            <button onclick="simulateIvrCall()" id="ivr-call-btn" class="bg-[#3F6B4A] hover:bg-emerald-800 text-white px-3.5 py-1 font-semibold rounded-sm">
-              📞 Dial Call
+            <button onclick="connectIvrCall()" id="ivr-call-btn" class="bg-[#3F6B4A] hover:bg-emerald-800 text-white px-3.5 py-1 font-semibold rounded-sm">
+              <span data-i18n="ivrCallBtn">📞 Connect Call</span>
             </button>
           </div>
           <div id="ivr-status-box" class="p-2.5 bg-white border border-[#E1E4DD] text-[11px] font-mono text-[#1B2A44] min-h-[50px] leading-relaxed">
-            Status: On Hook. Click "Dial Call" to simulate interactive voice response.
+            Status: Line Ready. Click "Connect Call" to dispatch interactive voice response.
           </div>
         </div>
       </div>
@@ -905,6 +904,7 @@
   <script>
     // 0. Active Language State (en, hi, ta)
     let currentLanguage = "en";
+    let currentScenario = "cyclone";
 
     const I18N_STRINGS = {
       en: {
@@ -915,7 +915,60 @@
         quickHeat: "Heat stress & UV index analysis",
         quickFlood: "Emergency flood & hazard scan",
         inputPlaceholder: "Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g. Will it rain during harvest?)",
-        transmit: "TRANSMIT"
+        transmit: "TRANSMIT",
+        topBarDirectives: "Operational Directives",
+        drawerWarning: "Synoptic Warning: Deep depression over West-Central Bay of Bengal. Squally winds 55-65 km/h along coastal corridors.",
+        drawerDesc: "National Disaster Management Authority (NDMA) Common Alerting Protocol (CAP v1.2) active advisory. Multi-agency operational fan-out deployed across Agriculture, Maritime Coastal Fisheries, and Urban Local Bodies.",
+        viewRoleDirectives: "View Role Directives",
+        topBarSub: "Conversational Meteorological Intelligence Layer",
+        topBarTag: "Mission Mausam • BharatFS • IMD Nowcast • NDMA SACHET CAP",
+        headerKicker: "WEATHERGPT • METEOROLOGICAL REASONING ENGINE",
+        headerLayer: "All-India Unified Layer",
+        headerTitle: "Conversational Weather & Disaster Intelligence",
+        headerDesc: "Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning, and NDMA CAP feeds into role-specific actions",
+        navRoleDirectives: "Role Directives",
+        navRural: "Rural Access Tier (IVR/SMS)",
+        navHazard: "IMD Hazard Atlas",
+        workbenchTitle: "Role-Based Operational Directives Engine",
+        workbenchBadge: "CAP FAN-OUT",
+        workbenchDesc: "Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives",
+        scenarioLabel: "Active Scenario:",
+        scenarioCyclone: "Cyclone Red Alert (Coast)",
+        scenarioFlood: "Urban Cloudburst (Bengaluru)",
+        scenarioHeatwave: "Severe Heatwave & Evaporation (Delhi)",
+        cardFarmerTitle: "AGRICULTURE & AGROMET",
+        cardFarmerBadge: "FARMER ROLE",
+        cardFishermanTitle: "MARITIME & COASTAL SAFETY",
+        cardFishermanBadge: "FISHERMAN ROLE",
+        cardCityTitle: "URBAN LOCAL BODY & OPS",
+        cardCityBadge: "CITY OPS ROLE",
+        copyBriefing: "Copy Multi-Role Briefing",
+        chatCardTitle: "WeatherGPT Conversational Meteorologist",
+        aiOnline: "AI Online",
+        chatCardSubtitle: "Autonomous Synoptic Intelligence & Multi-turn Dialogue",
+        clearChat: "Clear Chat",
+        printRecord: "Print Record",
+        targetLabel: "📍 Target:",
+        targetPlaceholder: "City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)...",
+        roleLensLabel: "Role Lens:",
+        roleFarmer: "Farmer",
+        roleFisherman: "Fisherman",
+        roleCityOps: "City Ops / ULB",
+        rolePublic: "Public",
+        thinkingText: "WeatherGPT is consulting BharatFS synoptic grids, IMD nowcasts, and generating role directives...",
+        suggestionsLabel: "Suggestions:",
+        disasterRadarTitle: "SACHET / NDMA DISASTER RADAR",
+        telemetryTitle: "SYNOPTIC STATION TELEMETRY",
+        telemetrySub: "RAW SENSORS",
+        inspectBtn: "Inspect",
+        scalesTitle: "REGULATORY METEOROLOGICAL SCALES",
+        scalesSub: "STANDARDS",
+        footerRural: "Rural IVR & Telephony Gateway",
+        ruralModalTitle: "Rural Accessibility Tier (Non-Smartphone Reach)",
+        ruralTabIvr: "1. Toll-Free IVR Voice Gateway (1800-MAUSAM-AI)",
+        ruralTabSms: "2. SMS & USSD Delivery",
+        ruralTabKrishi: "3. Krishi Sakhi Field Console",
+        ivrCallBtn: "📞 Connect Call"
       },
       hi: {
         welcomeTitle: "मौसम जीपीटी केंद्रीय मौसम सलाह टर्मिनल",
@@ -925,7 +978,60 @@
         quickHeat: "लू का खतरा और पराबैंगनी (UV) सूचकांक विश्लेषण",
         quickFlood: "सचेत आपदा चेतावनी और भारी बारिश का पूर्वानुमान",
         inputPlaceholder: "मौसम जीपीटी से हिंदी में पूछें (उदा. क्या आज बारिश होगी और फसल काटना ठीक है?)",
-        transmit: "भेजें"
+        transmit: "भेजें",
+        topBarDirectives: "परिचालन निर्देश",
+        drawerWarning: "सिनॉप्टिक चेतावनी: पश्चिम-मध्य बंगाल की खाड़ी पर गहरा दबाव। तटीय क्षेत्रों में 55-65 किमी/घंटा की तूफानी हवाएँ।",
+        drawerDesc: "राष्ट्रीय आपदा प्रबंधन प्राधिकरण (NDMA) कॉमन अलर्टिंग प्रोटोकॉल (CAP v1.2) सक्रिय चेतावनी। कृषि, समुद्री मत्स्य पालन और नगर निगमों के लिए समन्वित परिचालन निर्देश जारी।",
+        viewRoleDirectives: "भूमिका-आधारित निर्देश देखें",
+        topBarSub: "संवादात्मक मौसम विज्ञान व आपदा आसूचना प्रणाली",
+        topBarTag: "मिशन मौसम • भारत-एफएस • आईएमडी नाउकास्ट • सचेत एनडीएमए",
+        headerKicker: "वेदर जीपीटी • मौसम विज्ञान विश्लेषण इंजन",
+        headerLayer: "अखिल भारतीय एकीकृत प्रणाली",
+        headerTitle: "संवादात्मक मौसम और आपदा आसूचना",
+        headerDesc: "भारत-एफएस संख्यात्मक ग्रिड, मेघदूत कृषि मौसम, दामिनी आकाशीय बिजली और एनडीएमए सचेत अलर्ट को भूमिका-विशिष्ट निर्णयों में परिवर्तित करना",
+        navRoleDirectives: "भूमिका निर्देश",
+        navRural: "ग्रामीण पहुंच स्तर (IVR/SMS)",
+        navHazard: "आईएमडी आपदा एटलस",
+        workbenchTitle: "भूमिका-आधारित परिचालन निर्देश इंजन",
+        workbenchBadge: "सचेत अलर्ट विभाजन",
+        workbenchDesc: "एकल रेड/ऑरेंज चेतावनी को स्वतः समानांतर, क्षेत्र-विशिष्ट परिचालन निर्देशों में प्रसारित किया जाता है",
+        scenarioLabel: "सक्रिय परिदृश्य:",
+        scenarioCyclone: "चक्रवात रेड अलर्ट (तटीय)",
+        scenarioFlood: "शहरी अतिवृष्टि व बाढ़ (बेंगलुरु)",
+        scenarioHeatwave: "भीषण लू व जल वाष्पीकरण (दिल्ली)",
+        cardFarmerTitle: "कृषि एवं कृषि मौसम विज्ञान",
+        cardFarmerBadge: "किसान भूमिका",
+        cardFishermanTitle: "समुद्री एवं तटीय सुरक्षा",
+        cardFishermanBadge: "मछुआरा भूमिका",
+        cardCityTitle: "शहरी स्थानीय निकाय एवं आपदा प्रबंधन",
+        cardCityBadge: "नगर निगम भूमिका",
+        copyBriefing: "निर्देश कॉपी करें",
+        chatCardTitle: "मौसम जीपीटी संवादात्मक मौसम विज्ञानी",
+        aiOnline: "एआई सक्रिय",
+        chatCardSubtitle: "स्वायत्त सिनॉप्टिक आसूचना एवं बहु-चरणीय संवाद",
+        clearChat: "बातचीत साफ़ करें",
+        printRecord: "प्रिंट रिकॉर्ड",
+        targetLabel: "📍 लक्षित स्थान:",
+        targetPlaceholder: "शहर या जिला दर्ज करें (उदा. बेंगलुरु, दिल्ली, मुंबई)...",
+        roleLensLabel: "भूमिका दृष्टिकोण:",
+        roleFarmer: "किसान",
+        roleFisherman: "मछुआरा",
+        roleCityOps: "नगर निगम / यूएलबी",
+        rolePublic: "नागरिक",
+        thinkingText: "मौसम जीपीटी भारत-एफएस ग्रिड और आईएमडी नाउकास्ट का विश्लेषण कर भूमिका निर्देश तैयार कर रहा है...",
+        suggestionsLabel: "सुझाव:",
+        disasterRadarTitle: "सचेत / एनडीएमए आपदा रडार",
+        telemetryTitle: "सिनॉप्टिक मौसम केंद्र टेलीमेट्री",
+        telemetrySub: "सेंसर डेटा",
+        inspectBtn: "जांचें",
+        scalesTitle: "मानक मौसम विज्ञान पैमाने",
+        scalesSub: "मानक",
+        footerRural: "ग्रामीण आईवीआर एवं टेलीफोनी गेटवे",
+        ruralModalTitle: "ग्रामीण पहुंच स्तर (फीचर फोन उपयोगकर्ताओं हेतु)",
+        ruralTabIvr: "1. टोल-फ्री आईवीआर वॉयस गेटवे (1800-MAUSAM-AI)",
+        ruralTabSms: "2. एसएमएस एवं यूएसएसडी सेवा",
+        ruralTabKrishi: "3. कृषि सखी फील्ड कंसोल",
+        ivrCallBtn: "📞 कॉल कनेक्ट करें"
       },
       ta: {
         welcomeTitle: "வெதர் ஜிபிடி வானிலை மற்றும் பேரிடர் முனையம்",
@@ -935,12 +1041,67 @@
         quickHeat: "வெப்ப அலை மற்றும் புற ஊதாக் கதிர்வீச்சு தாக்கம்",
         quickFlood: "பேரிடர் எச்சரிக்கை மற்றும் கனமழை முன்னறிவிப்பு",
         inputPlaceholder: "தமிழில் கேளுங்கள் (उदा. இன்று மழை பெய்யுமா? அறுவடை செய்யலாமா?)",
-        transmit: "அனுப்புக"
+        transmit: "அனுப்புக",
+        topBarDirectives: "செயல்பாட்டு வழிமுறைகள்",
+        drawerWarning: "வானிலை எச்சரிக்கை: மேற்கு-மத்திய வங்காள விரிகுடாவில் ஆழ்ந்த காற்றழுத்த தாழ்வு மண்டலம். கடலோரப் பகுதிகளில் 55-65 கிமீ/மணி வேகத்தில் பலத்த காற்று.",
+        drawerDesc: "தேசிய பேரிடர் மேலாண்மை ஆணையம் (NDMA) பொது எச்சரிக்கை நெறிமுறை (CAP v1.2) நேரடி ஆலோசனை. விவசாயம், கடலோர மீன்பிடி மற்றும் நகர்ப்புற உள்ளாட்சி அமைப்புகளுக்கான வழிகாட்டுதல்கள் தீவிரப்படுத்தப்பட்டுள்ளன.",
+        viewRoleDirectives: "பணி வழிகாட்டுதல்களைக் காண்க",
+        topBarSub: "உரையாடல் வானிலை மற்றும் பேரிடர் நுண்ணறிவு தளம்",
+        topBarTag: "மிஷன் மௌசம் • பாரத்-எஃப்எஸ் • ஐஎம்டி வானிலை • என்டிஎம்ஏ சச்செட்",
+        headerKicker: "வெதர் ஜிபிடி • வானிலை பகுப்பாய்வு இயந்திரம்",
+        headerLayer: "அனைத்திந்திய ஒருங்கிணைந்த தளம்",
+        headerTitle: "உரையாடல் வானிலை மற்றும் பேரிடர் நுண்ணறிவு",
+        headerDesc: "பாரத்-எஃப்எஸ் வானிலை மாதிரி, மேக்தூத் வேளாண் வானிலை, தாமினி மின்னல் மற்றும் என்டிஎம்ஏ பேரிடர் எச்சரிக்கைகளை துறைசார் வழிகாட்டுதல்களாக மாற்றுகிறது",
+        navRoleDirectives: "பணி வழிகாட்டுதல்கள்",
+        navRural: "கிராமப்புற தொலைபேசி சேவை (IVR/SMS)",
+        navHazard: "ஐஎம்டி பேரிடர் அட்லஸ்",
+        workbenchTitle: "பணி அடிப்படையிலான செயல்பாட்டு வழிகாட்டு இயந்திரம்",
+        workbenchBadge: "எச்சரிக்கை பகுப்பாய்வு",
+        workbenchDesc: "ஒற்றை சிவப்பு/ஆரஞ்சு எச்சரிக்கை ஒரே நேரத்தில் துறைசார்ந்த செயல்பாட்டு வழிகாட்டுதல்களாக மாற்றப்படுகிறது",
+        scenarioLabel: "செயல்பாட்டு சூழல்:",
+        scenarioCyclone: "புயல் சிவப்பு எச்சரிக்கை (கடற்கரை)",
+        scenarioFlood: "நகர்ப்புற பெருமழை (பெங்களூரு)",
+        scenarioHeatwave: "கடும் வெப்ப அலை (தில்லி)",
+        cardFarmerTitle: "விவசாயம் மற்றும் வேளாண் வானிலை",
+        cardFarmerBadge: "விவசாயி பணி",
+        cardFishermanTitle: "கடல் மற்றும் கடலோர பாதுகாப்பு",
+        cardFishermanBadge: "மீனவர் பணி",
+        cardCityTitle: "நகர்ப்புற உள்ளாட்சி மற்றும் பேரிடர் மேலாண்மை",
+        cardCityBadge: "நகராட்சி பணி",
+        copyBriefing: "அனைத்து வழிகாட்டுதல்களையும் நகலெடு",
+        chatCardTitle: "வெதர் ஜிபிடி உரையாடல் வானிலை ஆய்வாளர்",
+        aiOnline: "செயற்கை நுண்ணறிவு தயார்",
+        chatCardSubtitle: "தன்னாட்சி வானிலை நுண்ணறிவு மற்றும் உரையாடல்",
+        clearChat: "உரையாடலை அழிக்க",
+        printRecord: "பதிவை அச்சிட",
+        targetLabel: "📍 இடம்:",
+        targetPlaceholder: "நகரம் அல்லது மாவட்டத்தை உள்ளிடவும் (எ.கா. பெங்களூரு, சென்னை, தில்லி)...",
+        roleLensLabel: "பார்வை நோக்கம்:",
+        roleFarmer: "விவசாயி",
+        roleFisherman: "மீனவர்",
+        roleCityOps: "நகராட்சி / நிர்வாகம்",
+        rolePublic: "பொதுமக்கள்",
+        thinkingText: "வெதர் ஜிபிடி பாரத்-எஃப்எஸ் மாதிரிகள் மற்றும் ஐஎம்டி புள்ளிவிவரங்களை பகுப்பாய்வு செய்கிறது...",
+        suggestionsLabel: "பரிந்துரைகள்:",
+        disasterRadarTitle: "சச்செட் / என்டிஎம்ஏ பேரிடர் ரேடார்",
+        telemetryTitle: "வானிலை ஆய்வு மைய நேரடி தகவல்கள்",
+        telemetrySub: "சென்சார் தகவல்கள்",
+        inspectBtn: "ஆராய்க",
+        scalesTitle: "வானிலை அளவீட்டு அளவுகோல்கள்",
+        scalesSub: "தரநிலைகள்",
+        footerRural: "கிராமப்புற ஐவிஆர் மற்றும் தொலைபேசி சேவை",
+        ruralModalTitle: "கிராமப்புற தொலைபேசி சேவை (சாதாரண மொபைல் போன்கள்)",
+        ruralTabIvr: "1. கட்டணமில்லா தொலைபேசி சேவை (1800-MAUSAM-AI)",
+        ruralTabSms: "2. எஸ்எம்எஸ் & யுஎஸ்எஸ்டி தகவல்",
+        ruralTabKrishi: "3. கிருஷி சகி கள உதவி",
+        ivrCallBtn: "📞 இணைப்பைத் தொடங்கு"
       }
     };
 
     function setAppLanguage(lang) {
       currentLanguage = lang;
+      document.documentElement.lang = lang;
+      
       ["en", "hi", "ta"].forEach(l => {
         const btn = document.getElementById("lang-btn-" + l);
         if (btn) {
@@ -953,9 +1114,26 @@
       });
 
       const strings = I18N_STRINGS[lang] || I18N_STRINGS.en;
+      
+      // Update all elements with data-i18n
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (strings[key]) {
+          el.textContent = strings[key];
+        }
+      });
+
+      // Update all elements with data-i18n-placeholder
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (strings[key]) {
+          el.setAttribute("placeholder", strings[key]);
+        }
+      });
+
       const city = getTargetCity();
       const input = document.getElementById("chat-input");
-      if (input) {
+      if (input && !input.value.trim()) {
         input.placeholder = strings.inputPlaceholder;
       }
       const sendLabel = document.getElementById("send-label");
@@ -963,11 +1141,11 @@
         sendLabel.textContent = strings.transmit;
       }
 
-      // Re-render suggestions if empty
+      // Re-render suggestions
       const chipsBar = document.getElementById("suggestion-chips-bar");
       if (chipsBar) {
         chipsBar.innerHTML = `
-          <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">Suggestions:</span>
+          <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">${strings.suggestionsLabel}</span>
           <button type="button" onclick="quickAsk('${strings.quickPesticide.replace('{city}', city)}')" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
             🌾 ${strings.quickPesticide.replace('{city}', city)}
           </button>
@@ -981,6 +1159,11 @@
             ⚠️ ${strings.quickFlood}
           </button>
         `;
+      }
+
+      // Refresh directives cards in selected language
+      if (typeof triggerRoleDirectives === "function") {
+        triggerRoleDirectives(currentScenario);
       }
     }
 
@@ -1391,11 +1574,9 @@
     }
 
     function clearChatHistory() {
-      if (confirm("Reset conversation history and clear local record?")) {
-        chatHistory = [];
-        localStorage.removeItem("weathergpt_chat_history");
-        initChatUI();
-      }
+      chatHistory = [];
+      localStorage.removeItem("weathergpt_chat_history");
+      initChatUI();
     }
 
     function printChatTranscript() {
@@ -1477,137 +1658,377 @@
       }
     }
 
-    // 5. Showpiece Role Fan-Out Controller (Section 4.4 & 8.4)
-    const FANOUT_SCENARIOS = {
+    // 5. Role-Based Operational Directives Controller (Section 4.4 & 8.4)
+    const ROLE_DIRECTIVE_SCENARIOS = {
       cyclone: {
-        event: "Extremely Severe Cyclonic Storm & Storm Surge (Red Alert)",
-        area: "Coastal Odisha & Northern Andhra Pradesh",
-        meta: "Source: NDMA SACHET CAP v1.2 + BharatFS Cyclone Track (±12km ensemble spread)",
-        farmer: {
-          directive: "Emergency harvest of mature paddy within 18 hours; pause all agro-chemical spraying and secure livestock.",
-          checklist: [
-            "Dig 30cm peripheral trenches to stop prolonged root submergence",
-            "Zero pesticide or fertilizer application (drift & immediate washout risk)",
-            "Evacuate livestock to high-ground pucca shelters with stored dry fodder"
-          ],
-          status: "Spraying: SUSPENDED"
+        en: {
+          event: "Extremely Severe Cyclonic Storm & Storm Surge (Red Alert)",
+          area: "Coastal Odisha & Northern Andhra Pradesh",
+          meta: "Source: NDMA SACHET CAP v1.2 + BharatFS Cyclone Track (±12km ensemble spread)",
+          farmer: {
+            directive: "Emergency harvest of mature paddy within 18 hours; pause all agro-chemical spraying and secure livestock.",
+            checklist: [
+              "Dig 30cm peripheral trenches to stop prolonged root submergence",
+              "Zero pesticide or fertilizer application (drift & immediate washout risk)",
+              "Evacuate livestock to high-ground pucca shelters with stored dry fodder"
+            ],
+            status: "Spraying: SUSPENDED"
+          },
+          fisherman: {
+            directive: "TOTAL SEA BAN: Coastal squalls exceeding 75 km/h with rough sea state. Return to harbor by 18:00 IST.",
+            checklist: [
+              "Total suspension of deep-sea and coastal fishing operations",
+              "Moor fiber boats and catamarans securely above high spring-tide line",
+              "Keep marine VHF tuned to Coast Guard Channel 16 for SAR updates"
+            ],
+            status: "Departure: TOTAL BAN"
+          },
+          city_ops: {
+            directive: "ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize heavy dewatering pumps to chronic low-lying wards.",
+            checklist: [
+              "Station 100-HP diesel pumps at known inundation railway underpasses",
+              "Pre-position NDRF and Civil Defense boats in vulnerable wards",
+              "Broadcast real-time road diversion alerts for submerged arterial routes"
+            ],
+            status: "Alert: CODE RED"
+          }
         },
-        fisherman: {
-          directive: "TOTAL SEA BAN: Coastal squalls exceeding 75 km/h with rough sea state. Return to harbor by 18:00 IST.",
-          checklist: [
-            "Total suspension of deep-sea and coastal fishing operations",
-            "Moor fiber boats and catamarans securely above high spring-tide line",
-            "Keep marine VHF tuned to Coast Guard Channel 16 for SAR updates"
-          ],
-          status: "Departure: TOTAL BAN"
+        hi: {
+          event: "अत्यंत गंभीर चक्रवाती तूफान और तूफानी लहरें (रेड अलर्ट)",
+          area: "तटीय ओडिशा एवं उत्तरी आंध्र प्रदेश",
+          meta: "स्रोत: एनडीएमए सचेत सीएपी v1.2 + भारत-एफएस चक्रवात पथ (±12 किमी फैलाव)",
+          farmer: {
+            directive: "18 घंटों के भीतर पकी धान की फसल की आपातकालीन कटाई करें; सभी कीटनाशक छिड़काव रोकें और मवेशियों को सुरक्षित रखें।",
+            checklist: [
+              "जड़ों के जलभराव को रोकने के लिए मेड़ों के किनारे 30 सेमी गहरी जल निकासी नालियां बनाएं",
+              "48 घंटों तक किसी भी कीटनाशक या उर्वरक का छिड़काव न करें (हवा में बहने और धुलने का खतरा)",
+              "मवेशियों को सूखे चारे के साथ ऊंचे पक्के आश्रयों में स्थानांतरित करें"
+            ],
+            status: "छिड़काव: स्थगित"
+          },
+          fisherman: {
+            directive: "समुद्र में जाने पर पूर्ण प्रतिबंध: 75 किमी/घंटे से अधिक तेज तूफानी हवाएं। शाम 18:00 बजे तक बंदरगाह लौटें।",
+            checklist: [
+              "गहरे समुद्र और तटीय मछली पकड़ने के सभी कार्य तुरंत स्थगित करें",
+              "फाइबर नौकाओं और नावों को उच्च ज्वार रेखा से ऊपर सुरक्षित बांधें",
+              "तटरक्षक खोज व बचाव हेतु मरीन वीएचएफ चैनल 16 चालू रखें"
+            ],
+            status: "रवानगी: पूर्ण प्रतिबंध"
+          },
+          city_ops: {
+            directive: "नगर निगम जल निकासी प्रोटोकॉल सक्रिय करें: जलभराव वाले निचले वार्डों में भारी पंप तैनात करें।",
+            checklist: [
+              "रेलवे अंडरपास और संवेदनशील चौराहों पर 100-एचपी डीजल पंप तैनात करें",
+              "संवेदनशील वार्डों में एनडीआरएफ और नागरिक सुरक्षा बचाव नौकाएं पहले से तैनात करें",
+              "जलमग्न मुख्य मार्गों के लिए वास्तविक समय में यातायात डायवर्जन जारी करें"
+            ],
+            status: "चेतावनी: कोड रेड"
+          }
         },
-        city_ops: {
-          directive: "ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize heavy dewatering pumps to chronic low-lying wards.",
-          checklist: [
-            "Station 100-HP diesel pumps at known inundation railway underpasses",
-            "Pre-position NDRF and Civil Defense boats in vulnerable wards",
-            "Broadcast real-time road diversion alerts for submerged arterial routes"
-          ],
-          status: "Alert: CODE RED"
+        ta: {
+          event: "மிக தீவிர புயல் மற்றும் கடல் கொந்தளிப்பு (சிவப்பு எச்சரிக்கை)",
+          area: "கடலோர ஒடிசா மற்றும் வடக்கு ஆந்திர பிரதேசம்",
+          meta: "ஆதாரம்: என்டிஎம்ஏ சச்செட் சிஏபி v1.2 + பாரத்-எஃப்எஸ் புயல் பாதை (±12 கிமீ)",
+          farmer: {
+            directive: "18 மணி நேரத்திற்குள் பழுத்த நெல் பயிரை அவசரமாக அறுவடை செய்யவும்; பூச்சிக்கொல்லி மருந்து தெளிப்பதை நிறுத்தி கால்நடைகளைப் பாதுகாக்கவும்.",
+            checklist: [
+              "வேர் அழுகலைத் தடுக்க வரப்புகளில் 30 செ.மீ வடிகால் வாய்க்கால்களை வெட்டவும்",
+              "பூச்சிக்கொல்லி அல்லது உரமிடுவதை உடனடியாக தவிர்க்கவும் (காற்று மற்றும் மழையால் அடித்துச் செல்லப்படும் அபாயம்)",
+              "கால்நடைகளை மேடான கான்கிரீட் கொட்டகைகளுக்கு மாற்றவும்"
+            ],
+            status: "மருந்து தெளித்தல்: நிறுத்திவைப்பு"
+          },
+          fisherman: {
+            directive: "கடலுக்குச் செல்ல முழு தடை: 75 கிமீ/மணி வேகத்தில் பலத்த சூறாவளி காற்று. மாலை 18:00 மணிக்குள் கரை திரும்புங்கள்.",
+            checklist: [
+              "ஆழ்கடல் மற்றும் கடலோர மீன்பிடி நடவடிக்கைகளை முழுமையாக நிறுத்தவும்",
+              "படகுகளை உயர் அலை வரம்பிற்கு மேல் பாதுகாப்பாக கட்டி வைக்கவும்",
+              "கடலோர காவல்படை சேனல் 16-ஐ தொடர்ந்து கவனிக்கவும்"
+            ],
+            status: "புறப்பாடு: முழு தடை"
+          },
+          city_ops: {
+            directive: "நகராட்சி வடிகால் அவசர திட்டத்தை செயல்படுத்துக: தாழ்வான பகுதிகளில் அதிக திறன் கொண்ட நீர் இறைக்கும் பம்புகளை தயார் செய்க.",
+            checklist: [
+              "தண்ணீர் தேங்கும் ரயில்வே பாலங்கள் அருகே 100-HP பம்புகளை நிறுவவும்",
+              "பாதிக்கப்படக்கூடிய பகுதிகளில் பேரிடர் மீட்புப் படகுகளை முன்கூட்டியே தயார் நிலையில் வைக்கவும்",
+              "போக்குவரத்து மாற்று வழிகள் குறித்த அறிவிப்புகளை வெளியிடவும்"
+            ],
+            status: "எச்சரிக்கை: ரெட் அலர்ட்"
+          }
         }
       },
       flood: {
-        event: "Monsoon Convective Torrential Downpour & Flash Floods",
-        area: "Bengaluru Urban & Hebbal Catchment",
-        meta: "Source: IMD Doppler Radar & Nowcast (14:00 IST) + Hazard Atlas Historical Normals",
-        farmer: {
-          directive: "Drain excess water from horticultural and vegetable beds; delay fertilizer application by 48 hours.",
-          checklist: [
-            "Clear soil drainage furrows to prevent seedling root asphyxiation",
-            "Suspend foliar fungicide sprays until rainfall ceases completely",
-            "Inspect bund structural stability along field margins"
-          ],
-          status: "Spraying: DELAYED"
+        en: {
+          event: "Monsoon Convective Torrential Downpour & Flash Floods",
+          area: "Bengaluru Urban & Hebbal Catchment",
+          meta: "Source: IMD Doppler Radar & Nowcast (14:00 IST) + Hazard Atlas Historical Normals",
+          farmer: {
+            directive: "Drain excess water from horticultural and vegetable beds; delay fertilizer application by 48 hours.",
+            checklist: [
+              "Clear soil drainage furrows to prevent seedling root asphyxiation",
+              "Suspend foliar fungicide sprays until rainfall ceases completely",
+              "Inspect bund structural stability along field margins"
+            ],
+            status: "Spraying: DELAYED"
+          },
+          fisherman: {
+            directive: "INLAND RESERVOIR WARNING: High surface turbulence and sudden surge in lake and reservoir outfalls.",
+            checklist: [
+              "Halt coracle and freshwater artisanal netting on lakes and dams",
+              "Watch for rapid reservoir spillway shutter openings",
+              "Secure nylon gill nets away from flooded shorelines"
+            ],
+            status: "Freshwater: RESTRICTED"
+          },
+          city_ops: {
+            directive: "ACTIVATE WARD SUMP PUMPING: High risk of underpass waterlogging on Outer Ring Road.",
+            checklist: [
+              "Switch on automatic sump pumps at chronic underpasses",
+              "Alert traffic police to divert traffic around flooded lake overflows",
+              "Desilt stormwater drain entry grates from urban debris"
+            ],
+            status: "Alert: CODE ORANGE"
+          }
         },
-        fisherman: {
-          directive: "INLAND RESERVOIR WARNING: High surface turbulence and sudden surge in lake and reservoir outfalls.",
-          checklist: [
-            "Halt coracle and freshwater artisanal netting on lakes and dams",
-            "Watch for rapid reservoir spillway shutter openings",
-            "Secure nylon gill nets away from flooded shorelines"
-          ],
-          status: "Freshwater: RESTRICTED"
+        hi: {
+          event: "मानसून की मूसलाधार बारिश और अचानक बाढ़ का खतरा",
+          area: "बेंगलुरु शहरी एवं हेब्बल जलग्रहण क्षेत्र",
+          meta: "स्रोत: आईएमडी डॉपलर रडार व नाउकास्ट + आपदा एटलस ऐतिहासिक रिकॉर्ड",
+          farmer: {
+            directive: "सब्जियों और बागवानी क्यारियों से अतिरिक्त पानी निकालें; उर्वरक का प्रयोग 48 घंटे टालें।",
+            checklist: [
+              "पौधों की जड़ों को गलने से बचाने के लिए जल निकासी नालियों को तुरंत साफ करें",
+              "बारिश पूरी तरह रुकने तक पत्तियों पर फफूंदनाशक का छिड़काव स्थगित रखें",
+              "खेत की मेड़ों की स्थिरता की जांच करें"
+            ],
+            status: "छिड़काव: स्थगित"
+          },
+          fisherman: {
+            directive: "जलाशय चेतावनी: झीलों और जलाशयों में भारी उफान और तेज बहाव की संभावना।",
+            checklist: [
+              "झीलों और बांधों में छोटी नावों और मछली पकड़ने के जालों का उपयोग रोकें",
+              "जलाशय के स्पिलवे गेट तेजी से खुलने पर सतर्क रहें",
+              "बाढ़ वाले किनारों से नायलॉन के जालों को सुरक्षित ऊंचाई पर रखें"
+            ],
+            status: "जलाशय: प्रतिबंधित"
+          },
+          city_ops: {
+            directive: "वार्ड संप पंपिंग सक्रिय करें: आउटर रिंग रोड और अंडरपासों में गंभीर जलभराव का खतरा।",
+            checklist: [
+              "प्रमुख अंडरपासों पर स्वचालित संप पंप तुरंत चालू करें",
+              "झीलों के ओवरफ्लो होने पर ट्रैफिक पुलिस को मार्ग मोड़ने के निर्देश दें",
+              "तूफानी नालों की जालियों से कचरा साफ करें"
+            ],
+            status: "चेतावनी: कोड ऑरेंज"
+          }
         },
-        city_ops: {
-          directive: "ACTIVATE WARD SUMP PUMPING: High risk of underpass waterlogging on Outer Ring Road.",
-          checklist: [
-            "Switch on automatic sump pumps at chronic underpasses",
-            "Alert traffic police to divert traffic around flooded lake overflows",
-            "Desilt stormwater drain entry grates from urban debris"
-          ],
-          status: "Alert: CODE ORANGE"
+        ta: {
+          event: "பருவமழை பெருவெள்ளம் மற்றும் மேகவெடிப்பு எச்சரிக்கை",
+          area: "பெங்களூரு நகர்ப்புறம் மற்றும் ஹெப்பல் வடிநிலம்",
+          meta: "ஆதாரம்: ஐஎம்டி டாப்ளர் ரேடார் மற்றும் வானிலை முன்னறிவிப்பு",
+          farmer: {
+            directive: "தோட்டக்கலை மற்றும் காய்கறி பயிர்களில் இருந்து தேங்கிய நீரை வெளியேற்றவும்; உரமிடுவதை 48 மணி நேரம் தள்ளிப்போடவும்.",
+            checklist: [
+              "நாற்றுகள் அழுகாமல் இருக்க வயல் வடிகால்களை உடனடியாக தூர்வாரவும்",
+              "மழை முழுமையாக நிற்கும் வரை பூஞ்சாணக் கொல்லி மருந்து தெளிக்க வேண்டாம்",
+              "வயல் வரப்புகளின் உறுதியை சரிபார்க்கவும்"
+            ],
+            status: "மருந்து தெளித்தல்: தள்ளிவைப்பு"
+          },
+          fisherman: {
+            directive: "உள்நாட்டு நீர்நிலை எச்சரிக்கை: ஏரிகள் மற்றும் அணைகளில் நீர்மட்டம் உயர்வு.",
+            checklist: [
+              "ஏரிகளில் பரிசல் மற்றும் மீன்பிடி வலைகளைப் பயன்படுத்துவதை தவிர்க்கவும்",
+              "அணை மதகுகள் திறக்கப்படும் அபாயத்தை கண்காணிக்கவும்",
+              "மீன்பிடி வலைகளை பாதுகாப்பான இடங்களுக்கு மாற்றவும்"
+            ],
+            status: "உள்நாட்டு மீன்பிடி: தடை"
+          },
+          city_ops: {
+            directive: "நகர நீர் இறைக்கும் பம்புகளை இயக்கவும்: முக்கிய சாலைகள் மற்றும் சுரங்கப்பாதைகளில் நீர் தேங்கும் அபாயம்.",
+            checklist: [
+              "சுரங்கப்பாதைகளில் தானியங்கி நீர் இறைக்கும் பம்புகளை இயக்கவும்",
+              "போக்குவரத்து நெரிசலைத் தவிர்க்க மாற்று வழிகளை அறிவிக்கவும்",
+              "மழைநீர் வடிகால் வாயில்களில் உள்ள குப்பைகளை அகற்றவும்"
+            ],
+            status: "எச்சரிக்கை: ஆரஞ்சு அலர்ட்"
+          }
         }
       },
       heatwave: {
-        event: "Severe Heatwave & Evapotranspiration Surge (Loo Conditions)",
-        area: "New Delhi & NCR Region",
-        meta: "Source: IMD Heat Action Plan Bulletin + BharatFS Thermal Forecast",
-        farmer: {
-          directive: "Apply nocturnal irrigation (03:00 - 06:00 IST); mulch topsoil to preserve root zone moisture.",
-          checklist: [
-            "Apply straw mulch to conserve 0-6cm topsoil moisture",
-            "Provide shaded shelters and continuous cool water for milch cattle",
-            "Strictly avoid field labor during peak thermal window (11:30 - 15:30)"
-          ],
-          status: "Labor: NOCTURNAL SHIFT"
+        en: {
+          event: "Severe Heatwave & Evapotranspiration Surge (Loo Conditions)",
+          area: "New Delhi & NCR Region",
+          meta: "Source: IMD Heat Action Plan Bulletin + BharatFS Thermal Forecast",
+          farmer: {
+            directive: "Apply nocturnal irrigation (03:00 - 06:00 IST); mulch topsoil to preserve root zone moisture.",
+            checklist: [
+              "Apply straw mulch to conserve 0-6cm topsoil moisture",
+              "Provide shaded shelters and continuous cool water for milch cattle",
+              "Strictly avoid field labor during peak thermal window (11:30 - 15:30)"
+            ],
+            status: "Labor: NOCTURNAL SHIFT"
+          },
+          fisherman: {
+            directive: "AQUACULTURE ADVISORY: Pond water temperature exceeding 33°C. Risk of dissolved oxygen depletion.",
+            checklist: [
+              "Run pond paddle aerators during early dawn hours",
+              "Add freshwater recharge to maintain pond depth > 1.5m",
+              "Reduce feed ration by 30% to prevent unconsumed waste decomposition"
+            ],
+            status: "Aquaculture: HIGH STRESS"
+          },
+          city_ops: {
+            directive: "ACTIVATE HEAT ACTION PLAN (HAP): Open public hydration stations and misting shelters.",
+            checklist: [
+              "Establish ORS kiosks at major transit interchanges",
+              "Ensure uninterrupted municipal power supply to emergency hospital wards",
+              "Enforce mandatory rest breaks for outdoor construction laborers"
+            ],
+            status: "Alert: CODE ORANGE"
+          }
         },
-        fisherman: {
-          directive: "AQUACULTURE ADVISORY: Pond water temperature exceeding 33°C. Risk of dissolved oxygen depletion.",
-          checklist: [
-            "Run pond paddle aerators during early dawn hours",
-            "Add freshwater recharge to maintain pond depth > 1.5m",
-            "Reduce feed ration by 30% to prevent unconsumed waste decomposition"
-          ],
-          status: "Aquaculture: HIGH STRESS"
+        hi: {
+          event: "भीषण लू एवं अत्यधिक वाष्पीकरण की स्थिति",
+          area: "नई दिल्ली एवं राष्ट्रीय राजधानी क्षेत्र (NCR)",
+          meta: "स्रोत: आईएमडी हीट एक्शन प्लान बुलेटिन + भारत-एफएस थर्मल पूर्वानुमान",
+          farmer: {
+            directive: "रात के समय सिंचाई करें (03:00 - 06:00 बजे); नमी बनाए रखने के लिए मिट्टी में पुआल की मल्चिंग करें।",
+            checklist: [
+              "मिट्टी की नमी बचाने के लिए 0-6 सेमी पुआल या पत्तों की मल्चिंग करें",
+              "दुधारू पशुओं के लिए छायादार बाड़े और स्वच्छ शीतल जल की व्यवस्था करें",
+              "दोपहर 11:30 से 15:30 के बीच खेत में शारीरिक श्रम से पूरी तरह बचें"
+            ],
+            status: "श्रम: रात्रि पाली"
+          },
+          fisherman: {
+            directive: "मत्स्य पालन सलाह: तालाब का तापमान 33°C से अधिक। ऑक्सीजन की कमी का गंभीर खतरा।",
+            checklist: [
+              "सुबह तड़के तालाब के पैडल एरेटर चलाकर ऑक्सीजन स्तर बढ़ाएं",
+              "तालाब की गहराई 1.5 मीटर से अधिक बनाए रखने के लिए ताजा पानी डालें",
+              "भोजन की मात्रा में 30% की कटौती करें ताकि अपशिष्ट न सड़े"
+            ],
+            status: "मत्स्य पालन: अत्यधिक तनाव"
+          },
+          city_ops: {
+            directive: "हीट एक्शन प्लान (HAP) लागू करें: सार्वजनिक पेयजल केंद्र और ओआरएस स्टॉल शुरू करें।",
+            checklist: [
+              "बस स्टैंड और मेट्रो स्टेशनों पर ओआरएस और शीतल जल कियोस्क स्थापित करें",
+              "अस्पतालों के आपातकालीन वार्डों में निर्बाध बिजली व कूलिंग सुनिश्चित करें",
+              "निर्माण श्रमिकों के लिए दोपहर में अनिवार्य विश्राम लागू करें"
+            ],
+            status: "चेतावनी: कोड ऑरेंज"
+          }
         },
-        city_ops: {
-          directive: "ACTIVATE HEAT ACTION PLAN (HAP): Open public hydration stations and misting shelters.",
-          checklist: [
-            "Establish ORS kiosks at major transit interchanges",
-            "Ensure uninterrupted municipal power supply to emergency hospital wards",
-            "Enforce mandatory rest breaks for outdoor construction laborers"
-          ],
-          status: "Alert: CODE ORANGE"
+        ta: {
+          event: "கடும் வெப்ப அலை மற்றும் நிலத்தடி நீர் ஆவியாதல் நிலை",
+          area: "புது தில்லி மற்றும் தேசிய தலைநகர் பகுதி (NCR)",
+          meta: "ஆதாரம்: ஐஎம்டி வெப்ப அலை திட்டம் மற்றும் பாரத்-எஃப்எஸ் மாதிரி",
+          farmer: {
+            directive: "இரவு அல்லது விடியற்காலை வேளையில் பாசனம் செய்யவும் (03:00 - 06:00); மண் ஈரப்பதத்தை பாதுகாக்க தழைக்கூளம் இடவும்.",
+            checklist: [
+              "மண்ணின் ஈரப்பதத்தை பாதுகாக்க வைக்கோல் கொண்டு மூடாக்கு இடவும்",
+              "கால்நடைகளுக்கு நிழலான கொட்டகை மற்றும் தொடர்ச்சியான குடிநீர் வசதி அளிக்கவும்",
+              "நண்பகல் 11:30 முதல் 15:30 வரை வெயிலில் கடுமையான வேலை செய்வதைத் தவிர்க்கவும்"
+            ],
+            status: "பணி: இரவு நேர மாற்றம்"
+          },
+          fisherman: {
+            directive: "மீன் பண்ணை வழிகாட்டுதல்: குட்டை நீர் வெப்பநிலை 33°C-க்கு மேல் உயர்வு. ஆக்சிஜன் பற்றாக்குறை ஆபத்து.",
+            checklist: [
+              "விடியற்காலையில் குட்டைகளில் காற்று காற்றோட்ட கருவிகளை இயக்கவும்",
+              "குட்டை ஆழத்தை 1.5 மீட்டருக்கு மேல் வைத்திருக்க புதிய நீரை நிரப்பவும்",
+              "தீவன அளவை 30% குறைத்து நீர் மாசடைவதை தடுக்கவும்"
+            ],
+            status: "மீன்வளர்ப்பு: அதிக வெப்ப அழுத்தம்"
+          },
+          city_ops: {
+            directive: "வெப்ப அலை தணிப்பு திட்டம் (HAP) செயல்படுத்துக: பொது குடிநீர் மற்றும் நிழல் கூடாரங்களை அமைக்கவும்.",
+            checklist: [
+              "முக்கிய போக்குவரத்து மையங்களில் ORS மற்றும் குடிநீர் மையங்களை திறக்கவும்",
+              "மருத்துவமனைகளில் தொடர்ச்சியான மின்சாரம் மற்றும் குளிர்சாதன வசதியை உறுதி செய்க",
+              "கட்டுமானத் தொழிலாளர்களுக்கு நண்பகல் கட்டாய ஓய்வு வழங்கவும்"
+            ],
+            status: "எச்சரிக்கை: ஆரஞ்சு அலர்ட்"
+          }
         }
       }
     };
 
-    function triggerShowpieceFanout(scenarioKey) {
-      const data = FANOUT_SCENARIOS[scenarioKey] || FANOUT_SCENARIOS.cyclone;
+    function triggerRoleDirectives(scenarioKey) {
+      currentScenario = scenarioKey || currentScenario || "cyclone";
+      const scenarioBundle = ROLE_DIRECTIVE_SCENARIOS[currentScenario] || ROLE_DIRECTIVE_SCENARIOS.cyclone;
+      const data = scenarioBundle[currentLanguage] || scenarioBundle.en;
 
-      document.getElementById("fanout-meta-line").textContent = data.meta;
+      const metaEl = document.getElementById("fanout-meta-line");
+      if (metaEl) metaEl.textContent = data.meta;
 
       // Update Farmer Card
-      document.getElementById("fanout-farmer-directive").textContent = data.farmer.directive;
-      document.getElementById("fanout-farmer-checklist").innerHTML = data.farmer.checklist.map(item => `<li class="flex items-start gap-1.5"><span>•</span><span>${item}</span></li>`).join("");
-      document.getElementById("fanout-farmer-status").textContent = data.farmer.status;
+      const farmDir = document.getElementById("fanout-farmer-directive");
+      if (farmDir) farmDir.textContent = data.farmer.directive;
+      const farmList = document.getElementById("fanout-farmer-checklist");
+      if (farmList) {
+        farmList.innerHTML = data.farmer.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
+      }
+      const farmStat = document.getElementById("fanout-farmer-status");
+      if (farmStat) farmStat.textContent = data.farmer.status;
 
       // Update Fisherman Card
-      document.getElementById("fanout-fisherman-directive").textContent = data.fisherman.directive;
-      document.getElementById("fanout-fisherman-checklist").innerHTML = data.fisherman.checklist.map(item => `<li class="flex items-start gap-1.5"><span>•</span><span>${item}</span></li>`).join("");
-      document.getElementById("fanout-fisherman-status").textContent = data.fisherman.status;
+      const fishDir = document.getElementById("fanout-fisherman-directive");
+      if (fishDir) fishDir.textContent = data.fisherman.directive;
+      const fishList = document.getElementById("fanout-fisherman-checklist");
+      if (fishList) {
+        fishList.innerHTML = data.fisherman.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
+      }
+      const fishStat = document.getElementById("fanout-fisherman-status");
+      if (fishStat) fishStat.textContent = data.fisherman.status;
 
       // Update City Ops Card
-      document.getElementById("fanout-city-directive").textContent = data.city_ops.directive;
-      document.getElementById("fanout-city-checklist").innerHTML = data.city_ops.checklist.map(item => `<li class="flex items-start gap-1.5"><span>•</span><span>${item}</span></li>`).join("");
-      document.getElementById("fanout-city-status").textContent = data.city_ops.status;
+      const cityDir = document.getElementById("fanout-city-directive");
+      if (cityDir) cityDir.textContent = data.city_ops.directive;
+      const cityList = document.getElementById("fanout-city-checklist");
+      if (cityList) {
+        cityList.innerHTML = data.city_ops.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
+      }
+      const cityStat = document.getElementById("fanout-city-status");
+      if (cityStat) cityStat.textContent = data.city_ops.status;
 
       // Scroll to workbench
-      document.getElementById("fanout-workbench").scrollIntoView({ behavior: "smooth" });
+      const workbench = document.getElementById("fanout-workbench");
+      if (workbench) workbench.scrollIntoView({ behavior: "smooth" });
     }
 
-    function copyFanoutDirectives() {
+    // Backwards compatibility alias
+    const triggerShowpieceFanout = triggerRoleDirectives;
+    const FANOUT_SCENARIOS = ROLE_DIRECTIVE_SCENARIOS;
+
+    function openRoleFanoutModal(scenario) {
+      triggerRoleDirectives(scenario || currentScenario || "cyclone");
+      const workbench = document.getElementById("fanout-workbench");
+      if (workbench) {
+        workbench.scrollIntoView({ behavior: "smooth", block: "start" });
+        workbench.classList.add("ring-2", "ring-[#C97A2B]");
+        setTimeout(() => workbench.classList.remove("ring-2", "ring-[#C97A2B]"), 1600);
+      }
+    }
+    const openRoleDirectivesModal = openRoleFanoutModal;
+    window.openRoleFanoutModal = openRoleFanoutModal;
+    window.openRoleDirectivesModal = openRoleDirectivesModal;
+
+    function copyFanoutDirectives(btn) {
       const farmer = document.getElementById("fanout-farmer-directive").textContent;
       const fisherman = document.getElementById("fanout-fisherman-directive").textContent;
       const city = document.getElementById("fanout-city-directive").textContent;
-      const text = "=== WEATHERGPT ROLE-BASED ALERT FAN-OUT ===\n\n[FARMER]: " + farmer + "\n\n[FISHERMAN]: " + fisherman + "\n\n[CITY OPS]: " + city;
+      const text = "=== WEATHERGPT ROLE-BASED OPERATIONAL DIRECTIVES ===\n\n[FARMER]: " + farmer + "\n\n[FISHERMAN]: " + fisherman + "\n\n[CITY OPS]: " + city;
       navigator.clipboard.writeText(text);
-      alert("Role fan-out briefing copied to clipboard!");
+      
+      if (btn) {
+        const orig = btn.innerHTML;
+        const msg = currentLanguage === 'hi' ? 'कॉपी हो गया' : (currentLanguage === 'ta' ? 'நகலெடுக்கப்பட்டது' : 'Copied');
+        btn.innerHTML = "<span>✓</span> <span>" + msg + "</span>";
+        setTimeout(() => { btn.innerHTML = orig; }, 1800);
+      }
     }
 
     function toggleTickerDetail() {
@@ -1690,7 +2111,7 @@
         badge.className = "text-[10px] font-bold px-2 py-0.5 bg-slate-200 text-slate-700 rounded-xs";
         listEl.innerHTML = `
           <div class="text-xs text-slate-500 text-center py-3">
-            Simulated SACHET Radar online. Connect backend for live RSS sync.
+            SACHET Radar standby. Connecting backend for live RSS sync.
           </div>
         `;
       }
@@ -1778,7 +2199,7 @@
       });
     }
 
-    // 9. Rural Accessibility Suite (IVR Simulator & Krishi Sakhi)
+    // 9. Rural Accessibility Suite (IVR Telephony & Krishi Sakhi)
     function openRuralModal() {
       document.getElementById("rural-modal").classList.remove("hidden");
     }
@@ -1800,7 +2221,7 @@
       });
     }
 
-    async function simulateIvrCall() {
+    async function connectIvrCall() {
       const lang = document.getElementById("ivr-lang").value;
       const query = document.getElementById("ivr-query-input").value;
       const statusBox = document.getElementById("ivr-status-box");
@@ -1809,7 +2230,7 @@
 
       try {
         const backendUrl = getActiveBackendUrl();
-        const res = await fetch(backendUrl + "/api/tools/telephony_simulate", {
+        const res = await fetch(backendUrl + "/api/tools/telephony", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ channel: "IVR", language: lang, query })
@@ -1836,6 +2257,9 @@
         statusBox.innerHTML = "<span class='text-red-600'>IVR Telephony error: " + e.message + "</span>";
       }
     }
+
+    // Backwards compatibility alias
+    const simulateIvrCall = connectIvrCall;
 
     function speakKrishiSakhi() {
       const text = "வணக்கம் முருகேசன். அடுத்த 24 மணி நேரத்திற்கு உங்கள் கிராமத்தில் கனமழைக்கு வாய்ப்பு குறைவு. மஞ்சள் பயிரில் வேர் அழுகல் ஏற்படாமல் இருக்க வடிகால் வாய்க்கால்களை சுத்தமாக வைத்திருங்கள்.";

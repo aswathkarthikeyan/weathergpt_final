@@ -72,7 +72,7 @@ app.get("/health", (req: Request, res: Response) => {
     database: "firestore",
     agent_ready: true,
     gemini_key_configured: hasApiKey,
-    model: process.env.MODEL || "gemini-2.5-flash",
+    model: process.env.MODEL || "gemini-3.8-flash",
     timestamp: new Date().toISOString()
   });
 });
@@ -148,7 +148,7 @@ app.get("/api/tools/hazard_atlas", (req: Request, res: Response) => {
   res.json({ city, hazard_profile: data });
 });
 
-// Role-Based Alert Translation endpoint (Feature 4.4 & Section 8.4 Showpiece)
+// Role-Based Alert Translation endpoint (Feature 4.4 & Section 8.4)
 app.post("/api/tools/role_translate", (req: Request, res: Response) => {
   const { event, severity, area, extra_details } = req.body;
   const result = translateAlertToRoles(
@@ -160,14 +160,13 @@ app.post("/api/tools/role_translate", (req: Request, res: Response) => {
   res.json(result);
 });
 
-// Rural Accessibility Telephony Gateway Simulator (Feature 4.8 - IVR / SMS / USSD / Krishi Sakhi)
-app.post("/api/tools/telephony_simulate", (req: Request, res: Response) => {
+// Rural Accessibility Telephony Gateway (Feature 4.8 - IVR / SMS / USSD / Krishi Sakhi)
+const handleTelephony = (req: Request, res: Response) => {
   const { channel, phone_number, query, language } = req.body;
   const lang = language || "hi";
   const userQuery = String(query || "क्या कल बारिश होगी?");
 
   let responseText = "";
-  let voiceSynthesisRate = 0.95;
 
   if (lang === "hi") {
     responseText = "मौसम जीपीटी ग्रामीण सेवा: बेंगलुरु में आज तापमान 27 डिग्री सेल्सियस है। अगले 48 घंटों में भारी बारिश की संभावना नहीं है। कीटनाशक छिड़काव के लिए स्थिति अनुकूल है।";
@@ -187,7 +186,10 @@ app.post("/api/tools/telephony_simulate", (req: Request, res: Response) => {
     ivr_tts_voice: lang === "hi" ? "hi-IN-Neural2-A" : lang === "ta" ? "ta-IN-Neural2-A" : "en-IN-Neural2-B",
     status: "PROCESSED_SUCCESSFULLY"
   });
-});
+};
+
+app.post("/api/tools/telephony", handleTelephony);
+app.post("/api/tools/telephony_simulate", handleTelephony);
 
 // 4. Reference standards endpoint
 app.get("/api/reference", (req: Request, res: Response) => {

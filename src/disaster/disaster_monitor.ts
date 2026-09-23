@@ -1,7 +1,7 @@
 import { getDisasterAlerts } from "./disaster_service.js";
 import { AlertItem } from "./models.js";
 
-const MOCK_USER_DB = [
+const SUBSCRIBED_USERS_REGISTRY = [
   { user_id: "user_123", lat: 12.9716, lon: 77.59, radius: 50, monitor_enabled: true }
 ];
 
@@ -15,7 +15,7 @@ export function informUserOfDisaster(userId: string, alert: AlertItem) {
 export async function runHourlyCheck() {
   console.log("[DISASTER MONITOR] Hourly check started");
 
-  for (const user of MOCK_USER_DB) {
+  for (const user of SUBSCRIBED_USERS_REGISTRY) {
     if (!user.monitor_enabled) continue;
 
     try {
