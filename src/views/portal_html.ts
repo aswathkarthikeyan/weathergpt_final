@@ -382,36 +382,31 @@ export function getPortalHtml(): string {
       <div class="lg:col-span-7 space-y-4">
 
         <!-- MAIN CHATBOT CARD -->
-        <div id="weathergpt-chat-card" class="glass-card shadow-sm flex flex-col rounded-xl overflow-hidden relative z-10 border border-[#E1E4DD]/80">
-          <!-- Terminal Header -->
-          <div class="glass-inner-subtle px-4 sm:px-5 py-3 border-b border-[#E1E4DD]/70 flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 h-7 bg-[#1B2A44] text-white rounded-md flex items-center justify-center font-bold text-xs shadow-2xs">
-                ⚡
-              </span>
-              <div>
-                <div class="font-serif font-bold text-[#1B2A44] text-sm tracking-wide">
-                  <span data-i18n="chatCardTitle">WeatherGPT Conversational Meteorologist</span>
-                </div>
-                <p class="text-[11px] text-[#5B6472]" data-i18n="chatCardSubtitle">Autonomous Synoptic Intelligence &amp; Multi-turn Dialogue</p>
-              </div>
+        <div id="weathergpt-chat-card" class="bg-white/90 backdrop-blur-md shadow-md flex flex-col rounded-2xl overflow-hidden relative z-10 border border-slate-200/90 transition-all">
+          <!-- Clean Meteorological Console Header -->
+          <div class="bg-slate-50/80 px-5 py-3.5 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="font-sans font-semibold text-[#1B2A44] text-sm tracking-tight" data-i18n="chatCardTitle">
+                WeatherGPT Meteorological Console
+              </h3>
+              <p class="text-[11px] text-slate-500" data-i18n="chatCardSubtitle">Synoptic Intelligence &amp; Multi-turn Dialogue</p>
             </div>
             
             <div class="flex items-center gap-2">
-              <button onclick="clearChatHistory()" title="Clear conversation history" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white/70 hover:bg-white text-[11px] font-medium transition flex items-center gap-1 rounded-sm shadow-2xs">
-                <span>🗑️</span> <span class="hidden sm:inline" data-i18n="clearChat">Clear Chat</span>
+              <button onclick="clearChatHistory()" title="Clear conversation history" class="text-slate-600 hover:text-slate-900 px-2.5 py-1 border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1.5 rounded-md shadow-2xs">
+                <span>🧹</span> <span class="hidden sm:inline" data-i18n="clearChat">Clear Chat</span>
               </button>
-              <button onclick="printChatTranscript()" title="Print formal meteorological record" class="text-[#5B6472] hover:text-[#1B2A44] px-2.5 py-1 border border-[#E1E4DD] bg-white/70 hover:bg-white text-[11px] font-medium transition flex items-center gap-1 rounded-sm shadow-2xs">
+              <button onclick="printChatTranscript()" title="Print formal meteorological record" class="text-slate-600 hover:text-slate-900 px-2.5 py-1 border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1.5 rounded-md shadow-2xs">
                 <span>🖨️</span> <span class="hidden sm:inline" data-i18n="printRecord">Print Record</span>
               </button>
             </div>
           </div>
 
         <!-- Configuration & Targeting Bar -->
-        <div class="p-3.5 glass-inner-subtle border-b border-[#E1E4DD]/70 space-y-2.5 text-xs">
+        <div class="p-4 bg-slate-50/40 border-b border-slate-200/70 space-y-3 text-xs">
           <!-- Location Picker Row -->
           <div class="flex flex-wrap items-center gap-2">
-            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0" data-i18n="targetLabel">📍 Target:</span>
+            <span class="font-semibold text-slate-700 text-[11px] shrink-0" data-i18n="targetLabel">📍 Target Location:</span>
             <div class="flex-1 min-w-[180px] flex items-center gap-1.5">
               <input
                 id="location-input"
@@ -419,13 +414,13 @@ export function getPortalHtml(): string {
                 value="Bangalore"
                 placeholder="City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)..."
                 data-i18n-placeholder="targetPlaceholder"
-                class="flex-1 bg-white/90 border border-[#E1E4DD] px-2.5 py-1 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] font-medium rounded-sm shadow-2xs"
+                class="flex-1 bg-white border border-slate-200 px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium rounded-lg shadow-2xs transition"
               />
               <button
                 type="button"
                 onclick="detectUserLocation()"
                 title="Detect current GPS location"
-                class="px-2.5 py-1 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] font-semibold shrink-0 flex items-center gap-1 rounded-sm shadow-2xs"
+                class="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-medium shrink-0 flex items-center gap-1 rounded-lg shadow-2xs transition"
               >
                 <span>🎯</span> <span class="hidden sm:inline">GPS</span>
               </button>
@@ -433,78 +428,78 @@ export function getPortalHtml(): string {
 
             <!-- Quick City Chips (Verified Indian Metropolitan Coordinates) -->
             <div class="flex items-center gap-1 overflow-x-auto py-0.5 max-w-full">
-              <button type="button" onclick="applyPresetCity('Bangalore')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
+              <button type="button" onclick="applyPresetCity('Bangalore')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
                 Bengaluru
               </button>
-              <button type="button" onclick="applyPresetCity('New Delhi')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
+              <button type="button" onclick="applyPresetCity('New Delhi')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
                 Delhi
               </button>
-              <button type="button" onclick="applyPresetCity('Mumbai')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
+              <button type="button" onclick="applyPresetCity('Mumbai')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
                 Mumbai
               </button>
-              <button type="button" onclick="applyPresetCity('Chennai')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
+              <button type="button" onclick="applyPresetCity('Chennai')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
                 Chennai
               </button>
-              <button type="button" onclick="applyPresetCity('Coimbatore')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
+              <button type="button" onclick="applyPresetCity('Coimbatore')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
                 Coimbatore
               </button>
-              <button type="button" onclick="applyPresetCity('Kolkata')" class="px-2 py-0.5 bg-white/80 hover:bg-white border border-[#E1E4DD] text-[11px] text-[#1B2A44] rounded-sm whitespace-nowrap font-medium shadow-2xs">
+              <button type="button" onclick="applyPresetCity('Kolkata')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
                 Kolkata
               </button>
             </div>
           </div>
 
           <!-- Sector Selection Pills -->
-          <div class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#E1E4DD]/70">
-            <span class="font-bold text-[#1B2A44] uppercase tracking-wider text-[10px] shrink-0 mr-1" data-i18n="roleLensLabel">Role Lens:</span>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200/60">
+            <span class="font-semibold text-slate-700 text-[11px] shrink-0 mr-1" data-i18n="roleLensLabel">Role Lens:</span>
+            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
               <input type="radio" name="sector" value="farmer" class="sr-only" checked onchange="handleSectorChange('farmer')">
               <span>🌾</span> <span data-i18n="roleFarmer">Farmer</span>
             </label>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
+            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
               <input type="radio" name="sector" value="fisherman" class="sr-only" onchange="handleSectorChange('fisherman')">
               <span>⚓</span> <span data-i18n="roleFisherman">Fisherman</span>
             </label>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
+            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
               <input type="radio" name="sector" value="city_ops" class="sr-only" onchange="handleSectorChange('city_ops')">
               <span>🏢</span> <span data-i18n="roleCityOps">City Ops / ULB</span>
             </label>
-            <label class="cursor-pointer border border-[#E1E4DD] px-2 py-1 bg-white/80 hover:bg-white has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-[#1B2A44] text-[11px] font-medium flex items-center gap-1 rounded-sm transition shadow-2xs">
+            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
               <input type="radio" name="sector" value="general" class="sr-only" onchange="handleSectorChange('general')">
               <span>👤</span> <span data-i18n="rolePublic">Public</span>
             </label>
-            <span class="ml-auto text-[10px] font-mono text-[#5B6472]" id="session-id-display">SESSION: READY</span>
+            <span class="ml-auto text-[10px] font-mono text-slate-400" id="session-id-display">SESSION: READY</span>
           </div>
         </div>
 
         <!-- Chat Stream Conversation Container -->
-        <div id="chat-thread" class="p-4 sm:p-5 space-y-4 max-h-[580px] min-h-[440px] overflow-y-auto glass-chat-thread">
+        <div id="chat-thread" class="p-5 space-y-4 max-h-[580px] min-h-[440px] overflow-y-auto bg-slate-50/20">
           <!-- Welcome message rendered via JavaScript -->
         </div>
 
         <!-- Thinking / Loading Indicator -->
-        <div id="chat-thinking" class="hidden px-5 py-3 glass-inner-subtle border-t border-[#E1E4DD]/70 flex items-center gap-3">
-          <div class="w-4 h-4 border-2 border-[#1B2A44] border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-xs font-medium text-[#1B2A44]" data-i18n="thinkingText">
-            WeatherGPT is consulting BharatFS synoptic grids, IMD nowcasts, and generating role directives...
+        <div id="chat-thinking" class="hidden px-5 py-3 bg-slate-50 border-t border-slate-200/70 flex items-center gap-3">
+          <div class="w-4 h-4 border-2 border-slate-700 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-xs font-medium text-slate-700" data-i18n="thinkingText">
+            Consulting BharatFS numerical grids, IMD nowcasts, and generating role directives...
           </span>
         </div>
 
         <!-- Composer & Quick Action Bar -->
-        <div id="chat-composer" class="p-3.5 glass-inner-subtle border-t border-[#E1E4DD]/70 space-y-2.5">
+        <div id="chat-composer" class="p-4 bg-white border-t border-slate-200/80 space-y-3">
           <!-- Suggestion Prompts Carousel (Localized dynamically) -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs" id="suggestion-chips-bar">
-            <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0" data-i18n="suggestionsLabel">Suggestions:</span>
-            <button type="button" onclick="quickAsk('Is it safe to spray pesticides on crops today in ' + getTargetCity() + '? Check wind and rain.')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider shrink-0" data-i18n="suggestionsLabel">Suggestions:</span>
+            <button type="button" onclick="quickAsk('Is it safe to spray pesticides on crops today in ' + getTargetCity() + '? Check wind and rain.')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
               🌾 Agrochemical Spraying
             </button>
-            <button type="button" onclick="quickAsk('Check coastal wind speed at 10m/80m and squall warnings for ' + getTargetCity() + '. Can boats go out?')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
+            <button type="button" onclick="quickAsk('Check coastal wind speed at 10m/80m and squall warnings for ' + getTargetCity() + '. Can boats go out?')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
               ⚓ Marine Squalls &amp; Wind
             </button>
-            <button type="button" onclick="quickAsk('What is the historical flood record and extreme 24h rainfall for ' + getTargetCity() + ' in Hazard Atlas?')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
+            <button type="button" onclick="quickAsk('What is the historical flood record and extreme 24h rainfall for ' + getTargetCity() + ' in Hazard Atlas?')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
               🗺️ Hazard Atlas Flood History
             </button>
-            <button type="button" onclick="quickAsk('Scan active disaster warnings, thunderstorms, and rain outlook for ' + getTargetCity() + '.')" class="px-2 py-0.5 bg-white/70 hover:bg-white border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap shadow-2xs">
+            <button type="button" onclick="quickAsk('Scan active disaster warnings, thunderstorms, and rain outlook for ' + getTargetCity() + '.')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
               ⚠️ Disaster Bulletin Scan
             </button>
           </div>
@@ -515,19 +510,19 @@ export function getPortalHtml(): string {
               <textarea
                 id="chat-input"
                 rows="2"
-                placeholder="Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g. Will it rain during harvest?)"
+                placeholder="Ask about weather, rain forecasts, agricultural advisories, or coastal warnings..."
                 data-i18n-placeholder="inputPlaceholder"
-                class="w-full bg-white/90 focus:bg-white border border-[#E1E4DD] p-2.5 text-xs text-[#1B2A44] focus:outline-none focus:ring-1 focus:ring-[#1B2A44] focus:border-[#1B2A44] resize-none font-sans leading-relaxed rounded-sm pr-10 shadow-2xs"
+                class="w-full bg-slate-50 focus:bg-white border border-slate-200 p-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none font-sans leading-relaxed rounded-xl pr-10 shadow-2xs transition"
                 required
               ></textarea>
               
-              <!-- Voice Dictation / Speech-to-Text Button (Section 4.8) -->
+              <!-- Voice Dictation / Speech-to-Text Button -->
               <button
                 type="button"
                 id="voice-mic-btn"
                 onclick="toggleVoiceRecognition()"
                 title="Voice Input (English, Hindi, Tamil Speech Recognition)"
-                class="absolute right-2.5 top-2.5 w-6 h-6 rounded-full bg-white hover:bg-[#C97A2B] hover:text-white border border-[#E1E4DD] text-[#C97A2B] flex items-center justify-center transition shadow-xs"
+                class="absolute right-3 top-3 w-6 h-6 rounded-full bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center transition shadow-2xs"
               >
                 <span id="mic-icon" class="text-xs">🎙️</span>
               </button>
@@ -536,23 +531,21 @@ export function getPortalHtml(): string {
             <button
               id="chat-send-btn"
               type="submit"
-              class="h-[52px] bg-[#1B2A44] hover:bg-[#132845] text-white font-semibold text-xs uppercase tracking-wider px-5 border border-[#132845] transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50 rounded-sm shadow-sm"
+              class="h-[52px] bg-[#1B2A44] hover:bg-[#132845] text-white font-medium text-xs tracking-wide px-5 transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50 rounded-xl shadow-xs"
             >
-              <span id="send-icon">⚡</span>
-              <span id="send-label" data-i18n="transmit">TRANSMIT</span>
+              <span id="send-label" data-i18n="transmit">Send</span>
+              <span>➔</span>
             </button>
           </form>
 
           <!-- Micro Security & Standards Notice -->
-          <div class="flex items-center justify-between text-[10px] text-[#5B6472] pt-0.5">
-            <span class="flex items-center gap-1.5">
-              <span>🔒 Firestore Memory</span>
-              <span>•</span>
-              <span>WMO Synoptic Standards</span>
+          <div class="flex items-center justify-between text-[10.5px] text-slate-400 pt-0.5">
+            <span class="flex items-center gap-2">
+              <span>WMO Standards</span>
               <span>•</span>
               <span>Explainable Provenance</span>
             </span>
-            <span class="font-mono">BharatFS / GFS Ensemble (±0.8°C)</span>
+            <span class="font-mono">BharatFS Numerical Grids</span>
           </div>
         </div>
       </div>
@@ -1423,28 +1416,27 @@ export function getPortalHtml(): string {
       const qHeat = strings.quickHeat;
       const qFlood = strings.quickFlood;
       return \`
-        <div class="glass-card-subtle p-4 rounded-md shadow-xs space-y-3">
-          <div class="flex items-center gap-2 pb-2 border-b border-[#E1E4DD]/70">
-            <span class="w-6 h-6 bg-[#1B2A44] text-white rounded flex items-center justify-center text-xs font-bold shadow-xs">W</span>
-            <div class="font-bold text-xs text-[#1B2A44] font-serif">\${strings.welcomeTitle}</div>
-            <span class="ml-auto text-[10px] text-[#5B6472] font-mono">READY</span>
+        <div class="bg-white border border-slate-200/90 p-4 sm:p-5 rounded-xl shadow-xs space-y-3">
+          <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div class="font-semibold text-xs text-slate-800">\${strings.welcomeTitle}</div>
+            <span class="text-[10px] text-slate-400 font-mono">ONLINE</span>
           </div>
-          <p class="text-xs text-[#1B2A44] leading-relaxed">
+          <p class="text-xs text-slate-600 leading-relaxed">
             \${strings.welcomeDesc}
           </p>
-          <div class="glass-inner-subtle p-2.5 space-y-1.5 rounded-md">
-            <div class="text-[11px] font-bold text-[#5B6472] uppercase tracking-wider">Quick Action Queries:</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qPesticide)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+          <div class="bg-slate-50/70 p-3 space-y-2 rounded-lg border border-slate-200/60">
+            <div class="text-[10.5px] font-semibold text-slate-500 uppercase tracking-wider">Quick Inquiries:</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qPesticide)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
                 <span>🌾</span> <span>\${qPesticide}</span>
               </button>
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qMarine)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qMarine)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
                 <span>⚓</span> <span>\${qMarine}</span>
               </button>
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qHeat)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qHeat)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
                 <span>🏃</span> <span>\${qHeat}</span>
               </button>
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qFlood)}" class="text-left p-1.5 bg-white/70 hover:bg-white border border-[#E1E4DD] rounded-sm text-[#1B2A44] text-[11px] flex items-center gap-1.5 transition shadow-2xs">
+              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qFlood)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
                 <span>⚠️</span> <span>\${qFlood}</span>
               </button>
             </div>
@@ -1461,16 +1453,16 @@ export function getPortalHtml(): string {
         const userDiv = document.createElement("div");
         userDiv.className = "flex flex-col items-end space-y-1";
         userDiv.innerHTML = \`
-          <div class="flex items-center gap-1.5 text-[10px] text-[#5B6472] mr-1">
-            <span class="font-bold text-[#1B2A44] uppercase">You</span>
+          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 mr-1">
+            <span class="font-semibold text-slate-700">You</span>
             <span>•</span>
-            <span class="bg-white/80 border border-[#E1E4DD] px-1.5 py-0.2 rounded font-medium text-[#1B2A44]">📍 \${metadata.city || getTargetCity()}</span>
+            <span class="bg-white border border-slate-200 px-1.5 py-0.2 rounded font-medium text-slate-600">📍 \${metadata.city || getTargetCity()}</span>
             <span>•</span>
-            <span class="bg-blue-100/90 text-[#1B2A44] px-1.5 py-0.2 rounded font-medium uppercase">\${metadata.sector || getSelectedSector()}</span>
+            <span class="bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded font-medium uppercase">\${metadata.sector || getSelectedSector()}</span>
             <span>•</span>
             <span>\${timeStr}</span>
           </div>
-          <div class="max-w-[88%] bg-[#1B2A44] text-white px-4 py-2.5 rounded-md shadow-xs text-xs leading-relaxed">
+          <div class="max-w-[88%] bg-[#1B2A44] text-white px-4 py-2.5 rounded-2xl rounded-tr-xs shadow-xs text-xs leading-relaxed">
             \${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
           </div>
         \`;
@@ -1481,23 +1473,22 @@ export function getPortalHtml(): string {
         const formattedHtml = renderWeatherMarkdown(text);
 
         asstDiv.innerHTML = \`
-          <div class="flex items-center gap-1.5 text-[10px] text-[#5B6472] ml-1">
-            <span class="w-4 h-4 bg-[#C97A2B] text-white font-bold rounded-full flex items-center justify-center text-[9px] shadow-2xs">⚡</span>
-            <span class="font-bold text-[#1B2A44] uppercase">WeatherGPT Dispatch</span>
+          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 ml-1">
+            <span class="font-semibold text-slate-700">WeatherGPT Advisory</span>
             <span>•</span>
-            <span class="text-[#3F6B4A] font-semibold font-mono">BharatFS / Gemini</span>
+            <span class="text-emerald-700 font-medium font-mono">BharatFS</span>
             <span>•</span>
             <span>\${timeStr}</span>
           </div>
-          <div class="max-w-[94%] glass-card p-4 rounded-md shadow-sm text-slate-800 text-xs leading-relaxed space-y-2">
+          <div class="max-w-[94%] bg-white border border-slate-200/90 p-4 sm:p-5 rounded-2xl rounded-tl-xs shadow-xs text-slate-800 text-xs leading-relaxed space-y-2">
             \${formattedHtml}
-            <div class="pt-2 mt-2 border-t border-[#E1E4DD]/70 flex items-center justify-between text-[10px] text-[#5B6472]">
+            <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
               <span class="font-mono">WMO SYNOPTIC COMPLIANT</span>
               <div class="flex items-center gap-3">
-                <button onclick="speakWeatherMessage(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1 text-[#C97A2B]">
+                <button onclick="speakWeatherMessage(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1 text-slate-600 hover:text-slate-900">
                   <span>🔊</span> Listen
                 </button>
-                <button onclick="copyAdvisory(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1">
+                <button onclick="copyAdvisory(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1 text-slate-600 hover:text-slate-900">
                   <span>📋</span> Copy Text
                 </button>
               </div>
