@@ -175,74 +175,64 @@ export function getPortalHtml(): string {
     </div>
 
     <!-- Main Navigation Bar -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-      <!-- Left: Logo & Identity -->
-      <div class="flex items-center gap-3">
-        <!-- WeatherGPT Official Emblem -->
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1B2A44] to-[#132845] p-0.5 shadow-sm flex items-center justify-center shrink-0 border border-[#C97A2B]/60">
-          <div class="w-full h-full rounded-md flex flex-col items-center justify-center text-[#C97A2B] font-serif font-black text-base leading-none">
-            <span>W</span>
-            <span class="text-[7px] font-sans font-bold tracking-widest text-slate-200">GPT</span>
-          </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <!-- Left: Identity -->
+      <div>
+        <div class="flex items-center flex-wrap gap-2">
+          <span class="text-[11px] uppercase tracking-wider text-slate-700 font-bold" data-i18n="headerKicker">
+            WeatherGPT
+          </span>
+          <span class="text-slate-300 text-[10px]">•</span>
+          <span class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+            <span data-i18n="headerLayer">All-India Unified Layer</span>
+          </span>
         </div>
-        
-        <div class="space-y-0.5">
-          <div class="flex items-center flex-wrap gap-2">
-            <span class="text-[10px] uppercase tracking-wider text-[#C97A2B] font-bold flex items-center gap-1">
-              <span>⚡</span> <span data-i18n="headerKicker">WeatherGPT Intelligence</span>
-            </span>
-            <span class="text-slate-300 text-[10px]">•</span>
-            <span class="text-[10px] text-[#3F6B4A] font-semibold flex items-center gap-1">
-              <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#3F6B4A]"></span>
-              <span data-i18n="headerLayer">All-India Unified Layer</span>
-            </span>
-          </div>
-          <h1 class="text-sm sm:text-base font-bold text-[#1B2A44] tracking-tight font-serif" data-i18n="headerTitle">
-            METEOROLOGICAL REASONING ENGINE
-          </h1>
-          <p class="text-[10.5px] text-[#5B6472] hidden sm:block truncate max-w-xl" data-i18n="headerDesc">
-            Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning &amp; NDMA CAP
-          </p>
-        </div>
+        <h1 class="text-sm sm:text-base font-semibold text-[#1B2A44] tracking-tight" data-i18n="headerTitle">
+          Meteorological Reasoning Engine
+        </h1>
+        <p class="text-[10.5px] text-slate-500 hidden sm:block truncate max-w-xl" data-i18n="headerDesc">
+          Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning &amp; NDMA CAP
+        </p>
       </div>
 
       <!-- Right: Subscriptions, Telemetry, Controls -->
-      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2.5 text-xs pt-1 lg:pt-0 border-t lg:border-t-0 border-[#E1E4DD]/60">
+      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2.5 text-xs pt-1 lg:pt-0 border-t lg:border-t-0 border-slate-200/60">
         <!-- Telemetry Clock Pill -->
-        <div class="hidden xl:flex items-center gap-2 bg-[#1B2A44]/5 border border-[#E1E4DD] px-2.5 py-1 rounded-sm text-[10.5px] font-mono">
-          <span id="utc-clock" class="text-[#5B6472]">UTC: --:--:--</span>
+        <div class="hidden xl:flex items-center gap-2 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-md text-[10.5px] font-mono">
+          <span id="utc-clock" class="text-slate-500">UTC: --:--:--</span>
           <span class="text-slate-300">|</span>
-          <span id="local-clock" class="text-[#C97A2B] font-semibold">IST: --:--:--</span>
+          <span id="local-clock" class="text-slate-800 font-semibold">IST: --:--:--</span>
         </div>
 
         <!-- Language Selector -->
-        <div class="flex items-center bg-white/90 border border-[#E1E4DD] rounded-sm p-0.5 shadow-2xs text-[11px] font-sans">
-          <button onclick="setAppLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded-xs text-white bg-[#C97A2B] font-semibold transition">
+        <div class="flex items-center bg-white border border-slate-200 rounded-md p-0.5 shadow-2xs text-[11px]">
+          <button onclick="setAppLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded text-white bg-slate-800 font-semibold transition">
             EN
           </button>
-          <button onclick="setAppLanguage('hi')" id="lang-btn-hi" class="px-2 py-0.5 rounded-xs text-[#5B6472] hover:text-[#1B2A44] transition">
+          <button onclick="setAppLanguage('hi')" id="lang-btn-hi" class="px-2 py-0.5 rounded text-slate-600 hover:text-slate-900 transition">
             हिन्दी
           </button>
-          <button onclick="setAppLanguage('ta')" id="lang-btn-ta" class="px-2 py-0.5 rounded-xs text-[#5B6472] hover:text-[#1B2A44] transition">
+          <button onclick="setAppLanguage('ta')" id="lang-btn-ta" class="px-2 py-0.5 rounded text-slate-600 hover:text-slate-900 transition">
             தமிழ்
           </button>
         </div>
 
         <!-- Action Nav Buttons -->
         <div class="flex items-center gap-1.5">
-          <button onclick="openRoleFanoutModal()" class="px-2.5 py-1 bg-[#C97A2B] hover:bg-[#b0671f] text-white rounded-sm font-semibold text-xs transition flex items-center gap-1 shadow-2xs">
-            <span>⚡</span> <span data-i18n="navRoleDirectives">Directives</span>
+          <button onclick="openRoleFanoutModal()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded-md font-medium text-xs transition flex items-center gap-1 shadow-2xs">
+            <span data-i18n="navRoleDirectives">Directives</span>
           </button>
-          <button onclick="openRuralModal()" class="px-2.5 py-1 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm font-medium text-xs transition flex items-center gap-1 shadow-2xs">
-            <span>📞</span> <span data-i18n="navRural">Rural Tier</span>
+          <button onclick="openRuralModal()" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-md font-medium text-xs transition flex items-center gap-1 shadow-2xs">
+            <span data-i18n="navRural">Rural Tier</span>
           </button>
-          <button onclick="openHazardModal()" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-[#1B2A44] border border-[#E1E4DD] rounded-sm font-medium text-xs transition flex items-center gap-1 shadow-2xs">
-            <span>🗺️</span> <span data-i18n="navHazard">Atlas</span>
+          <button onclick="openHazardModal()" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-md font-medium text-xs transition flex items-center gap-1 shadow-2xs">
+            <span data-i18n="navHazard">Atlas</span>
           </button>
-          <button onclick="openApiModal()" title="Configure Backend API Endpoint (Cloudflare / Cloud Run)" class="px-2 py-1 bg-white hover:bg-slate-50 text-[#1B2A44] border border-[#E1E4DD] rounded-sm font-mono text-[11px] font-medium transition flex items-center gap-1 shadow-2xs">
-            <span>⚙️</span> <span>API</span>
+          <button onclick="openApiModal()" title="Configure Backend API Endpoint (Cloudflare / Cloud Run)" class="px-2 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-md font-mono text-[11px] font-medium transition flex items-center gap-1 shadow-2xs">
+            <span>API</span>
           </button>
-          <a href="/health" target="_blank" class="px-2 py-1 bg-slate-100/90 hover:bg-slate-200 text-[#3F6B4A] rounded-sm border border-slate-300 font-mono text-[10px] font-semibold">
+          <a href="/health" target="_blank" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-emerald-800 rounded-md border border-slate-200 font-mono text-[10px] font-semibold">
             /health
           </a>
         </div>
@@ -254,33 +244,28 @@ export function getPortalHtml(): string {
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-5 space-y-6">
 
     <!-- ==================== ROLE-BASED ALERT DIRECTIVES ENGINE (SEAMLESS INTEGRATED BAR) ==================== -->
-    <section id="fanout-workbench" class="glass-card rounded-xl p-4 sm:p-5 space-y-4 relative z-10 shadow-xs border border-[#E1E4DD]/80">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-[#E1E4DD]/60">
+    <section id="fanout-workbench" class="bg-white rounded-xl p-4 sm:p-5 space-y-4 relative z-10 shadow-xs border border-slate-200/90">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div class="space-y-0.5">
-          <div class="flex items-center gap-2">
-            <span class="w-5 h-5 bg-[#C97A2B] text-white rounded flex items-center justify-center font-bold text-[11px] shadow-2xs">
-              ⚡
-            </span>
-            <h2 class="font-serif font-bold text-sm text-[#1B2A44] tracking-wide" data-i18n="workbenchTitle">
-              Role-Based Operational Directives Engine
-            </h2>
-          </div>
-          <p class="text-[11.5px] text-[#5B6472]" data-i18n="workbenchDesc">
+          <h2 class="font-semibold text-sm text-slate-800 tracking-tight" data-i18n="workbenchTitle">
+            Role-Based Operational Directives Engine
+          </h2>
+          <p class="text-[11.5px] text-slate-500" data-i18n="workbenchDesc">
             Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives
           </p>
         </div>
 
         <!-- Solid Color Active Scenario Selector Pills -->
         <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-[11px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0" data-i18n="scenarioLabel">Active Scenario:</span>
-          <div class="inline-flex rounded-lg p-1 bg-slate-100/90 border border-[#E1E4DD] gap-1 shadow-2xs">
-            <button id="scenario-btn-cyclone" onclick="triggerRoleDirectives('cyclone')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#B3261E] text-white shadow-xs" data-i18n="scenarioCyclone">
+          <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider shrink-0" data-i18n="scenarioLabel">Active Scenario:</span>
+          <div class="inline-flex rounded-lg p-1 bg-slate-100 border border-slate-200 gap-1 shadow-2xs">
+            <button id="scenario-btn-cyclone" onclick="triggerRoleDirectives('cyclone')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-red-600 text-white shadow-xs" data-i18n="scenarioCyclone">
               <span>🔴</span> Cyclone Red Alert (Coast)
             </button>
-            <button id="scenario-btn-flood" onclick="triggerRoleDirectives('flood')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 text-[#5B6472] hover:text-[#1B2A44] hover:bg-white/60" data-i18n="scenarioFlood">
+            <button id="scenario-btn-flood" onclick="triggerRoleDirectives('flood')" class="px-3 py-1.5 text-xs font-medium rounded-md transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white" data-i18n="scenarioFlood">
               <span>🌧️</span> Urban Cloudburst (Bengaluru)
             </button>
-            <button id="scenario-btn-heatwave" onclick="triggerRoleDirectives('heatwave')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 text-[#5B6472] hover:text-[#1B2A44] hover:bg-white/60" data-i18n="scenarioHeatwave">
+            <button id="scenario-btn-heatwave" onclick="triggerRoleDirectives('heatwave')" class="px-3 py-1.5 text-xs font-medium rounded-md transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white" data-i18n="scenarioHeatwave">
               <span>☀️</span> Severe Heatwave &amp; Evaporation (Delhi)
             </button>
           </div>
