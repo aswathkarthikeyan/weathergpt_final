@@ -2917,7 +2917,11 @@ export function getPortalHtml(): string {
         u.lang = "ta-IN";
         window.speechSynthesis.speak(u);
       } else {
-        alert("Audio Guidance:\\n\\n" + guidance);
+        const notifyEl = document.getElementById("radar-notice");
+        if (notifyEl) {
+          notifyEl.classList.remove("hidden");
+          notifyEl.innerHTML = '<span class="font-bold">Audio:</span> ' + guidance;
+        }
       }
     }
 
@@ -3198,15 +3202,20 @@ export function getPortalHtml(): string {
             specificAdvice = "परिचालन स्थिति: " + (wind < 15 && rain < 2.5 ? "अनुकूल खिड़की सक्रिय" : "सावधानी व निगरानी आवश्यक") + "। " + (wind < 15 ? ("हवा की गति (" + wind + " km/h) सामान्य सीमा में है।") : ("हवा की गति (" + wind + " km/h) अधिक है।"));
           }
 
-          reply = "### **" + topicHeading + ": " + city + "**\n\n" +
-            "**वर्तमान भू-मौसम पैरामीटर:**\n" +
-            "· तापमान: **" + temp + "°C** (महसूस: " + feels + "°C) | सापेक्ष आर्द्रता: **" + humidity + "%**\n" +
-            "· 10m सतही हवा: **" + wind + " km/h** | 24h वर्षा: **" + rain + " mm** | UV इंडेक्स: **" + uv + "**\n" +
-            "· 6cm मृदा तापमान: **" + soil6 + "°C** | वायुदाब: **" + pressure + " hPa**\n\n" +
-            "**" + occupation + " (" + niche + ") के लिए सिफारिश:**\n" +
-            "1. " + specificAdvice + "\n" +
-            "2. **निगरानी**: SACHET/IMD बुलेटिन एवं स्थानीय क्षेत्रीय वेधशाला अद्यतन के अनुसार कार्य योजना बनाएं।\n\n" +
-            "*स्रोत: भारतएफएस संख्यात्मक मॉडल + आईएमडी नाउकास्ट (सिनेप्टिक विश्लेषण)*";
+          reply = [
+            "### **" + topicHeading + ": " + city + "**",
+            "",
+            "**वर्तमान भू-मौसम पैरामीटर:**",
+            "· तापमान: **" + temp + "°C** (महसूस: " + feels + "°C) | सापेक्ष आर्द्रता: **" + humidity + "%**",
+            "· 10m सतही हवा: **" + wind + " km/h** | 24h वर्षा: **" + rain + " mm** | UV इंडेक्स: **" + uv + "**",
+            "· 6cm मृदा तापमान: **" + soil6 + "°C** | वायुदाब: **" + pressure + " hPa**",
+            "",
+            "**" + occupation + " (" + niche + ") के लिए सिफारिश:**",
+            "1. " + specificAdvice,
+            "2. **निगरानी**: SACHET/IMD बुलेटिन एवं स्थानीय क्षेत्रीय वेधशाला अद्यतन के अनुसार कार्य योजना बनाएं।",
+            "",
+            "*स्रोत: भारतएफएस संख्यात्मक मॉडल + आईएमडी नाउकास्ट (सिनेप्टिक विश्लेषण)*"
+          ].join("\n");
         } else if (currentLanguage === "ta") {
           let topicHeading = "வானிலை ஆய்வு மற்றும் பணி வழிகாட்டுதல்";
           let specificAdvice = "";
@@ -3226,15 +3235,20 @@ export function getPortalHtml(): string {
             specificAdvice = "செயல்பாட்டு அனுமதி: " + (wind < 15 && rain < 2.5 ? "சாதகமான வானிலை சூழல் நிலவுகிறது" : "கண்காணிப்பு மற்றும் எச்சரிக்கை தேவை") + ". காற்றின் வேகம் " + wind + " km/h மற்றும் மழை " + rain + " mm.";
           }
 
-          reply = "### **" + topicHeading + ": " + city + "**\n\n" +
-            "**நேரடி வானிலை அளவீடுகள்:**\n" +
-            "· வெப்பநிலை: **" + temp + "°C** | ஈரப்பதம்: **" + humidity + "%**\n" +
-            "· காற்றின் வேகம்: **" + wind + " km/h** | 24 மணி நேர மழை: **" + rain + " mm** | புற ஊதா: **" + uv + "**\n" +
-            "· மண் வெப்பநிலை: **" + soil6 + "°C** | காற்று அழுத்தம்: **" + pressure + " hPa**\n\n" +
-            "**" + occupation + " (" + niche + ") வழிகாட்டல்:**\n" +
-            "1. " + specificAdvice + "\n" +
-            "2. **களப்பணி**: நேரடி பாரத்எஃப்எஸ் மற்றும் IMD நிலவரங்களை கருத்தில் கொண்டு செயல்படவும்.\n\n" +
-            "*மூலம்: பாரத்எஃப்எஸ் கணிப்பு + IMD நேரடி வானிலை தொகுப்பு*";
+          reply = [
+            "### **" + topicHeading + ": " + city + "**",
+            "",
+            "**நேரடி வானிலை அளவீடுகள்:**",
+            "· வெப்பநிலை: **" + temp + "°C** | ஈரப்பதம்: **" + humidity + "%**",
+            "· காற்றின் வேகம்: **" + wind + " km/h** | 24 மணி நேர மழை: **" + rain + " mm** | புற ஊதா: **" + uv + "**",
+            "· மண் வெப்பநிலை: **" + soil6 + "°C** | காற்று அழுத்தம்: **" + pressure + " hPa**",
+            "",
+            "**" + occupation + " (" + niche + ") வழிகாட்டல்:**",
+            "1. " + specificAdvice,
+            "2. **களப்பணி**: நேரடி பாரத்எஃப்எஸ் மற்றும் IMD நிலவரங்களை கருத்தில் கொண்டு செயல்படவும்.",
+            "",
+            "*மூலம்: பாரத்எஃப்எஸ் கணிப்பு + IMD நேரடி வானிலை தொகுப்பு*"
+          ].join("\n");
         } else {
           let topicHeading = "Synoptic Meteorological Assessment";
           let specificAdvice = "";
@@ -3257,15 +3271,20 @@ export function getPortalHtml(): string {
             specificAdvice = "Operational State: " + (wind < 15 && rain < 2.5 ? "Operational Window OPEN" : "Precautionary Monitoring Active") + ". Surface wind velocity (" + wind + " km/h) and precipitation (" + rain + " mm) are within operational parameters.";
           }
 
-          reply = "### **" + topicHeading + ": " + city + "**\n\n" +
-            "**Live Synoptic Ground Parameters:**\n" +
-            "· Air Temperature: **" + temp + "°C** (Feels like: " + feels + "°C) | Relative Humidity: **" + humidity + "%**\n" +
-            "· 10m Surface Wind: **" + wind + " km/h** | 24h Precipitation: **" + rain + " mm** | Solar UV: **" + uv + "**\n" +
-            "· 6cm Subsurface Soil: **" + soil6 + "°C** | Barometric MSL: **" + pressure + " hPa**\n\n" +
-            "**Operational Guidance for " + occupation + " (" + niche + "):**\n" +
-            "1. " + specificAdvice + "\n" +
-            "2. **Protocol**: Maintain standard field compliance with SACHET early advisories and BharatFS telemetry updates.\n\n" +
-            "*Source: BharatFS Synoptic Model + IMD Ground Telemetry [Live Analysis]*";
+          reply = [
+            "### **" + topicHeading + ": " + city + "**",
+            "",
+            "**Live Synoptic Ground Parameters:**",
+            "· Air Temperature: **" + temp + "°C** (Feels like: " + feels + "°C) | Relative Humidity: **" + humidity + "%**",
+            "· 10m Surface Wind: **" + wind + " km/h** | 24h Precipitation: **" + rain + " mm** | Solar UV: **" + uv + "**",
+            "· 6cm Subsurface Soil: **" + soil6 + "°C** | Barometric MSL: **" + pressure + " hPa**",
+            "",
+            "**Operational Guidance for " + occupation + " (" + niche + "):**",
+            "1. " + specificAdvice,
+            "2. **Protocol**: Maintain standard field compliance with SACHET early advisories and BharatFS telemetry updates.",
+            "",
+            "*Source: BharatFS Synoptic Model + IMD Ground Telemetry [Live Analysis]*"
+          ].join("\n");
         }
       }
 
