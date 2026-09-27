@@ -20,6 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -139,7 +140,6 @@
           aria-selected="true"
           class="px-2.5 sm:px-3 py-1.5 rounded-md bg-ink text-white font-semibold text-xs shadow-2xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span>💬</span>
           <span class="hidden sm:inline">Chat Console</span>
           <span class="sm:hidden">Chat</span>
         </button>
@@ -151,7 +151,6 @@
           aria-selected="false"
           class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span>📋</span>
           <span class="hidden sm:inline">Role Directives</span>
           <span class="sm:hidden">Directives</span>
         </button>
@@ -163,7 +162,6 @@
           aria-selected="false"
           class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span>📡</span>
           <span class="hidden sm:inline">Telemetry</span>
         </button>
 
@@ -174,7 +172,6 @@
           aria-selected="false"
           class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span>🛡️</span>
           <span class="hidden sm:inline">Radar</span>
         </button>
 
@@ -185,7 +182,6 @@
           aria-selected="false"
           class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span>🗺️</span>
           <span class="hidden sm:inline">Atlas</span>
         </button>
 
@@ -196,7 +192,6 @@
           aria-selected="false"
           class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span>📞</span>
           <span class="hidden sm:inline">Rural</span>
         </button>
       </nav>
@@ -212,7 +207,7 @@
           title="Click to change your default profile, location, and niche"
           class="flex items-center gap-1.5 px-2.5 py-1.5 bg-paper hover:bg-subtle border border-line hover:border-darkline rounded-md text-xs text-ink transition-colors shadow-2xs group focus-visible:ring-2 focus-visible:ring-ink"
         >
-          <span id="badge-avatar" class="text-sm">🌾</span>
+          <span id="badge-avatar" class="w-5 h-5 rounded bg-ink text-white text-[10px] font-bold flex items-center justify-center">AG</span>
           <span id="badge-name" class="font-bold truncate max-w-[85px] sm:max-w-[120px]">Suresh Kumar</span>
           <span class="text-muted hidden md:inline">·</span>
           <span id="badge-meta" class="text-muted hidden md:inline truncate max-w-[100px]">Coimbatore</span>
@@ -257,20 +252,18 @@
         
         <div class="bg-white border border-line rounded-lg shadow-xs flex flex-col overflow-hidden">
           
-          <!-- Terminal Header -->
-          <div class="bg-paper px-5 py-3.5 border-b border-line flex items-center justify-between gap-3">
-            <div>
-              <h2 class="font-bold text-base text-ink tracking-tight">
-                Meteorological Reasoning Console
+          <!-- Terminal Header (Compact Chatbot Header) -->
+          <div class="bg-paper px-4 py-2.5 border-b border-line flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></span>
+              <h2 id="chat-console-title" class="font-semibold text-sm text-ink tracking-tight">
+                Chatbot
               </h2>
-              <p class="text-xs text-muted mt-0.5">
-                BharatFS numerical forecasts, live ground telemetry, and early warning synthesis
-              </p>
             </div>
 
             <!-- Terminal Actions -->
             <div class="flex items-center gap-2">
-              <button onclick="clearChatHistory()" title="Reset Dialogue History" class="px-3 py-1 text-xs font-medium text-slatebody hover:text-ink bg-white hover:bg-subtle border border-line rounded transition-colors shadow-2xs">
+              <button id="chat-clear-btn" onclick="clearChatHistory()" title="Reset Dialogue History" class="px-2.5 py-1 text-xs font-medium text-slatebody hover:text-ink bg-white hover:bg-subtle border border-line rounded transition-colors shadow-2xs">
                 Clear Thread
               </button>
             </div>
@@ -284,7 +277,7 @@
           <!-- Thinking / Reasoning Indicator -->
           <div id="chat-thinking" class="hidden px-5 py-2.5 bg-paper border-t border-line text-xs text-slate-500 flex items-center gap-2">
             <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-            <span>Evaluating numerical forecast grids &amp; synoptic telemetry...</span>
+            <span id="chat-thinking-text">Evaluating numerical forecast grids &amp; synoptic telemetry...</span>
           </div>
 
           <!-- ==================== CONTEXT CONTROL STRIP & COMPOSER ==================== -->
@@ -293,8 +286,8 @@
             <div class="flex flex-wrap items-center gap-3">
               <!-- Location Context Input -->
               <div class="flex items-center gap-1.5">
-                <span class="font-semibold text-slatebody flex items-center gap-1">
-                  <span>📍</span> Location:
+                <span id="context-loc-label" class="font-semibold text-slatebody">
+                  Location:
                 </span>
                 <input
                   id="query-location"
@@ -311,8 +304,8 @@
 
               <!-- Niche Focus Select -->
               <div class="flex items-center gap-1.5">
-                <span class="font-semibold text-slatebody flex items-center gap-1">
-                  <span>🎯</span> Niche:
+                <span id="context-niche-label" class="font-semibold text-slatebody">
+                  Niche:
                 </span>
                 <select
                   id="query-niche"
@@ -320,14 +313,14 @@
                   class="bg-white border border-line px-2.5 py-1 text-xs text-ink font-medium rounded focus:outline-none focus:border-ink shadow-2xs max-w-[210px] truncate"
                   title="Specific operational focus for this inquiry"
                 >
-                  <option value="Agrochemical Spraying & Crop Protection">🌾 Agrochemical Spraying</option>
-                  <option value="Harvest & Sowing Rain Window">🌱 Harvest & Sowing Window</option>
-                  <option value="Coastal Squall & High Sea Clearance">⚓ High Sea & Coastal Safety</option>
-                  <option value="Urban Waterlogging & Drain Choke">🏢 Urban Waterlogging & Drain</option>
-                  <option value="Heatwave & Outdoor Worker Safety">☀️ Heatwave & Worker Safety</option>
-                  <option value="Cyclone Preparedness & High Wind">🌀 Cyclone & Wind Defense</option>
-                  <option value="Cold Chain Humidity & Thermal Stability">🚚 Cold Chain Logistics</option>
-                  <option value="General Atmospheric Advisory">🌍 General Weather</option>
+                  <option value="Agrochemical Spraying & Crop Protection">Agrochemical Spraying</option>
+                  <option value="Harvest & Sowing Rain Window">Harvest & Sowing Window</option>
+                  <option value="Coastal Squall & High Sea Clearance">High Sea & Coastal Safety</option>
+                  <option value="Urban Waterlogging & Drain Choke">Urban Waterlogging & Drain</option>
+                  <option value="Heatwave & Outdoor Worker Safety">Heatwave & Worker Safety</option>
+                  <option value="Cyclone Preparedness & High Wind">Cyclone & Wind Defense</option>
+                  <option value="Cold Chain Humidity & Thermal Stability">Cold Chain Logistics</option>
+                  <option value="General Atmospheric Advisory">General Weather</option>
                 </select>
               </div>
             </div>
@@ -339,7 +332,7 @@
               class="hidden text-[11px] text-cobalt hover:underline font-semibold"
               title="Revert back to your registered profile defaults"
             >
-              ↺ Reset to Profile Default
+              Reset to Profile Default
             </button>
           </div>
 
@@ -363,7 +356,7 @@
                   title="Speech-to-Text Dictation (English, Hindi, Tamil)"
                   class="absolute right-3 top-3 text-muted hover:text-ink transition-colors p-1"
                 >
-                  <span id="mic-icon" class="text-sm">🎙️</span>
+                  <span id="mic-icon" class="text-xs font-mono font-bold">MIC</span>
                 </button>
               </div>
 
@@ -374,7 +367,6 @@
                 class="h-11 px-5 bg-ink hover:bg-slate-800 text-white font-semibold text-sm rounded-md transition-colors shadow-2xs shrink-0 flex items-center gap-2"
               >
                 <span id="send-label">Transmit</span>
-                <span aria-hidden="true">➔</span>
               </button>
             </form>
 
@@ -422,10 +414,10 @@
         <div id="stage-telemetry" class="space-y-4">
           <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
             <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
-              <span class="font-bold text-sm text-ink tracking-tight">
+              <span id="telemetry-stage-title" class="font-bold text-sm text-ink tracking-tight">
                 Synoptic Ground Telemetry
               </span>
-              <button onclick="inspectStation()" class="text-xs font-semibold text-slatebody hover:text-ink px-2.5 py-1 bg-white border border-line rounded shadow-2xs">
+              <button id="telemetry-refresh-btn" onclick="inspectStation()" class="text-xs font-semibold text-slatebody hover:text-ink px-2.5 py-1 bg-white border border-line rounded shadow-2xs">
                 Refresh Sensors
               </button>
             </div>
@@ -440,22 +432,16 @@
                   placeholder="Enter Indian city..."
                   class="flex-1 bg-paper border border-line px-3 py-1.5 text-sm font-medium rounded focus:outline-none focus:border-ink"
                 />
-                <button onclick="inspectStation()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1.5 text-sm font-semibold rounded transition-colors shadow-2xs">
+                <button id="station-query-btn" onclick="inspectStation()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1.5 text-sm font-semibold rounded transition-colors shadow-2xs">
                   Query
                 </button>
               </div>
 
-              <!-- Live Telemetry Box (Dynamically Rendered 12-point sensor grid) -->
-              <div id="telemetry-box" class="space-y-3">
+              <!-- Live Telemetry Box (Dynamically Rendered Sensor Grid + 16h Trend) -->
+              <div id="telemetry-box" class="space-y-4">
                 <div class="text-muted text-center py-8 text-sm">
                   Loading synoptic station sensors...
                 </div>
-              </div>
-
-              <!-- Sensor Provenance Note -->
-              <div class="pt-2 border-t border-line text-xs text-muted flex items-center justify-between">
-                <span>Level-1 Ground Sensors</span>
-                <span class="font-mono">WMO Station #43295</span>
               </div>
             </div>
           </div>
@@ -466,18 +452,18 @@
           <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
             <div class="bg-paper px-5 py-3.5 border-b border-line flex flex-wrap items-center justify-between gap-3">
               <div>
-                <span class="font-bold text-sm sm:text-base text-ink tracking-tight flex items-center gap-2">
-                  <span>📋</span> Role-Based Operational Directives
+                <span id="directives-stage-title" class="font-bold text-sm sm:text-base text-ink tracking-tight flex items-center gap-2">
+                  Role-Based Operational Directives
                 </span>
-                <p class="text-xs text-muted mt-0.5">
+                <p id="directives-stage-subtitle" class="text-xs text-muted mt-0.5">
                   Synchronized with registered profile, real-time ground sensors &amp; NDMA alerts
                 </p>
               </div>
               <div class="flex items-center gap-2">
-                <button onclick="fetchUserRoleDirectives()" title="Query live weather and re-evaluate directives" class="text-xs font-semibold text-slatebody hover:text-ink px-3 py-1.5 bg-white border border-line hover:bg-subtle rounded-md shadow-2xs flex items-center gap-1.5 transition-colors">
-                  <span>🔄</span> Refresh Directives
+                <button id="directives-refresh-btn" onclick="fetchUserRoleDirectives()" title="Query live weather and re-evaluate directives" class="text-xs font-semibold text-slatebody hover:text-ink px-3 py-1.5 bg-white border border-line hover:bg-subtle rounded-md shadow-2xs flex items-center gap-1.5 transition-colors">
+                  Refresh Directives
                 </button>
-                <button onclick="copyPersonalizedDirectives(this)" class="text-xs font-semibold text-slatebody hover:text-ink px-3 py-1.5 bg-white border border-line hover:bg-subtle rounded-md shadow-2xs transition-colors">
+                <button id="directives-copy-btn" onclick="copyPersonalizedDirectives(this)" class="text-xs font-semibold text-slatebody hover:text-ink px-3 py-1.5 bg-white border border-line hover:bg-subtle rounded-md shadow-2xs transition-colors">
                   Copy Dossier
                 </button>
               </div>
@@ -487,8 +473,8 @@
               <!-- Registered Operator Profile Header Card -->
               <div class="p-3.5 bg-paper border border-line rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-md bg-white border border-line flex items-center justify-center text-base shrink-0" id="directives-avatar">
-                    🌾
+                  <div class="w-9 h-9 rounded-md bg-ink text-white font-bold text-xs flex items-center justify-center shrink-0" id="directives-avatar">
+                    AG
                   </div>
                   <div class="leading-tight">
                     <div class="flex items-center gap-2">
@@ -497,16 +483,16 @@
                       <span class="text-xs text-slate-600 font-medium" id="directives-user-sector">Farmer</span>
                     </div>
                     <div class="text-xs text-muted mt-1 flex flex-wrap items-center gap-1.5">
-                      <span>Niche:</span>
+                      <span id="directives-niche-prefix">Niche:</span>
                       <span class="font-medium text-slate-900" id="directives-user-niche">Pesticide Spray Window</span>
                       <span class="text-slate-300">·</span>
-                      <span>Location:</span>
+                      <span id="directives-loc-prefix">Location:</span>
                       <span class="font-medium text-slate-900" id="directives-user-location">Coimbatore</span>
                     </div>
                   </div>
                 </div>
 
-                <button onclick="openOnboardingModal(true)" class="self-start sm:self-auto text-xs text-slate-700 hover:text-ink font-semibold px-2.5 py-1 bg-white border border-line hover:border-darkline rounded transition-colors shrink-0">
+                <button id="directives-edit-role-btn" onclick="openOnboardingModal(true)" class="self-start sm:self-auto text-xs text-slate-700 hover:text-ink font-semibold px-2.5 py-1 bg-white border border-line hover:border-darkline rounded transition-colors shrink-0">
                   Edit Role / Niche ▾
                 </button>
               </div>
@@ -515,7 +501,7 @@
               <div class="border border-line rounded-lg p-4 bg-white space-y-3.5 shadow-2xs">
                 <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-line">
                   <div class="flex items-center gap-2.5">
-                    <span class="text-[11px] font-semibold uppercase tracking-wider text-muted">Tactical Advisory</span>
+                    <span id="tactical-advisory-badge" class="text-[11px] font-semibold uppercase tracking-wider text-muted">Tactical Advisory</span>
                     <span class="text-slate-300">·</span>
                     <div id="directives-status-pill" class="inline-flex items-center">
                       <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200">Evaluating telemetry</span>
@@ -608,7 +594,7 @@
         <div id="stage-radar" class="space-y-4 hidden">
           <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
             <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
-              <span class="font-bold text-sm text-ink tracking-tight">
+              <span id="radar-stage-title" class="font-bold text-sm text-ink tracking-tight">
                 SACHET / NDMA Early Disaster Radar
               </span>
               <span id="disaster-badge" class="font-mono text-xs text-muted">
@@ -639,7 +625,7 @@
                   <option value="100">Radius: 100 km</option>
                   <option value="200">Radius: 200 km</option>
                 </select>
-                <button onclick="loadDisasterAlerts()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1 font-semibold rounded transition-colors shadow-2xs">
+                <button id="radar-scan-btn" onclick="loadDisasterAlerts()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1 font-semibold rounded transition-colors shadow-2xs">
                   Scan
                 </button>
               </div>
@@ -664,7 +650,7 @@
         <div id="stage-atlas" class="space-y-4 hidden">
           <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
             <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
-              <span class="font-bold text-sm text-ink tracking-tight">
+              <span id="atlas-stage-title" class="font-bold text-sm text-ink tracking-tight">
                 IMD Climate Hazard &amp; Vulnerability Atlas
               </span>
               <span class="font-mono text-xs text-muted">imdpune.gov.in</span>
@@ -680,7 +666,7 @@
                   placeholder="District or city name..."
                   class="flex-1 bg-paper border border-line px-3 py-1.5 text-sm rounded font-medium focus:outline-none focus:border-ink"
                 />
-                <button onclick="searchHazardAtlas()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1.5 text-sm font-semibold rounded transition-colors shadow-2xs">
+                <button id="atlas-query-btn" onclick="searchHazardAtlas()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1.5 text-sm font-semibold rounded transition-colors shadow-2xs">
                   Query Atlas
                 </button>
               </div>
@@ -704,14 +690,14 @@
         <div id="stage-rural" class="space-y-4 hidden">
           <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
             <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
-              <span class="font-bold text-sm text-ink tracking-tight">
+              <span id="rural-stage-title" class="font-bold text-sm text-ink tracking-tight">
                 Rural Accessibility Telephony Gateway
               </span>
               <span class="text-xs text-slate-500 font-medium">Toll-free 1800-MAUSAM</span>
             </div>
 
             <div class="p-4 space-y-4 text-sm">
-              <p class="text-slatebody text-xs leading-relaxed">
+              <p id="rural-stage-desc" class="text-slatebody text-xs leading-relaxed">
                 Empowers rural communities and feature-phone holders without 4G/5G data access to receive synoptic weather intelligence via voice IVR and SMS.
               </p>
 
@@ -765,7 +751,7 @@
               <div id="rural-content-krishi" class="space-y-3 hidden">
                 <div class="p-3 bg-paper border border-line rounded text-xs space-y-2">
                   <div class="font-bold text-ink flex items-center justify-between">
-                    <span>🌾 Krishi Sakhi Audio Bulletin (Tamil Nadu)</span>
+                    <span>Krishi Sakhi Audio Bulletin (Tamil Nadu)</span>
                     <button onclick="speakKrishiSakhi()" class="text-ink hover:underline font-semibold text-xs">
                       ▶ Play Audio
                     </button>
@@ -794,11 +780,11 @@
       <!-- Modal Header -->
       <div class="border-b border-line pb-4 flex items-start justify-between">
         <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-cobalt">WeatherGPT Operator Registration</span>
-          <h2 class="text-xl font-extrabold text-ink mt-1">
+          <span id="onboarding-modal-badge" class="text-xs font-bold uppercase tracking-wider text-cobalt">WeatherGPT Operator Registration</span>
+          <h2 id="onboarding-modal-title" class="text-xl font-extrabold text-ink mt-1">
             Institutional Weather Decision Profile
           </h2>
-          <p class="text-xs text-muted mt-1 leading-relaxed">
+          <p id="onboarding-modal-sub" class="text-xs text-muted mt-1 leading-relaxed">
             Configure your professional role, primary location, and operational niche. This establishes your default context, which can still be customized on-the-fly for individual queries.
           </p>
         </div>
@@ -808,7 +794,7 @@
           class="hidden text-muted hover:text-ink text-lg font-bold p-1 leading-none"
           title="Close without saving"
         >
-          ✕
+          ×
         </button>
       </div>
 
@@ -817,7 +803,7 @@
         
         <!-- Full Name & Title -->
         <div class="space-y-1">
-          <label class="block text-xs font-bold text-ink">
+          <label id="modal-label-name" class="block text-xs font-bold text-ink">
             Full Name or Call Sign <span class="text-slate-400">*</span>
           </label>
           <input
@@ -831,7 +817,7 @@
 
         <!-- Occupation / Role Selection -->
         <div class="space-y-1">
-          <label class="block text-xs font-bold text-ink">
+          <label id="modal-label-role" class="block text-xs font-bold text-ink">
             Professional Occupation / Role <span class="text-slate-400">*</span>
           </label>
           <select
@@ -840,22 +826,22 @@
             onchange="syncNicheSuggestions()"
             class="w-full bg-paper border border-line px-3.5 py-2 text-sm text-ink font-medium rounded-md focus:outline-none focus:border-ink transition-colors"
           >
-            <option value="Agriculture & Agromet Specialist" selected>🌾 Agriculture &amp; Farming (Farmer / Agromet Advisor)</option>
-            <option value="Maritime & Coastal Fisheries">⚓ Maritime &amp; Marine Operations (Fisherman / Coastal Ops)</option>
-            <option value="Municipal Administration & City Ops">🏢 Municipal Administration (Urban Local Body / Transit Ops)</option>
-            <option value="Disaster Management Coordinator">🚨 Disaster &amp; Emergency Management (NDRF / SDRF Coordinator)</option>
-            <option value="Supply Chain & Cold Storage Manager">🚚 Cold-Chain Logistics &amp; Transport Manager</option>
-            <option value="Construction & Infrastructure Engineer">🏗️ Infrastructure &amp; Civil Engineering Contractor</option>
-            <option value="Renewable Energy Yield Operator">☀️ Solar &amp; Wind Energy Generation Operator</option>
-            <option value="Public Health Officer">🩺 Public Health &amp; Vector-Borne Disease Control</option>
-            <option value="Aviation & UAV Drone Dispatcher">✈️ Aviation, Drone &amp; UAV Flight Operations</option>
-            <option value="General Citizen & Traveler">🌍 General Citizen / Business Traveler</option>
+            <option value="Agriculture & Agromet Specialist" selected>Agriculture &amp; Farming (Farmer / Agromet Advisor)</option>
+            <option value="Maritime & Coastal Fisheries">Maritime &amp; Marine Operations (Fisherman / Coastal Ops)</option>
+            <option value="Municipal Administration & City Ops">Municipal Administration (Urban Local Body / Transit Ops)</option>
+            <option value="Disaster Management Coordinator">Disaster &amp; Emergency Management (NDRF / SDRF Coordinator)</option>
+            <option value="Supply Chain & Cold Storage Manager">Cold-Chain Logistics &amp; Transport Manager</option>
+            <option value="Construction & Infrastructure Engineer">Infrastructure &amp; Civil Engineering Contractor</option>
+            <option value="Renewable Energy Yield Operator">Solar &amp; Wind Energy Generation Operator</option>
+            <option value="Public Health Officer">Public Health &amp; Vector-Borne Disease Control</option>
+            <option value="Aviation & UAV Drone Dispatcher">Aviation, Drone &amp; UAV Flight Operations</option>
+            <option value="General Citizen & Traveler">General Citizen / Business Traveler</option>
           </select>
         </div>
 
         <!-- Default Geographic Location -->
         <div class="space-y-1">
-          <label class="block text-xs font-bold text-ink">
+          <label id="modal-label-loc" class="block text-xs font-bold text-ink">
             Default Meteorological Location (City / District) <span class="text-slate-400">*</span>
           </label>
           <div class="flex items-center gap-2">
@@ -867,6 +853,7 @@
               class="flex-1 bg-paper border border-line px-3.5 py-2 text-sm text-ink font-medium rounded-md focus:outline-none focus:border-ink transition-colors"
             />
             <button
+              id="modal-btn-gps"
               type="button"
               onclick="detectSignupLocation()"
               class="px-3.5 py-2 bg-white hover:bg-subtle border border-line rounded-md text-xs font-semibold text-slatebody shadow-2xs shrink-0"
@@ -876,7 +863,7 @@
             </button>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap pt-1 text-xs text-muted">
-            <span>Quick:</span>
+            <span id="modal-quick-label">Quick:</span>
             <button type="button" onclick="setSignupLoc('Bengaluru')" class="text-slatebody hover:text-ink underline">Bengaluru</button>
             <span aria-hidden="true">·</span>
             <button type="button" onclick="setSignupLoc('New Delhi')" class="text-slatebody hover:text-ink underline">New Delhi</button>
@@ -893,7 +880,7 @@
 
         <!-- Operational Focus Niche -->
         <div class="space-y-1">
-          <label class="block text-xs font-bold text-ink">
+          <label id="modal-label-niche" class="block text-xs font-bold text-ink">
             Operational Focus Niche <span class="text-slate-400">*</span>
           </label>
           <select
@@ -914,14 +901,15 @@
 
         <!-- Modal Actions -->
         <div class="pt-3 border-t border-line flex items-center justify-between gap-3">
-          <span class="text-[11px] text-muted">
+          <span id="modal-footer-note" class="text-[11px] text-muted">
             Stored locally &amp; synced with Firestore memory
           </span>
           <button
+            id="modal-btn-submit"
             type="submit"
             class="px-5 py-2.5 bg-ink hover:bg-slate-800 text-white font-bold text-sm rounded-md transition-colors shadow-2xs"
           >
-            Save Profile &amp; Launch Console ➔
+            Save Profile &amp; Launch Console
           </button>
         </div>
       </form>
@@ -934,7 +922,7 @@
     <div class="bg-white border border-line rounded-lg max-w-md w-full p-5 space-y-4 shadow-xl">
       <div class="flex items-center justify-between border-b border-line pb-2.5">
         <h3 class="font-bold text-sm text-ink">API Routing Configuration</h3>
-        <button onclick="closeApiModal()" class="text-muted hover:text-ink text-sm">✕</button>
+        <button onclick="closeApiModal()" class="text-muted hover:text-ink text-sm">×</button>
       </div>
 
       <div class="space-y-3 text-xs">
@@ -983,7 +971,17 @@
     // Safe Backend URL resolution
     function getActiveBackendUrl() {
       const stored = localStorage.getItem("weathergpt_backend_url");
-      if (stored && stored.trim()) return stored.trim().replace(/\/$/, "");
+      if (stored && stored.trim()) {
+        const s = stored.trim();
+        return s.endsWith("/") ? s.slice(0, -1) : s;
+      }
+
+      // If hosted on Cloudflare Pages (*.pages.dev) or an external static host, automatically route to the deployed backend
+      const host = window.location.hostname || "";
+      if (host.includes("pages.dev") || host.includes("weathergpt-8gk") || host.includes("github.io") || window.location.protocol === "file:") {
+        return "https://ais-dev-uaoibp5wsqmvog2l7uc4ql-285971087987.asia-southeast1.run.app";
+      }
+
       return window.location.origin;
     }
 
@@ -993,7 +991,7 @@
       if (!u.startsWith("http://") && !u.startsWith("https://")) {
         u = "https://" + u;
       }
-      return u.replace(/\/$/, "");
+      return u.endsWith("/") ? u.slice(0, -1) : u;
     }
 
     // ==================== ONBOARDING & USER PROFILE FLOW ====================
@@ -1022,19 +1020,19 @@
     function updateUserProfileUI() {
       // Update header badge
       const avatarMap = {
-        "Agriculture & Agromet Specialist": "🌾",
-        "Maritime & Coastal Fisheries": "⚓",
-        "Municipal Administration & City Ops": "🏢",
-        "Disaster Management Coordinator": "🚨",
-        "Supply Chain & Cold Storage Manager": "🚚",
-        "Construction & Infrastructure Engineer": "🏗️",
-        "Renewable Energy Yield Operator": "☀️",
-        "Public Health Officer": "🩺",
-        "Aviation & UAV Drone Dispatcher": "✈️",
-        "General Citizen & Traveler": "🌍"
+        "Agriculture & Agromet Specialist": "AG",
+        "Maritime & Coastal Fisheries": "MR",
+        "Municipal Administration & City Ops": "MU",
+        "Disaster Management Coordinator": "DM",
+        "Supply Chain & Cold Storage Manager": "SC",
+        "Construction & Infrastructure Engineer": "CE",
+        "Renewable Energy Yield Operator": "RE",
+        "Public Health Officer": "PH",
+        "Aviation & UAV Drone Dispatcher": "AV",
+        "General Citizen & Traveler": "CZ"
       };
 
-      const av = avatarMap[userProfile.occupation] || "👤";
+      const av = avatarMap[userProfile.occupation] || "OP";
       const avEl = document.getElementById("badge-avatar");
       const nameEl = document.getElementById("badge-name");
       const metaEl = document.getElementById("badge-meta");
@@ -1051,7 +1049,7 @@
       if (lensEl) {
         const shortRole = userProfile.occupation.split("&")[0].trim().split(" ")[0];
         const shortNiche = userProfile.niche ? userProfile.niche.split("&")[0].trim().slice(0, 22) : "Spray Window";
-        lensEl.textContent = av + " " + shortRole + " · " + shortNiche;
+        lensEl.textContent = shortRole + " · " + shortNiche;
       }
 
       // Sync active context controls in Chatbot console
@@ -1311,9 +1309,477 @@
       return promise;
     }
 
+    // ==================== COMPREHENSIVE MULTILINGUAL I18N SYSTEM ====================
+    const I18N = {
+      en: {
+        clockIst: "IST: ",
+        topNavChat: "Chat Console",
+        topNavDirectives: "Role Directives",
+        topNavTelemetry: "Telemetry",
+        topNavRadar: "Radar",
+        topNavAtlas: "Atlas",
+        topNavRural: "Rural",
+        chatTitle: "Chatbot",
+        chatSubtitle: "",
+        clearThread: "Clear Thread",
+        locLabel: "Location:",
+        locPlaceholder: "City / District",
+        nicheLabel: "Niche:",
+        resetDefault: "↺ Reset to Profile Default",
+        chatPlaceholder: "Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g., Can I spray crops today? Will rain disrupt transport?)...",
+        transmit: "Transmit",
+        thinking: "Evaluating numerical forecast grids & synoptic telemetry...",
+        ready: "Ready",
+        welcomeTitle: "WeatherGPT Meteorological Reasoning",
+        welcomeGreeting: "Welcome",
+        welcomeSub: "You can ask any synoptic or practical weather question below. Use the context bar above to change target city or focus area anytime!",
+        tabTelemetry: "Telemetry",
+        tabDirectives: "Role Directives",
+        tabRadar: "Disaster Radar",
+        tabAtlas: "Hazard Atlas",
+        tabRural: "Rural Suite",
+        telemetryTitle: "Synoptic Ground Telemetry",
+        refreshSensors: "Refresh Sensors",
+        stationPlaceholder: "Enter Indian city...",
+        queryBtn: "Query",
+        lvl1Sensors: "Level-1 Ground Sensors",
+        tempLabel: "TEMPERATURE",
+        humidityLabel: "RELATIVE HUMIDITY",
+        windLabel: "WIND VELOCITY",
+        pressureLabel: "SURFACE PRESSURE",
+        uvLabel: "SOLAR UV INDEX",
+        rainLabel: "24H PRECIPITATION",
+        soil0Label: "SOIL TEMP (0cm)",
+        soil6Label: "SOIL TEMP (6cm)",
+        trendTitle: "16-HOUR TEMPERATURE EVOLUTION",
+        feelsLabel: "Feels",
+        dewpointLabel: "Nominal dewpoint",
+        gradientLabel: "80m gradient",
+        baroLabel: "MSL Barometric datum",
+        topsoilLabel: "Topsoil seedbed",
+        subsurfaceLabel: "Sub-surface root layer",
+        directivesTitle: "Role-Based Operational Directives",
+        directivesSubtitle: "Synchronized with registered profile, real-time ground sensors & NDMA alerts",
+        refreshDirectives: "Refresh Directives",
+        copyDossier: "Copy Dossier",
+        copiedDossier: "Copied Dossier!",
+        editRole: "Edit Role / Niche ▾",
+        tacticalAdvisory: "Tactical Advisory",
+        radarTitle: "SACHET / NDMA Early Disaster Radar",
+        monitoring: "MONITORING",
+        activeAlerts: "Active Alerts",
+        noAlertsBadge: "No Active Bulletins",
+        scanBtn: "Scan",
+        noAlertsTitle: "Synoptic Perimeter Clear",
+        noAlertsDesc: "SACHET early warning protocol confirms zero active emergency advisories within {radius}km radius.",
+        atlasTitle: "IMD Climate Hazard & Vulnerability Atlas",
+        hazardPlaceholder: "District or city name...",
+        queryAtlas: "Query Atlas",
+        ruralTitle: "Rural Accessibility Telephony Gateway",
+        ruralDesc: "Empowers rural communities and feature-phone holders without 4G/5G data access to receive synoptic weather intelligence via voice IVR and SMS.",
+        tabIvr: "IVR Voice Call (1800-MAUSAM)",
+        tabSms: "USSD / Push SMS",
+        tabKrishi: "Krishi Sakhi Audio",
+        dialIvr: "Dial IVR",
+        playAudio: "▶ Play Audio",
+        modalBadge: "WeatherGPT Operator Registration",
+        modalTitle: "Institutional Weather Decision Profile",
+        modalSub: "Configure your professional role, primary location, and operational niche. This establishes your default context, which can still be customized on-the-fly for individual queries.",
+        modalLabelName: "Full Name or Call Sign",
+        modalLabelRole: "Professional Occupation / Role",
+        modalLabelLoc: "Default Meteorological Location (City / District)",
+        modalLabelNiche: "Operational Focus Niche",
+        modalQuickLabel: "Quick:",
+        modalSaveBtn: "Save Profile & Launch Console",
+        listenBtn: "Listen",
+        speakingBtn: "Speaking...",
+        dispatchTitle: "WeatherGPT Synoptic Dispatch"
+      },
+      hi: {
+        clockIst: "आईएसटी: ",
+        topNavChat: "चैट कंसोल",
+        topNavDirectives: "भूमिका निर्देश",
+        topNavTelemetry: "टेलीमेट्री",
+        topNavRadar: "आपदा रडार",
+        topNavAtlas: "जलवायु एटलस",
+        topNavRural: "ग्रामीण सेवा",
+        chatTitle: "चैटबॉट",
+        chatSubtitle: "",
+        clearThread: "थ्रेड साफ करें",
+        locLabel: "स्थान:",
+        locPlaceholder: "शहर / ज़िला",
+        nicheLabel: "विषय:",
+        resetDefault: "प्रोफ़ाइल डिफ़ॉल्ट पर रीसेट करें",
+        chatPlaceholder: "वेदरजीपीटी से हिन्दी, தமிழ், या English में पूछें (उदा. क्या आज फसलों पर छिड़काव कर सकते हैं? क्या बारिश होगी?)...",
+        transmit: "भेजें",
+        thinking: "पूर्वानुमान ग्रिड और मौसम टेलीमेट्री का विश्लेषण किया जा रहा है...",
+        ready: "तैयार",
+        welcomeTitle: "वेदरजीपीटी मौसम विज्ञान विश्लेषण",
+        welcomeGreeting: "स्वागत है",
+        welcomeSub: "आप नीचे मौसम या व्यावहारिक कार्य से संबंधित कोई भी प्रश्न पूछ सकते हैं। इनपुट बार के ऊपर स्थित संदर्भ पट्टी से आप किसी भी समय शहर या विषय बदल सकते हैं!",
+        tabTelemetry: "टेलीमेट्री",
+        tabDirectives: "भूमिका निर्देश",
+        tabRadar: "आपदा रडार",
+        tabAtlas: "जलवायु एटलस",
+        tabRural: "ग्रामीण सेवा",
+        telemetryTitle: "प्रत्यक्ष भू-मौसम टेलीमेट्री",
+        refreshSensors: "सेंसर रीफ्रेश करें",
+        stationPlaceholder: "भारतीय शहर का नाम दर्ज करें...",
+        queryBtn: "खोजें",
+        lvl1Sensors: "स्तर-1 भूतल सेंसर",
+        tempLabel: "तापमान",
+        humidityLabel: "सापेक्ष आर्द्रता",
+        windLabel: "हवा की गति",
+        pressureLabel: "सतही वायुदाब",
+        uvLabel: "सौर यूवी सूचकांक",
+        rainLabel: "24 घंटे की वर्षा",
+        soil0Label: "मिट्टी तापमान (0cm)",
+        soil6Label: "मिट्टी तापमान (6cm)",
+        trendTitle: "16 घंटे का तापमान विकास",
+        feelsLabel: "महसूस",
+        dewpointLabel: "सामान्य ओसांक",
+        gradientLabel: "80m हवा गति",
+        baroLabel: "समुद्र तल वायुदाब",
+        topsoilLabel: "ऊपरी सतह मिट्टी",
+        subsurfaceLabel: "जड़ परत (6cm)",
+        directivesTitle: "भूमिका-आधारित परिचालन निर्देश",
+        directivesSubtitle: "पंजीकृत प्रोफ़ाइल, रीयल-टाइम भूतल सेंसर और एनडीएमए अलर्ट के साथ सिंक्रनाइज़",
+        refreshDirectives: "निर्देश रीफ्रेश करें",
+        copyDossier: "डोज़ियर कॉपी करें",
+        copiedDossier: "डोज़ियर कॉपी हुआ!",
+        editRole: "भूमिका / विषय बदलें ▾",
+        tacticalAdvisory: "रणनीतिक परामर्श",
+        radarTitle: "सचेत / एनडीएमए पूर्व आपदा रडार",
+        monitoring: "निगरानी जारी",
+        activeAlerts: "सक्रिय बुलेटिन",
+        noAlertsBadge: "कोई सक्रिय बुलेटिन नहीं",
+        scanBtn: "स्कैन करें",
+        noAlertsTitle: "मौसम परिधि सुरक्षित",
+        noAlertsDesc: "सचेत (SACHET) प्रारंभिक चेतावनी प्रोटोकॉल {radius} किमी के दायरे में शून्य सक्रिय आपातकालीन सलाह की पुष्टि करता है।",
+        atlasTitle: "आईएमडी जलवायु खतरा व संवेदनशीलता एटलस",
+        hazardPlaceholder: "ज़िले या शहर का नाम...",
+        queryAtlas: "एटलस में खोजें",
+        ruralTitle: "ग्रामीण सुगम्यता टेलीफोनी गेटवे",
+        ruralDesc: "4G/5G डेटा के बिना ग्रामीण समुदायों और फ़ीचर-फ़ोन उपयोगकर्ताओं को वॉयस IVR और SMS द्वारा मौसम सलाह प्रदान करता है।",
+        tabIvr: "आईवीआर वॉयस कॉल (1800-MAUSAM)",
+        tabSms: "यूएसएसडी / पुश एसएमएस",
+        tabKrishi: "कृषि सखी ऑडियो",
+        dialIvr: "आईवीआर डायल करें",
+        playAudio: "▶ ऑडियो सुनें",
+        modalBadge: "वेदरजीपीटी ऑपरेटर पंजीकरण",
+        modalTitle: "संस्थागत मौसम निर्णय प्रोफ़ाइल",
+        modalSub: "अपनी व्यावसायिक भूमिका, मुख्य स्थान और परिचालन विषय कॉन्फ़िगर करें। यह आपका डिफ़ॉल्ट संदर्भ सेट करता है जिसे कभी भी बदला जा सकता है।",
+        modalLabelName: "पूरा नाम या कॉल साइन",
+        modalLabelRole: "व्यावसायिक व्यवसाय / भूमिका",
+        modalLabelLoc: "डिफ़ॉल्ट मौसम स्थान (शहर / ज़िला)",
+        modalLabelNiche: "परिचालन फोकस विषय",
+        modalQuickLabel: "त्वरित:",
+        modalSaveBtn: "प्रोफ़ाइल सहेजें और कंसोल शुरू करें",
+        listenBtn: "सुनें",
+        speakingBtn: "बोल रहा है...",
+        dispatchTitle: "वेदरजीपीटी मौसम बुलेटिन"
+      },
+      ta: {
+        clockIst: "ஐஎஸ்டி: ",
+        topNavChat: "அரட்டை கன்சோல்",
+        topNavDirectives: "பணி வழிகாட்டல்",
+        topNavTelemetry: "வானிலை அளவீடு",
+        topNavRadar: "பேரிடர் ரேடார்",
+        topNavAtlas: "காலநிலை வரைபடம்",
+        topNavRural: "கிராம சேவை",
+        chatTitle: "சாட்பாட்",
+        chatSubtitle: "",
+        clearThread: "அரட்டையை அழி",
+        locLabel: "இடம்:",
+        locPlaceholder: "நகரம் / மாவட்டம்",
+        nicheLabel: "துறை:",
+        resetDefault: "சுயவிவரத்திற்கு மீட்டமை",
+        chatPlaceholder: "WeatherGPT-யிடம் தமிழ், हिन्दी அல்லது English-ல் கேளுங்கள் (எ.கா: இன்று பயிர்களுக்கு மருந்து தெளிக்கலாமா? மழை வருமா?)...",
+        transmit: "அனுப்பு",
+        thinking: "வானிலை முன்கணிப்பு மற்றும் அளவீடுகள் மதிப்பீடு செய்யப்படுகின்றன...",
+        ready: "தயார்",
+        welcomeTitle: "WeatherGPT வானிலை ஆய்வு மையம்",
+        welcomeGreeting: "வணக்கம்",
+        welcomeSub: "கீழே உங்கள் வானிலை சார்ந்த கேள்விகளைக் கேட்கலாம். எந்தக் கேள்விக்கும் நகரத்தையோ அல்லது துறையையோ மாற்றிக்கொள்ளலாம்!",
+        tabTelemetry: "வானிலை அளவீடு",
+        tabDirectives: "பணி வழிகாட்டல்",
+        tabRadar: "பேரிடர் ரேடார்",
+        tabAtlas: "காலநிலை வரைபடம்",
+        tabRural: "கிராம சேவை",
+        telemetryTitle: "நேரடி தரைப்பகுதி வானிலை அளவீடு",
+        refreshSensors: "புதுப்பி",
+        stationPlaceholder: "இந்திய நகரத்தை உள்ளிடவும்...",
+        queryBtn: "தேடு",
+        lvl1Sensors: "நிலை-1 தரை சென்சார்கள்",
+        tempLabel: "வெப்பநிலை",
+        humidityLabel: "ஈரப்பதம்",
+        windLabel: "காற்றின் வேகம்",
+        pressureLabel: "காற்றழுத்தம்",
+        uvLabel: "சூரிய புற ஊதா (UV)",
+        rainLabel: "24 மணி நேர மழை",
+        soil0Label: "மண் வெப்பநிலை (0cm)",
+        soil6Label: "மண் வெப்பநிலை (6cm)",
+        trendTitle: "16 மணி நேர வெப்பநிலை மாறுபாடு",
+        feelsLabel: "உணரப்படுவது",
+        dewpointLabel: "பனி நிலை",
+        gradientLabel: "80m காற்று வேகம்",
+        baroLabel: "சராசரி காற்றழுத்தம்",
+        topsoilLabel: "மேல்மண் அடுக்கு",
+        subsurfaceLabel: "வேர் மண்டலம் (6cm)",
+        directivesTitle: "பணி சார்ந்த செயல்பாட்டு வழிகாட்டுதல்",
+        directivesSubtitle: "பதிவுசெய்த சுயவிவரம், நிகழ்நேர சென்சார்கள் மற்றும் பேரிடர் எச்சரிக்கைகளுடன் இணைக்கப்பட்டது",
+        refreshDirectives: "புதுப்பி",
+        copyDossier: "நகலெடு",
+        copiedDossier: "நகலெடுக்கப்பட்டது!",
+        editRole: "பங்கு / துறையை மாற்று ▾",
+        tacticalAdvisory: "முக்கிய வழிகாட்டல்",
+        radarTitle: "சச்செட் / என்டிஎம்ஏ பேரிடர் ரேடார்",
+        monitoring: "கண்காணிப்பில் உள்ளது",
+        activeAlerts: "செயலில் உள்ள எச்சரிக்கைகள்",
+        noAlertsBadge: "எச்சரிக்கைகள் ஏதுமில்லை",
+        scanBtn: "ஸ்கேன் செய்",
+        noAlertsTitle: "வானிலை சூழல் பாதுகாப்பானது",
+        noAlertsDesc: "SACHET முன்னெச்சரிக்கை அமைப்பு {radius} கி.மீ சுற்றளவில் தீவிர எச்சரிக்கைகள் ஏதுமில்லை என்பதை உறுதிப்படுத்துகிறது.",
+        atlasTitle: "IMD காலநிலை ஆபத்து & பாதிப்பு வரைபடம்",
+        hazardPlaceholder: "மாவட்டம் அல்லது நகரத்தின் பெயர்...",
+        queryAtlas: "வரைபடத்தில் தேடு",
+        ruralTitle: "கிராமப்புற தொலைபேசி சேவை மையம்",
+        ruralDesc: "4G/5G இணைய வசதி இல்லாத கிராமப்புற மக்கள் குரல் வழி IVR மற்றும் SMS மூலம் உடனடி வானிலை தகவல்களைப் பெற உதவுகிறது.",
+        tabIvr: "IVR குரல் அழைப்பு (1800-MAUSAM)",
+        tabSms: "USSD / புஷ் எஸ்எம்எஸ்",
+        tabKrishi: "கிருஷி சகி ஆடியோ",
+        dialIvr: "IVR அழைக்கவும்",
+        playAudio: "▶ ஆடியோவை இயக்கு",
+        modalBadge: "WeatherGPT பயனர் பதிவு",
+        modalTitle: "வானிலை முடிவெடுக்கும் சுயவிவரம்",
+        modalSub: "உங்கள் தொழில் முறை பங்கு, முதன்மை இருப்பிடம் மற்றும் செயல்பாட்டுத் துறையை அமைக்கவும்.",
+        modalLabelName: "முழு பெயர்",
+        modalLabelRole: "தொழில் / பங்கு",
+        modalLabelLoc: "முதன்மை வானிலை இருப்பிடம் (நகரம் / மாவட்டம்)",
+        modalLabelNiche: "செயல்பாட்டுத் துறை",
+        modalQuickLabel: "விரைவு:",
+        modalSaveBtn: "சுயவிவரத்தைச் சேமித்து தொடங்குங்கள்",
+        listenBtn: "கேளுங்கள்",
+        speakingBtn: "பேசுகிறது...",
+        dispatchTitle: "WeatherGPT வானிலை அறிக்கை"
+      }
+    };
+
+    // Niche and Role Localization Maps
+    const NICHE_I18N = {
+      "Agrochemical Spraying & Crop Protection": {
+        en: "Agrochemical Spraying",
+        hi: "कीटनाशक छिड़काव व फसल सुरक्षा",
+        ta: "பூச்சிக்கொல்லி தெளிப்பு & பயிர் பாதுகாப்பு"
+      },
+      "Harvest & Sowing Rain Window": {
+        en: "Harvest & Sowing Window",
+        hi: "कटाई व बुवाई वर्षा समय",
+        ta: "அறுவடை & விதைப்பு மழை நேரம்"
+      },
+      "Coastal Squall & High Sea Clearance": {
+        en: "High Sea & Coastal Safety",
+        hi: "समुद्री तूफान व तटीय सुरक्षा",
+        ta: "கடல் காற்று & கடலோர பாதுகாப்பு"
+      },
+      "Urban Waterlogging & Drain Choke": {
+        en: "Urban Waterlogging & Drain",
+        hi: "शहरी जलभराव व नाली प्रबंधन",
+        ta: "நகர்ப்புற வெள்ளம் & வடிகால் மேலாண்மை"
+      },
+      "Heatwave & Outdoor Worker Safety": {
+        en: "Heatwave & Worker Safety",
+        hi: "लू (हीटवेव) व श्रमिक सुरक्षा",
+        ta: "வெப்ப அலை & தொழிலாளர் பாதுகாப்பு"
+      },
+      "Cyclone Preparedness & High Wind": {
+        en: "Cyclone & Wind Defense",
+        hi: "चक्रवात तैयारी व तेज हवा",
+        ta: "புயல் முன்னெச்சரிக்கை & தீவிர காற்று"
+      },
+      "Cold Chain Humidity & Thermal Stability": {
+        en: "Cold Chain Logistics",
+        hi: "कोल्ड चेन लॉजिस्टिक्स",
+        ta: "குளிர்சாதன விநியோகம் & போக்குவரத்து"
+      },
+      "General Atmospheric Advisory": {
+        en: "General Weather",
+        hi: "सामान्य मौसम परामर्श",
+        ta: "பொது வானிலை வழிகாட்டல்"
+      }
+    };
+
+    function applyLanguage(lang) {
+      const t = I18N[lang] || I18N.en;
+
+      // 1. Navigation bar
+      const topChat = document.getElementById("top-nav-chat");
+      const topDirectives = document.getElementById("top-nav-directives");
+      const topTelemetry = document.getElementById("top-nav-telemetry");
+      const topRadar = document.getElementById("top-nav-radar");
+      const topAtlas = document.getElementById("top-nav-atlas");
+      const topRural = document.getElementById("top-nav-rural");
+      if (topChat) topChat.innerHTML = '<span class="hidden sm:inline">' + t.topNavChat + '</span><span class="sm:hidden">' + (lang === "hi" ? "चैट" : lang === "ta" ? "அரட்டை" : "Chat") + '</span>';
+      if (topDirectives) topDirectives.innerHTML = '<span class="hidden sm:inline">' + t.topNavDirectives + '</span><span class="sm:hidden">' + (lang === "hi" ? "निर्देश" : lang === "ta" ? "வழிகாட்டல்" : "Directives") + '</span>';
+      if (topTelemetry) topTelemetry.innerHTML = '<span class="hidden sm:inline">' + t.topNavTelemetry + '</span>';
+      if (topRadar) topRadar.innerHTML = '<span class="hidden sm:inline">' + t.topNavRadar + '</span>';
+      if (topAtlas) topAtlas.innerHTML = '<span class="hidden sm:inline">' + t.topNavAtlas + '</span>';
+      if (topRural) topRural.innerHTML = '<span class="hidden sm:inline">' + t.topNavRural + '</span>';
+
+      // 2. Chat Console
+      const chatTitleEl = document.getElementById("chat-console-title");
+      const chatSubEl = document.getElementById("chat-console-subtitle");
+      const chatClearEl = document.getElementById("chat-clear-btn");
+      const chatThinkEl = document.getElementById("chat-thinking-text");
+      const locLabelEl = document.getElementById("context-loc-label");
+      const queryLocEl = document.getElementById("query-location");
+      const nicheLabelEl = document.getElementById("context-niche-label");
+      const resetContextEl = document.getElementById("reset-context-btn");
+      const chatInputEl = document.getElementById("chat-input");
+      const sendLabelEl = document.getElementById("send-label");
+
+      if (chatTitleEl) chatTitleEl.textContent = t.chatTitle;
+      if (chatSubEl) chatSubEl.textContent = t.chatSubtitle;
+      if (chatClearEl) chatClearEl.textContent = t.clearThread;
+      if (chatThinkEl) chatThinkEl.textContent = t.thinking;
+      if (locLabelEl) locLabelEl.textContent = t.locLabel;
+      if (queryLocEl) queryLocEl.placeholder = t.locPlaceholder;
+      if (nicheLabelEl) nicheLabelEl.textContent = t.nicheLabel;
+      if (resetContextEl) resetContextEl.textContent = t.resetDefault;
+      if (chatInputEl) chatInputEl.placeholder = t.chatPlaceholder;
+      if (sendLabelEl) sendLabelEl.textContent = t.transmit;
+
+      // Update query-niche select options
+      const nicheSelect = document.getElementById("query-niche");
+      if (nicheSelect) {
+        const currentVal = nicheSelect.value;
+        Array.from(nicheSelect.options).forEach(opt => {
+          const map = NICHE_I18N[opt.value];
+          if (map && map[lang]) {
+            opt.textContent = map[lang];
+          }
+        });
+        nicheSelect.value = currentVal;
+      }
+
+      // 3. Workspace tab buttons
+      const tabTelemetry = document.getElementById("tab-btn-telemetry");
+      const tabDirectives = document.getElementById("tab-btn-directives");
+      const tabRadar = document.getElementById("tab-btn-radar");
+      const tabAtlas = document.getElementById("tab-btn-atlas");
+      const tabRural = document.getElementById("tab-btn-rural");
+      if (tabTelemetry) tabTelemetry.textContent = t.tabTelemetry;
+      if (tabDirectives) tabDirectives.textContent = t.tabDirectives;
+      if (tabRadar) tabRadar.textContent = t.tabRadar;
+      if (tabAtlas) tabAtlas.textContent = t.tabAtlas;
+      if (tabRural) tabRural.textContent = t.tabRural;
+
+      // 4. Telemetry Stage
+      const telemTitleEl = document.getElementById("telemetry-stage-title");
+      const telemRefreshEl = document.getElementById("telemetry-refresh-btn");
+      const stationCityEl = document.getElementById("station-city");
+      const stationQueryEl = document.getElementById("station-query-btn");
+      const telemLvl1El = document.getElementById("telemetry-lvl1-label");
+      if (telemTitleEl) telemTitleEl.textContent = t.telemetryTitle;
+      if (telemRefreshEl) telemRefreshEl.textContent = t.refreshSensors;
+      if (stationCityEl) stationCityEl.placeholder = t.stationPlaceholder;
+      if (stationQueryEl) stationQueryEl.textContent = t.queryBtn;
+      if (telemLvl1El) telemLvl1El.textContent = t.lvl1Sensors;
+      const trendTitleEl = document.getElementById("trend-section-title");
+      if (trendTitleEl) trendTitleEl.textContent = t.trendTitle;
+      if (lastHourlySampleData) drawD3HourlyTrend(lastHourlySampleData);
+
+      // 5. Directives Stage
+      const dirTitleEl = document.getElementById("directives-stage-title");
+      const dirSubEl = document.getElementById("directives-stage-subtitle");
+      const dirRefreshEl = document.getElementById("directives-refresh-btn");
+      const dirCopyEl = document.getElementById("directives-copy-btn");
+      const dirEditEl = document.getElementById("directives-edit-role-btn");
+      const dirNichePrefix = document.getElementById("directives-niche-prefix");
+      const dirLocPrefix = document.getElementById("directives-loc-prefix");
+      const dirTacticalBadge = document.getElementById("tactical-advisory-badge");
+
+      if (dirTitleEl) dirTitleEl.textContent = t.directivesTitle;
+      if (dirSubEl) dirSubEl.textContent = t.directivesSubtitle;
+      if (dirRefreshEl) dirRefreshEl.textContent = t.refreshDirectives;
+      if (dirCopyEl) dirCopyEl.textContent = t.copyDossier;
+      if (dirEditEl) dirEditEl.textContent = t.editRole;
+      if (dirNichePrefix) dirNichePrefix.textContent = t.nicheLabel;
+      if (dirLocPrefix) dirLocPrefix.textContent = t.locLabel;
+      if (dirTacticalBadge) dirTacticalBadge.textContent = t.tacticalAdvisory;
+
+      // 6. Radar Stage
+      const radarTitleEl = document.getElementById("radar-stage-title");
+      const radarScanEl = document.getElementById("radar-scan-btn");
+      if (radarTitleEl) radarTitleEl.textContent = t.radarTitle;
+      if (radarScanEl) radarScanEl.textContent = t.scanBtn;
+
+      // 7. Atlas Stage
+      const atlasTitleEl = document.getElementById("atlas-stage-title");
+      const atlasInputEl = document.getElementById("hazard-search-input");
+      const atlasQueryEl = document.getElementById("atlas-query-btn");
+      if (atlasTitleEl) atlasTitleEl.textContent = t.atlasTitle;
+      if (atlasInputEl) atlasInputEl.placeholder = t.hazardPlaceholder;
+      if (atlasQueryEl) atlasQueryEl.textContent = t.queryAtlas;
+
+      // 8. Rural Stage
+      const ruralTitleEl = document.getElementById("rural-stage-title");
+      const ruralDescEl = document.getElementById("rural-stage-desc");
+      const ruralTabIvr = document.getElementById("rural-tab-ivr");
+      const ruralTabSms = document.getElementById("rural-tab-sms");
+      const ruralTabKrishi = document.getElementById("rural-tab-krishi");
+      const ivrCallBtn = document.getElementById("ivr-call-btn");
+      const ivrLangSelect = document.getElementById("ivr-lang");
+      const ivrQueryInput = document.getElementById("ivr-query-input");
+
+      if (ruralTitleEl) ruralTitleEl.textContent = t.ruralTitle;
+      if (ruralDescEl) ruralDescEl.textContent = t.ruralDesc;
+      if (ruralTabIvr) ruralTabIvr.textContent = t.tabIvr;
+      if (ruralTabSms) ruralTabSms.textContent = t.tabSms;
+      if (ruralTabKrishi) ruralTabKrishi.textContent = t.tabKrishi;
+      if (ivrCallBtn) ivrCallBtn.textContent = t.dialIvr;
+      if (ivrLangSelect) {
+        ivrLangSelect.value = lang;
+      }
+      if (ivrQueryInput) {
+        if (lang === "hi") ivrQueryInput.value = "क्या आज कीटनाशक छिड़काव कर सकते हैं?";
+        else if (lang === "ta") ivrQueryInput.value = "இன்று பூச்சிக்கொல்லி மருந்து தெளிக்கலாமா?";
+        else ivrQueryInput.value = "Can I spray pesticide today?";
+      }
+
+      // 9. Onboarding modal
+      const modalBadgeEl = document.getElementById("onboarding-modal-badge");
+      const modalTitleEl = document.getElementById("onboarding-modal-title");
+      const modalSubEl = document.getElementById("onboarding-modal-sub");
+      const modalNameEl = document.getElementById("modal-label-name");
+      const modalRoleEl = document.getElementById("modal-label-role");
+      const modalLocEl = document.getElementById("modal-label-loc");
+      const modalNicheEl = document.getElementById("modal-label-niche");
+      const modalQuickEl = document.getElementById("modal-quick-label");
+      const modalSubmitEl = document.getElementById("modal-btn-submit");
+
+      if (modalBadgeEl) modalBadgeEl.textContent = t.modalBadge;
+      if (modalTitleEl) modalTitleEl.textContent = t.modalTitle;
+      if (modalSubEl) modalSubEl.textContent = t.modalSub;
+      if (modalNameEl) modalNameEl.innerHTML = t.modalLabelName + ' <span class="text-slate-400">*</span>';
+      if (modalRoleEl) modalRoleEl.innerHTML = t.modalLabelRole + ' <span class="text-slate-400">*</span>';
+      if (modalLocEl) modalLocEl.innerHTML = t.modalLabelLoc + ' <span class="text-slate-400">*</span>';
+      if (modalNicheEl) modalNicheEl.innerHTML = t.modalLabelNiche + ' <span class="text-slate-400">*</span>';
+      if (modalQuickEl) modalQuickEl.textContent = t.modalQuickLabel;
+      if (modalSubmitEl) modalSubmitEl.textContent = t.modalSaveBtn;
+
+      // Update welcome card if thread has welcome message
+      const thread = document.getElementById("chat-thread");
+      if (thread && (!chatHistory || chatHistory.length === 0)) {
+        thread.innerHTML = renderWelcomeMessage();
+      }
+    }
+
     // ==================== LANGUAGE CONTROLLER ====================
     function setAppLanguage(lang) {
       currentLanguage = lang;
+      localStorage.setItem("weathergpt_lang", lang);
+
       ["en", "hi", "ta"].forEach(l => {
         const btn = document.getElementById("lang-btn-" + l);
         if (btn) {
@@ -1324,7 +1790,11 @@
           }
         }
       });
+
+      applyLanguage(lang);
       renderPersonalizedDirectives();
+      inspectStation();
+      loadDisasterAlerts();
     }
 
     // ==================== DYNAMIC PERSONALIZED ROLE DIRECTIVES ENGINE ====================
@@ -1341,19 +1811,19 @@
       const niche = activeNiche || userProfile.niche || "Agrochemical Spraying & Crop Protection";
 
       const avatarMap = {
-        "Agriculture & Agromet Specialist": "🌾",
-        "Maritime & Coastal Fisheries": "⚓",
-        "Municipal Administration & City Ops": "🏢",
-        "Disaster Management Coordinator": "🚨",
-        "Supply Chain & Cold Storage Manager": "🚚",
-        "Construction & Infrastructure Engineer": "🏗️",
-        "Renewable Energy Yield Operator": "☀️",
-        "Public Health Officer": "🩺",
-        "Aviation & UAV Drone Dispatcher": "✈️",
-        "General Citizen & Traveler": "🌍"
+        "Agriculture & Agromet Specialist": "AG",
+        "Maritime & Coastal Fisheries": "MR",
+        "Municipal Administration & City Ops": "MU",
+        "Disaster Management Coordinator": "DM",
+        "Supply Chain & Cold Storage Manager": "SC",
+        "Construction & Infrastructure Engineer": "CE",
+        "Renewable Energy Yield Operator": "RE",
+        "Public Health Officer": "PH",
+        "Aviation & UAV Drone Dispatcher": "AV",
+        "General Citizen & Traveler": "CZ"
       };
 
-      const av = avatarMap[occ] || "👤";
+      const av = avatarMap[occ] || "OP";
       const avEl = document.getElementById("directives-avatar");
       const nameEl = document.getElementById("directives-user-name");
       const sectorEl = document.getElementById("directives-user-sector");
@@ -1717,87 +2187,393 @@
         if (disLat && !disLat.matches(":focus")) disLat.value = lat;
         if (disLon && !disLon.matches(":focus")) disLon.value = lon;
 
+        const t = I18N[currentLanguage] || I18N.en;
         box.innerHTML = `
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-sm">
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">TEMPERATURE</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.temperature_c ?? 27.2} <span class="text-sm font-normal text-muted">°C</span></div>
-              <div class="text-xs text-muted mt-1">Feels ${c.apparent_temperature_c ?? 28.4}°C</div>
-            </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">RELATIVE HUMIDITY</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.relative_humidity_pct ?? 62} <span class="text-sm font-normal text-muted">%</span></div>
-              <div class="text-xs text-muted mt-1">Nominal dewpoint</div>
-            </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">WIND VELOCITY</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.wind_speed_10m_kmh ?? 11.4} <span class="text-sm font-normal text-muted">km/h</span></div>
-              <div class="text-xs text-muted mt-1">80m gradient: ${c.wind_speed_80m_kmh ?? 16.8} km/h</div>
-            </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">SURFACE PRESSURE</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.pressure_msl_hpa ?? 1012} <span class="text-sm font-normal text-muted">hPa</span></div>
-              <div class="text-xs text-muted mt-1">MSL Barometric datum</div>
-            </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">SOLAR UV INDEX</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.uv_index ?? 6.2}</div>
-              <div class="text-xs font-medium text-slate-600 mt-1">
-                ${c.uv_category || "Moderate Exposure"}
+          <div class="space-y-4">
+            <div>
+              <div class="flex items-center justify-between text-xs text-muted mb-2 font-medium">
+                <span id="telemetry-lvl1-label">${t.lvl1Sensors}</span>
+                <span class="font-mono">WMO Station #43295 · Synoptic Live</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-sm">
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.tempLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.temperature_c ?? 27.2} <span class="text-sm font-normal text-muted">°C</span></div>
+                  <div class="text-xs text-muted mt-1">${t.feelsLabel} ${c.apparent_temperature_c ?? 28.4}°C</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.humidityLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.relative_humidity_pct ?? 62} <span class="text-sm font-normal text-muted">%</span></div>
+                  <div class="text-xs text-muted mt-1">${t.dewpointLabel}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.windLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.wind_speed_10m_kmh ?? 11.4} <span class="text-sm font-normal text-muted">km/h</span></div>
+                  <div class="text-xs text-muted mt-1">${t.gradientLabel}: ${c.wind_speed_80m_kmh ?? 16.8} km/h</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.pressureLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.pressure_msl_hpa ?? 1012} <span class="text-sm font-normal text-muted">hPa</span></div>
+                  <div class="text-xs text-muted mt-1">${t.baroLabel}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.uvLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.uv_index ?? 6.2}</div>
+                  <div class="text-xs font-medium text-slate-600 mt-1">
+                    ${c.uv_category || "Moderate Exposure"}
+                  </div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.rainLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.precipitation_24h_mm ?? 0.0} <span class="text-sm font-normal text-muted">mm</span></div>
+                  <div class="text-xs text-muted mt-1">${c.precipitation_category || "Dry / Clear"}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.soil0Label}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.soil_temperature_0cm_c ?? 25.8} <span class="text-sm font-normal text-muted">°C</span></div>
+                  <div class="text-xs text-muted mt-1">${t.topsoilLabel}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">${t.soil6Label}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.soil_temperature_6cm_c ?? 24.5} <span class="text-sm font-normal text-muted">°C</span></div>
+                  <div class="text-xs text-muted mt-1">${t.subsurfaceLabel}</div>
+                </div>
               </div>
             </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">24H PRECIPITATION</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.precipitation_24h_mm ?? 0.0} <span class="text-sm font-normal text-muted">mm</span></div>
-              <div class="text-xs text-muted mt-1">${c.precipitation_category || "Dry / Clear"}</div>
-            </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">SOIL TEMP (0cm)</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.soil_temperature_0cm_c ?? 25.8} <span class="text-sm font-normal text-muted">°C</span></div>
-              <div class="text-xs text-muted mt-1">Topsoil seedbed</div>
-            </div>
-            <div class="border border-line rounded-md p-3 bg-paper">
-              <div class="text-[11px] text-muted font-bold uppercase tracking-wider">SOIL TEMP (6cm)</div>
-              <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">${c.soil_temperature_6cm_c ?? 24.5} <span class="text-sm font-normal text-muted">°C</span></div>
-              <div class="text-xs text-muted mt-1">Sub-surface root layer</div>
-            </div>
+            ${renderHourlyTrendChartContainer(data.hourly_sample)}
           </div>
-          ${renderHourlyTrendSpark(data.hourly_sample)}
         `;
+        setTimeout(() => {
+          drawD3HourlyTrend(data.hourly_sample);
+        }, 20);
       } catch(e) {
         box.innerHTML = `<div class="p-4 bg-paper border border-line text-slate-700 text-sm">Notice: Unable to refresh station telemetry (${e.message}). Retaining cached parameters.</div>`;
       }
     }
 
-    function renderHourlyTrendSpark(sample) {
+    let lastHourlySampleData = null;
+    let d3ResizeObserver = null;
+
+    function renderHourlyTrendChartContainer(sample) {
       if (!sample || !sample.temperature_2m || sample.temperature_2m.length === 0) return "";
-      const temps = sample.temperature_2m.slice(0, 16);
+      const rawTemps = sample.temperature_2m.slice(0, 16);
+      const temps = rawTemps.map(v => typeof v === "number" ? Number(v.toFixed(1)) : Number(v) || 0);
       const min = Math.min(...temps);
       const max = Math.max(...temps);
-      const range = max - min || 1;
-
-      const bars = temps.map((t, idx) => {
-        const h = Math.max(16, Math.round(((t - min) / range) * 40) + 12);
-        return `
-          <div class="flex-1 flex flex-col items-center gap-1 group">
-            <div class="text-[10px] font-mono text-muted tabular-nums opacity-0 group-hover:opacity-100 transition-opacity">${t}°</div>
-            <div class="w-full bg-slate-300 hover:bg-ink rounded-xs transition-colors" style="height: ${h}px" title="T+${idx}h: ${t}°C"></div>
-            <div class="text-[9px] font-mono text-muted">+${idx}h</div>
-          </div>
-        `;
-      }).join("");
+      const t = I18N[currentLanguage] || I18N.en;
 
       return `
-        <div class="pt-3 border-t border-line">
-          <div class="flex items-center justify-between text-xs text-muted mb-2 font-semibold">
-            <span>16-HOUR TEMPERATURE EVOLUTION</span>
-            <span class="font-mono">Min: ${min}°C · Max: ${max}°C</span>
+        <div class="mt-4 pt-3.5 border-t border-line">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-muted mb-2.5 font-medium">
+            <div class="flex items-center gap-2">
+              <span class="text-ink font-bold tracking-tight uppercase text-[11px]" id="trend-section-title">${t.trendTitle}</span>
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">D3 Synoptic Curve</span>
+            </div>
+            <div id="d3-trend-readout" class="font-mono text-xs bg-paper px-2.5 py-1 rounded border border-line flex items-center gap-2 text-slate-700 shadow-2xs">
+              <span id="d3-readout-min" class="text-slate-600">Min: <strong class="text-ink">${min}°C</strong></span>
+              <span class="text-slate-300">·</span>
+              <span id="d3-readout-max" class="text-slate-600">Max: <strong class="text-ink">${max}°C</strong></span>
+            </div>
           </div>
-          <div class="flex items-end gap-1.5 h-16 bg-paper border border-line rounded p-2.5">
-            ${bars}
+          <div id="d3-hourly-chart-container" class="w-full bg-paper border border-line rounded-lg p-2 sm:p-3.5 overflow-hidden shadow-2xs relative">
+            <div class="text-xs text-muted text-center py-8">Rendering D3 temperature evolution model...</div>
           </div>
         </div>
       `;
+    }
+
+    function drawD3HourlyTrend(sample) {
+      if (!sample) sample = lastHourlySampleData;
+      if (!sample || !sample.temperature_2m || sample.temperature_2m.length === 0) return;
+      lastHourlySampleData = sample;
+
+      const container = document.getElementById("d3-hourly-chart-container");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const rawTemps = sample.temperature_2m.slice(0, 16);
+      const data = rawTemps.map((v, idx) => ({
+        hour: idx,
+        label: "+" + idx + "h",
+        temp: typeof v === "number" ? Number(v.toFixed(1)) : Number(v) || 0
+      }));
+
+      const temps = data.map(d => d.temp);
+      const minTemp = Math.min(...temps);
+      const maxTemp = Math.max(...temps);
+      const currentTemp = data[0].temp;
+
+      const containerWidth = container.clientWidth || 480;
+      const width = Math.max(280, containerWidth);
+      const height = width < 420 ? 175 : 190;
+      const margin = { top: 24, right: width < 420 ? 16 : 24, bottom: 28, left: width < 420 ? 28 : 34 };
+
+      const yRange = maxTemp - minTemp;
+      const yPad = Math.max(0.8, yRange * 0.22);
+      const yMin = Math.floor((minTemp - yPad) * 10) / 10;
+      const yMax = Math.ceil((maxTemp + yPad) * 10) / 10;
+
+      // Safe fallback if D3 is not yet ready or offline
+      if (typeof d3 === "undefined") {
+        const innerW = width - margin.left - margin.right;
+        const innerH = height - margin.top - margin.bottom;
+        const getX = (h) => margin.left + (h / 15) * innerW;
+        const getY = (t) => margin.top + (1 - (t - yMin) / (yMax - yMin)) * innerH;
+
+        let pathD = "M " + getX(0) + " " + getY(data[0].temp);
+        for (let i = 1; i < data.length; i++) {
+          const prev = data[i-1];
+          const curr = data[i];
+          const mx = (getX(prev.hour) + getX(curr.hour)) / 2;
+          pathD += " C " + mx + " " + getY(prev.temp) + ", " + mx + " " + getY(curr.temp) + ", " + getX(curr.hour) + " " + getY(curr.temp);
+        }
+        const areaD = pathD + " L " + getX(15) + " " + (height - margin.bottom) + " L " + getX(0) + " " + (height - margin.bottom) + " Z";
+
+        const dots = data.map(d => `<circle cx="${getX(d.hour)}" cy="${getY(d.temp)}" r="${d.temp === maxTemp || d.temp === minTemp ? 4 : 2.5}" fill="${d.temp === maxTemp ? '#0F172A' : d.temp === minTemp ? '#64748B' : '#FFFFFF'}" stroke="#0F172A" stroke-width="1.5"/>`).join("");
+        const xLabels = data.filter((_, i) => i % (width < 420 ? 3 : 2) === 0 || i === 15).map(d => `<text x="${getX(d.hour)}" y="${height - 8}" text-anchor="middle" font-family="monospace" font-size="10" fill="#64748B">${d.label}</text>`).join("");
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto select-none">
+            <defs>
+              <linearGradient id="fallback-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0F172A" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="#0F172A" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="${areaD}" fill="url(#fallback-grad)"/>
+            <path d="${pathD}" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round"/>
+            ${dots}
+            ${xLabels}
+          </svg>
+        `;
+        return;
+      }
+
+      // Full D3 Chart Implementation
+      const xScale = d3.scaleLinear()
+        .domain([0, 15])
+        .range([margin.left, width - margin.right]);
+
+      const yScale = d3.scaleLinear()
+        .domain([yMin, yMax])
+        .range([height - margin.bottom, margin.top]);
+
+      const svg = d3.select(container)
+        .append("svg")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .attr("class", "w-full h-auto select-none overflow-visible");
+
+      // Area gradient
+      const defs = svg.append("defs");
+      const grad = defs.append("linearGradient")
+        .attr("id", "d3-temp-gradient")
+        .attr("x1", "0%").attr("y1", "0%")
+        .attr("x2", "0%").attr("y2", "100%");
+      grad.append("stop").attr("offset", "0%").attr("stop-color", "#0F172A").attr("stop-opacity", 0.16);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", "#0F172A").attr("stop-opacity", 0.0);
+
+      // Horizontal dashed gridlines
+      const yTicks = yScale.ticks(4);
+      svg.append("g")
+        .attr("class", "gridlines")
+        .selectAll("line")
+        .data(yTicks)
+        .enter()
+        .append("line")
+        .attr("x1", margin.left)
+        .attr("x2", width - margin.right)
+        .attr("y1", d => yScale(d))
+        .attr("y2", d => yScale(d))
+        .attr("stroke", "#E2E8F0")
+        .attr("stroke-dasharray", "3,3")
+        .attr("stroke-width", 1);
+
+      // Area Path
+      const areaGen = d3.area()
+        .x(d => xScale(d.hour))
+        .y0(height - margin.bottom)
+        .y1(d => yScale(d.temp))
+        .curve(d3.curveMonotoneX);
+
+      svg.append("path")
+        .datum(data)
+        .attr("fill", "url(#d3-temp-gradient)")
+        .attr("d", areaGen);
+
+      // Line Path
+      const lineGen = d3.line()
+        .x(d => xScale(d.hour))
+        .y(d => yScale(d.temp))
+        .curve(d3.curveMonotoneX);
+
+      svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "#0F172A")
+        .attr("stroke-width", 2.2)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round")
+        .attr("d", lineGen);
+
+      // Y-axis tick text
+      svg.append("g")
+        .selectAll("text")
+        .data(yTicks)
+        .enter()
+        .append("text")
+        .attr("x", margin.left - 6)
+        .attr("y", d => yScale(d) + 3.5)
+        .attr("text-anchor", "end")
+        .attr("font-family", "JetBrains Mono, monospace")
+        .attr("font-size", "10px")
+        .attr("fill", "#64748B")
+        .text(d => d + "°");
+
+      // X-axis tick labels
+      const step = width < 420 ? 3 : width < 560 ? 2 : 1;
+      const xTicks = data.filter((_, i) => i % step === 0 || i === 15);
+      svg.append("g")
+        .selectAll("text")
+        .data(xTicks)
+        .enter()
+        .append("text")
+        .attr("x", d => xScale(d.hour))
+        .attr("y", height - margin.bottom + 16)
+        .attr("text-anchor", "middle")
+        .attr("font-family", "JetBrains Mono, monospace")
+        .attr("font-size", "10px")
+        .attr("font-weight", "500")
+        .attr("fill", "#64748B")
+        .text(d => d.label);
+
+      // Dots on curve
+      const dotsGroup = svg.append("g").attr("class", "dots");
+      dotsGroup.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(d.hour))
+        .attr("cy", d => yScale(d.temp))
+        .attr("r", d => d.temp === maxTemp || d.temp === minTemp ? 4.5 : 2.5)
+        .attr("fill", d => d.temp === maxTemp ? "#0F172A" : d.temp === minTemp ? "#64748B" : "#FFFFFF")
+        .attr("stroke", d => d.temp === maxTemp ? "#0F172A" : d.temp === minTemp ? "#64748B" : "#0F172A")
+        .attr("stroke-width", d => d.temp === maxTemp || d.temp === minTemp ? 2 : 1.5);
+
+      // Min and Max Callout labels
+      const maxItem = data.find(d => d.temp === maxTemp);
+      const minItem = data.find(d => d.temp === minTemp);
+
+      if (maxItem) {
+        svg.append("text")
+          .attr("x", xScale(maxItem.hour))
+          .attr("y", Math.max(14, yScale(maxItem.temp) - 8))
+          .attr("text-anchor", "middle")
+          .attr("font-family", "JetBrains Mono, monospace")
+          .attr("font-size", "10px")
+          .attr("font-weight", "700")
+          .attr("fill", "#0F172A")
+          .text(maxItem.temp + "° Max");
+      }
+
+      if (minItem && minItem !== maxItem) {
+        const isNearBottom = yScale(minItem.temp) > height - margin.bottom - 12;
+        svg.append("text")
+          .attr("x", xScale(minItem.hour))
+          .attr("y", isNearBottom ? yScale(minItem.temp) - 8 : yScale(minItem.temp) + 16)
+          .attr("text-anchor", "middle")
+          .attr("font-family", "JetBrains Mono, monospace")
+          .attr("font-size", "10px")
+          .attr("font-weight", "700")
+          .attr("fill", "#475569")
+          .text(minItem.temp + "° Min");
+      }
+
+      // Interactive Crosshair & Hover Overlay
+      const crosshair = svg.append("line")
+        .attr("stroke", "#0F172A")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "2,2")
+        .attr("y1", margin.top)
+        .attr("y2", height - margin.bottom)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+
+      const focusDot = svg.append("circle")
+        .attr("r", 5.5)
+        .attr("fill", "#0F172A")
+        .attr("stroke", "#FFFFFF")
+        .attr("stroke-width", 2)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+
+      const readoutEl = document.getElementById("d3-trend-readout");
+
+      function updateHover(hourIndex) {
+        const idx = Math.max(0, Math.min(15, hourIndex));
+        const d = data[idx];
+        if (!d) return;
+
+        const xPos = xScale(d.hour);
+        const yPos = yScale(d.temp);
+
+        crosshair.attr("x1", xPos).attr("x2", xPos).style("opacity", 0.6);
+        focusDot.attr("cx", xPos).attr("cy", yPos).style("opacity", 1);
+
+        if (readoutEl) {
+          const delta = Math.round((d.temp - currentTemp) * 10) / 10;
+          const deltaStr = delta === 0 ? "Baseline" : (delta > 0 ? "+" + delta : String(delta)) + "°C";
+          readoutEl.innerHTML = `
+            <span class="font-bold text-ink font-mono">T+${d.hour}h: ${d.temp}°C</span>
+            <span class="text-slate-300">·</span>
+            <span class="text-slate-500 font-mono text-[11px]">${deltaStr}</span>
+          `;
+        }
+      }
+
+      function resetHover() {
+        crosshair.style("opacity", 0);
+        focusDot.style("opacity", 0);
+        if (readoutEl) {
+          readoutEl.innerHTML = `
+            <span id="d3-readout-min" class="text-slate-600">Min: <strong class="text-ink">${minTemp}°C</strong></span>
+            <span class="text-slate-300">·</span>
+            <span id="d3-readout-max" class="text-slate-600">Max: <strong class="text-ink">${maxTemp}°C</strong></span>
+          `;
+        }
+      }
+
+      // Pointer tracking rect
+      svg.append("rect")
+        .attr("x", margin.left)
+        .attr("y", margin.top)
+        .attr("width", width - margin.left - margin.right)
+        .attr("height", height - margin.top - margin.bottom)
+        .attr("fill", "transparent")
+        .attr("class", "cursor-crosshair")
+        .on("mousemove touchmove", function(event) {
+          event.preventDefault();
+          const [mx] = d3.pointer(event, this);
+          const hourVal = xScale.invert(mx);
+          const nearestHour = Math.round(hourVal);
+          updateHover(nearestHour);
+        })
+        .on("mouseleave touchend touchcancel", function() {
+          resetHover();
+        });
+
+      // Responsive Resize Observer
+      if (!d3ResizeObserver && window.ResizeObserver) {
+        let resizeTimer = null;
+        d3ResizeObserver = new ResizeObserver(() => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            if (lastHourlySampleData) drawD3HourlyTrend(lastHourlySampleData);
+          }, 120);
+        });
+        d3ResizeObserver.observe(container);
+      }
     }
 
     // ==================== SACHET DISASTER RADAR ====================
@@ -2053,17 +2829,25 @@
 
     // ==================== CHATBOT DIALOGUE CONTROLLER ====================
     function renderWelcomeMessage() {
+      const t = I18N[currentLanguage] || I18N.en;
+      let greeting = "Welcome, <strong>" + userProfile.name + "</strong> (" + userProfile.occupation + "). WeatherGPT is configured with your primary location <strong>" + userProfile.location + "</strong> and operational niche <strong>" + userProfile.niche + "</strong>.";
+      if (currentLanguage === "hi") {
+        greeting = "स्वागत है, <strong>" + userProfile.name + "</strong> (" + userProfile.occupation + ")। वेदरजीपीटी आपके प्राथमिक स्थान <strong>" + userProfile.location + "</strong> और परिचालन विषय <strong>" + userProfile.niche + "</strong> के साथ सक्रिय है।";
+      } else if (currentLanguage === "ta") {
+        greeting = "வணக்கம், <strong>" + userProfile.name + "</strong> (" + userProfile.occupation + "). WeatherGPT உங்கள் முதன்மை இருப்பிடம் <strong>" + userProfile.location + "</strong> மற்றும் செயல்பாட்டுத் துறை <strong>" + userProfile.niche + "</strong> உடன் தயாராக உள்ளது.";
+      }
+
       return `
         <div class="border border-line rounded-lg p-5 bg-paper space-y-2.5 shadow-2xs">
           <div class="flex items-center justify-between text-xs pb-1.5 border-b border-line">
-            <span class="font-bold text-ink text-sm">WeatherGPT Meteorological Reasoning</span>
-            <span class="text-xs text-slate-500 font-medium">Ready</span>
+            <span class="font-bold text-ink text-sm">${t.welcomeTitle}</span>
+            <span class="text-xs text-slate-500 font-medium">${t.ready}</span>
           </div>
           <p class="text-slatebody text-sm leading-relaxed">
-            Welcome, <strong>${userProfile.name}</strong> (${userProfile.occupation}). WeatherGPT is configured with your primary location <strong>${userProfile.location}</strong> and operational niche <strong>${userProfile.niche}</strong>.
+            ${greeting}
           </p>
           <p class="text-xs text-muted leading-relaxed">
-            You can ask any synoptic or practical weather question below. Notice the context bar above the composer: you can change the target city or operational niche for any specific question anytime!
+            ${t.welcomeSub}
           </p>
         </div>
       `;
@@ -2102,7 +2886,7 @@
           <div class="max-w-[85%] bg-ink text-white rounded-lg p-4 text-sm space-y-1.5 shadow-xs">
             <div class="text-[11px] text-slate-300 font-mono flex items-center justify-between gap-4 pb-1 border-b border-slate-700">
               <span>${meta.name || userProfile.name}</span>
-              <span>📍 ${meta.city || activeLocation} · 🎯 ${meta.niche ? meta.niche.split('&')[0].trim() : 'Active'}</span>
+              <span>${meta.city || activeLocation} · ${meta.niche ? meta.niche.split('&')[0].trim() : 'Active'}</span>
             </div>
             <div class="leading-relaxed font-sans pt-0.5">${text}</div>
           </div>
@@ -2112,7 +2896,7 @@
             <div class="flex items-center justify-between text-xs text-muted pb-2 border-b border-line">
               <span class="font-bold text-ink text-sm">WeatherGPT Synoptic Dispatch</span>
               <button onclick="speakWeatherMessage(this)" data-text="${encText}" class="hover:text-ink transition-colors flex items-center gap-1 font-mono text-xs font-semibold px-2 py-0.5 bg-paper rounded border border-line">
-                <span>🔊</span> Listen
+                Listen
               </button>
             </div>
             <div class="leading-relaxed text-slatebody whitespace-pre-line font-sans text-sm">${formatAssistantResponse(text)}</div>
@@ -2232,10 +3016,10 @@
       try {
         const r = await fetch(url + "/health");
         const json = await r.json();
-        resBox.textContent = "✓ Connected successfully: " + JSON.stringify(json);
+        resBox.textContent = "[OK] Connected successfully: " + JSON.stringify(json);
         resBox.className = "p-2.5 bg-paper border border-line text-xs font-mono text-slate-800 min-h-[44px]";
       } catch(e) {
-        resBox.textContent = "✗ Connection failed: " + e.message;
+        resBox.textContent = "[ERROR] Connection failed: " + e.message;
         resBox.className = "p-2.5 bg-paper border border-line text-xs font-mono text-slate-700 min-h-[44px]";
       }
     }
@@ -2258,14 +3042,17 @@
       const local = now.toLocaleTimeString();
       const utcEl = document.getElementById("utc-clock");
       const localEl = document.getElementById("local-clock");
+      const prefix = (I18N[currentLanguage] || I18N.en).clockIst;
       if (utcEl) utcEl.textContent = "UTC: " + utc;
-      if (localEl) localEl.textContent = "IST: " + local;
+      if (localEl) localEl.textContent = prefix + local;
     }
 
     // ==================== BOOTSTRAP ====================
     window.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem("weathergpt_lang") || "en";
       updateClocks();
       setInterval(updateClocks, 1000);
+      setAppLanguage(savedLang);
       initChatUI();
       loadSavedUserProfile();
       inspectStation();

@@ -972,7 +972,17 @@ export function getPortalHtml(): string {
     // Safe Backend URL resolution
     function getActiveBackendUrl() {
       const stored = localStorage.getItem("weathergpt_backend_url");
-      if (stored && stored.trim()) return stored.trim().replace(/\\/$/, "");
+      if (stored && stored.trim()) {
+        const s = stored.trim();
+        return s.endsWith("/") ? s.slice(0, -1) : s;
+      }
+
+      // If hosted on Cloudflare Pages (*.pages.dev) or an external static host, automatically route to the deployed backend
+      const host = window.location.hostname || "";
+      if (host.includes("pages.dev") || host.includes("weathergpt-8gk") || host.includes("github.io") || window.location.protocol === "file:") {
+        return "https://ais-dev-uaoibp5wsqmvog2l7uc4ql-285971087987.asia-southeast1.run.app";
+      }
+
       return window.location.origin;
     }
 
@@ -982,7 +992,7 @@ export function getPortalHtml(): string {
       if (!u.startsWith("http://") && !u.startsWith("https://")) {
         u = "https://" + u;
       }
-      return u.replace(/\\/$/, "");
+      return u.endsWith("/") ? u.slice(0, -1) : u;
     }
 
     // ==================== ONBOARDING & USER PROFILE FLOW ====================
