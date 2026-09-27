@@ -53,7 +53,7 @@ export function translateAlertToRoles(
     farmerDirectives = {
       role: "farmer",
       role_label: "Agriculture & Livestock",
-      role_icon: "🌾",
+      role_icon: "AG",
       urgency: isRed ? "CRITICAL" : "HIGH",
       badge_color: isRed ? "alert" : "caution",
       primary_directive: isRed
@@ -71,7 +71,7 @@ export function translateAlertToRoles(
     farmerDirectives = {
       role: "farmer",
       role_label: "Agriculture & Livestock",
-      role_icon: "🌾",
+      role_icon: "AG",
       urgency: "HIGH",
       badge_color: "caution",
       primary_directive: `Execute night/early dawn irrigation to counter high evapotranspiration; provide shaded animal shelters.`,
@@ -88,7 +88,7 @@ export function translateAlertToRoles(
     farmerDirectives = {
       role: "farmer",
       role_label: "Agriculture & Livestock",
-      role_icon: "🌾",
+      role_icon: "AG",
       urgency: "ADVISORY",
       badge_color: "advisory-ok",
       primary_directive: `Conditions favorable for scheduled farm operations; check local soil moisture levels before supplementary irrigation.`,
@@ -107,7 +107,7 @@ export function translateAlertToRoles(
     fishermanDirectives = {
       role: "fisherman",
       role_label: "Maritime & Coastal Safety",
-      role_icon: "⚓",
+      role_icon: "MR",
       urgency: "CRITICAL",
       badge_color: isRed ? "alert" : "caution",
       primary_directive: `TOTAL SEA BAN: Coastal squalls exceeding 55-75 km/h with rough to high sea state. Return to harbor by 18:00 IST.`,
@@ -123,7 +123,7 @@ export function translateAlertToRoles(
     fishermanDirectives = {
       role: "fisherman",
       role_label: "Maritime & Coastal Safety",
-      role_icon: "⚓",
+      role_icon: "MR",
       urgency: "ADVISORY",
       badge_color: "advisory-ok",
       primary_directive: `DEPARTURE CLEARANCE GRANTED: Wind speed 10-18 km/h; wave height 0.8m - 1.4m. Safe for coastal operations.`,
@@ -142,7 +142,7 @@ export function translateAlertToRoles(
     cityOpsDirectives = {
       role: "city_ops",
       role_label: "City Ops & Disaster Response",
-      role_icon: "🏢",
+      role_icon: "MU",
       urgency: isRed ? "CRITICAL" : "HIGH",
       badge_color: isRed ? "alert" : "caution",
       primary_directive: `ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize heavy dewatering pumps and pre-position rescue teams in low-lying wards.`,
@@ -158,7 +158,7 @@ export function translateAlertToRoles(
     cityOpsDirectives = {
       role: "city_ops",
       role_label: "City Ops & Disaster Response",
-      role_icon: "🏢",
+      role_icon: "MU",
       urgency: "HIGH",
       badge_color: "caution",
       primary_directive: `Activate Heat Action Plan (HAP): Open air-conditioned cooling shelters and water misting stations in transit hubs.`,
@@ -174,7 +174,7 @@ export function translateAlertToRoles(
     cityOpsDirectives = {
       role: "city_ops",
       role_label: "City Ops & Disaster Response",
-      role_icon: "🏢",
+      role_icon: "MU",
       urgency: "ADVISORY",
       badge_color: "advisory-ok",
       primary_directive: `Normal civic operations. Routine maintenance of stormwater drains and air quality sensors ongoing.`,

@@ -313,26 +313,26 @@ export async function synthesizeDirectWeatherAdvisory(
   const cityChecklist = roleDirectives?.roles?.city_ops?.action_checklist || ["Maintain standard pump readiness", "Monitor low-lying corridors"];
 
   // Detect query language (Hindi, Tamil, or English)
-  const isHindi = /[\u0900-\u097F]/.test(userMessage) || /(बारिश|मौसम|तापमान|छिड़काव|हवा|कल|आज)/i.test(userMessage);
-  const isTamil = /[\u0B80-\u0BFF]/.test(userMessage) || /(மழை|வானிலை|வெப்பநிலை|காற்று|நாளை|இன்று)/i.test(userMessage);
+  const isHindi = /[\u0900-\u097F]/.test(userMessage) || /Language:\s*hi/i.test(userMessage) || /(बारिश|मौसम|तापमान|छिड़काव|हवा|कल|आज)/i.test(userMessage);
+  const isTamil = /[\u0B80-\u0BFF]/.test(userMessage) || /Language:\s*ta/i.test(userMessage) || /(மழை|வானிலை|வெப்பநிலை|காற்று|நாளை|இன்று)/i.test(userMessage);
 
   if (isHindi) {
     return (
-      `⚡ मौसम जीपीटी परिचालन बुलेटिन (भारतएफएस / आईएमडी ग्राउंड टेलीमेट्री)\n\n` +
-      `📍 स्थान: ${resolvedName}, ${admin1} (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)\n` +
-      `🌡️ वर्तमान तापमान: ${temp}°C (महसूस: ${apparentTemp}°C)\n` +
-      `💨 सतही हवा (10m): ${wind10} किमी/घंटा | ऊपरी हवा (80m): ${wind80} किमी/घंटा\n` +
-      `💧 सापेक्ष आर्द्रता: ${humidity}% | वायुमंडलीय दबाव: ${pressure} hPa\n` +
-      `☀️ यूवी सूचकांक: ${uvIndex} (${uvCategory})\n` +
-      `🌧️ 24 घंटे की वर्षा अनुमान: ${rainSum} मिमी (${rainCategory})\n` +
-      `🌱 मिट्टी का तापमान: 0cm पर ${soil0}°C, 6cm पर ${soil6}°C\n\n` +
-      `🌾 किसान / कृषि सलाह:\n` +
+      `• मौसम जीपीटी परिचालन बुलेटिन (भारतएफएस / आईएमडी ग्राउंड टेलीमेट्री)\n\n` +
+      `स्थान: ${resolvedName}, ${admin1} (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)\n` +
+      `वर्तमान तापमान: ${temp}°C (महसूस: ${apparentTemp}°C)\n` +
+      `सतही हवा (10m): ${wind10} किमी/घंटा | ऊपरी हवा (80m): ${wind80} किमी/घंटा\n` +
+      `सापेक्ष आर्द्रता: ${humidity}% | वायुमंडलीय दबाव: ${pressure} hPa\n` +
+      `यूवी सूचकांक: ${uvIndex} (${uvCategory})\n` +
+      `24 घंटे की वर्षा अनुमान: ${rainSum} मिमी (${rainCategory})\n` +
+      `मिट्टी का तापमान: 0cm पर ${soil0}°C, 6cm पर ${soil6}°C\n\n` +
+      `किसान / कृषि सलाह:\n` +
       `${farmerDirective}\n\n` +
-      `🎣 मछुआरे / तटीय सुरक्षा:\n` +
+      `मछुआरे / तटीय सुरक्षा:\n` +
       `${fishermanDirective}\n\n` +
-      `🏢 नगर निगम / नागरिक संचालन:\n` +
+      `नगर निगम / नागरिक संचालन:\n` +
       `${cityDirective}\n\n` +
-      `🛡️ सचेत (SACHET / NDMA) रडार:\n` +
+      `सचेत (SACHET / NDMA) रडार:\n` +
       `${activeAlert ? `सक्रिय चेतावनी: [${activeAlert.severity}] ${activeAlert.event} - ${activeAlert.headline}` : "कोई सक्रिय गंभीर मौसम चेतावनी दर्ज नहीं है (सामान्य स्थिति)।"}\n\n` +
       `Forecast Confidence: High (ECMWF/GFS ensemble spread ±0.8°C, ±5% precipitation variance)\n` +
       `Source: BharatFS + IMD Nowcast [Live Ground Telemetry] | SACHET/NDMA CAP | IMD Climate Hazard Atlas`
@@ -341,21 +341,21 @@ export async function synthesizeDirectWeatherAdvisory(
 
   if (isTamil) {
     return (
-      `⚡ வெதர்கேபிடி செயல்பாட்டு வானிலை அறிக்கை (BharatFS / IMD நிகழ்நேர தரவு)\n\n` +
-      `📍 இடம்: ${resolvedName}, ${admin1} (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)\n` +
-      `🌡️ தற்போதைய வெப்பநிலை: ${temp}°C (உணரப்படுவது: ${apparentTemp}°C)\n` +
-      `💨 காற்றின் வேகம் (10m): ${wind10} கி.மீ/மணி | (80m): ${wind80} கி.மீ/மணி\n` +
-      `💧 ஈரப்பதம்: ${humidity}% | காற்றழுத்தம்: ${pressure} hPa\n` +
-      `☀️ புற ஊதா குறியீடு (UV): ${uvIndex} (${uvCategory})\n` +
-      `🌧️ மழை அளவு: ${rainSum} மி.மீ (${rainCategory})\n` +
-      `🌱 மண் வெப்பநிலை: ${soil0}°C\n\n` +
-      `🌾 உழவர் / வேளாண் வழிகாட்டுதல்:\n` +
+      `• வெதர்கேபிடி செயல்பாட்டு வானிலை அறிக்கை (BharatFS / IMD நிகழ்நேர தரவு)\n\n` +
+      `இடம்: ${resolvedName}, ${admin1} (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)\n` +
+      `தற்போதைய வெப்பநிலை: ${temp}°C (உணரப்படுவது: ${apparentTemp}°C)\n` +
+      `காற்றின் வேகம் (10m): ${wind10} கி.மீ/மணி | (80m): ${wind80} கி.மீ/மணி\n` +
+      `ஈரப்பதம்: ${humidity}% | காற்றழுத்தம்: ${pressure} hPa\n` +
+      `புற ஊதா குறியீடு (UV): ${uvIndex} (${uvCategory})\n` +
+      `மழை அளவு: ${rainSum} மி.மீ (${rainCategory})\n` +
+      `மண் வெப்பநிலை: ${soil0}°C\n\n` +
+      `உழவர் / வேளாண் வழிகாட்டுதல்:\n` +
       `${farmerDirective}\n\n` +
-      `🎣 மீனவர் / கடல் புறப்பாடு வழிகாட்டுதல்:\n` +
+      `மீனவர் / கடல் புறப்பாடு வழிகாட்டுதல்:\n` +
       `${fishermanDirective}\n\n` +
-      `🏢 நகராட்சி / பேரிடர் மேலாண்மை:\n` +
+      `நகராட்சி / பேரிடர் மேலாண்மை:\n` +
       `${cityDirective}\n\n` +
-      `🛡️ SACHET / NDMA பேரிடர் எச்சரிக்கை:\n` +
+      `SACHET / NDMA பேரிடர் எச்சரிக்கை:\n` +
       `${activeAlert ? `எச்சரிக்கை: [${activeAlert.severity}] ${activeAlert.event}` : "தற்போது தீவிர வானிலை எச்சரிக்கைகள் ஏதுமில்லை (வழக்கமான நிலை)."}\n\n` +
       `Forecast Confidence: High (ECMWF/GFS ensemble spread ±0.8°C, ±5% precipitation variance)\n` +
       `Source: BharatFS + IMD Nowcast [Live Ground Telemetry] | SACHET/NDMA CAP | IMD Climate Hazard Atlas`
@@ -364,40 +364,77 @@ export async function synthesizeDirectWeatherAdvisory(
 
   // English (Default)
   const alertStatus = activeAlert
-    ? `⚠️ Active Warning: [${activeAlert.severity} Alert] ${activeAlert.event} — ${activeAlert.headline}`
-    : `🟢 SACHET / NDMA CAP Radar: No severe weather warnings active within 50 km (Green / Normal).`;
+    ? `Active Warning: [${activeAlert.severity} Alert] ${activeAlert.event} — ${activeAlert.headline}`
+    : `SACHET / NDMA CAP Radar: No severe weather warnings active within 50 km (Normal).`;
 
   const hazardNote = hazardData
-    ? `\n\n🏛️ IMD Hazard Atlas Climate Context (${resolvedName}):\n` +
+    ? `\n\nIMD Hazard Atlas Climate Context (${resolvedName}):\n` +
       `• Extreme 24h Rainfall Record: ${hazardData.extreme_24h_rainfall_record_mm} mm (${hazardData.extreme_rainfall_record_date})\n` +
       `• Flood Hazard Level: ${hazardData.flood_hazard_level} | Cyclone Vulnerability: ${hazardData.cyclone_vulnerability}\n` +
       `• Normal Monsoon Onset: ${hazardData.monsoon_onset_normal} | Withdrawal: ${hazardData.monsoon_withdrawal_normal}`
     : "";
 
+  const userName = userMemories?.name;
+  const userOcc = userMemories?.occupation || userMemories?.persona;
+  const userNiche = userMemories?.niche;
+  const userProfileHeader = (userName || userOcc || userNiche)
+    ? `OPERATIONAL PROFILE: ${userName ? userName + " • " : ""}${userOcc || "Specialist"}${userNiche ? ` | Focus Niche: ${userNiche}` : ""}\n\n`
+    : "";
+
   return (
-    `⚡ WeatherGPT Operational Meteorological Advisory\n\n` +
-    `📍 Location: ${resolvedName}, ${admin1}, India (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)\n` +
-    `🌡️ Current Temperature: ${temp}°C (Apparent / Feels Like: ${apparentTemp}°C)\n` +
-    `💨 Surface Wind (10m): ${wind10} km/h | Gradient Wind (80m): ${wind80} km/h\n` +
-    `💧 Relative Humidity: ${humidity}% | Barometric Pressure: ${pressure} hPa\n` +
-    `☀️ UV Index: ${uvIndex} (${uvCategory} — ${uvIndex >= 8 ? "Sun protection advised between 11 AM - 3 PM" : "Standard sun safety"})\n` +
-    `🌧️ 24h Precipitation Forecast: ${rainSum} mm (${rainCategory})\n` +
-    `🌱 Agro-Meteorological Soil Temperature: ${soil0}°C at 0cm, ${soil6}°C at 6cm\n\n` +
-    `🌾 FARMER / AGROMET ADVISORY:\n` +
+    `• WeatherGPT Operational Meteorological Advisory\n\n` +
+    userProfileHeader +
+    `Location: ${resolvedName}, ${admin1}, India (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)\n` +
+    `Current Temperature: ${temp}°C (Apparent / Feels Like: ${apparentTemp}°C)\n` +
+    `Surface Wind (10m): ${wind10} km/h | Gradient Wind (80m): ${wind80} km/h\n` +
+    `Relative Humidity: ${humidity}% | Barometric Pressure: ${pressure} hPa\n` +
+    `UV Index: ${uvIndex} (${uvCategory} — ${uvIndex >= 8 ? "Sun protection advised between 11 AM - 3 PM" : "Standard sun safety"})\n` +
+    `24h Precipitation Forecast: ${rainSum} mm (${rainCategory})\n` +
+    `Agro-Meteorological Soil Temperature: ${soil0}°C at 0cm, ${soil6}°C at 6cm\n\n` +
+    `FARMER / AGROMET ADVISORY:\n` +
     `${farmerDirective}\n` +
     `• Field checklist: ${farmerChecklist.join("; ")}\n\n` +
-    `🎣 FISHERMAN / MARINE OPERATIONS:\n` +
+    `FISHERMAN / MARINE OPERATIONS:\n` +
     `${fishermanDirective}\n` +
     `• Marine checklist: ${fishermanChecklist.join("; ")}\n\n` +
-    `🏢 CITY OPERATIONS & INFRASTRUCTURE:\n` +
+    `CITY OPERATIONS & INFRASTRUCTURE:\n` +
     `${cityDirective}\n` +
     `• Transit/drainage checklist: ${cityChecklist.join("; ")}\n\n` +
-    `🛡️ DISASTER MONITORING RADAR:\n` +
+    `DISASTER MONITORING RADAR:\n` +
     `${alertStatus}` +
     `${hazardNote}\n\n` +
     `Forecast Confidence: High (ECMWF/GFS ensemble spread ±0.8°C, ±5% precipitation variance)\n` +
     `Source: BharatFS + IMD Nowcast [Live Ground Telemetry] | SACHET/NDMA CAP | IMD Climate Hazard & Vulnerability Atlas`
   );
+}
+
+// Model cooldown tracker to avoid repeating calls to rate-limited or quota-exhausted models
+const modelCooldowns = new Map<string, number>();
+
+// Put known exhausted models on initial cooldown
+modelCooldowns.set("gemini-3.8-flash", Date.now() + 3600000); // 1 hour cooldown for exhausted 3.8-flash
+
+function isModelInCooldown(modelName: string): boolean {
+  const expiry = modelCooldowns.get(modelName);
+  if (!expiry) return false;
+  if (Date.now() < expiry) return true;
+  modelCooldowns.delete(modelName);
+  return false;
+}
+
+function extractCooldownSeconds(err: any): number {
+  if (!err) return 60;
+  const str = typeof err === "object" ? JSON.stringify(err) : String(err);
+  const match = str.match(/retryDelay["']?\s*:\s*["']?(\d+(?:\.\d+)?)\s*s?/i) ||
+                str.match(/retry in (\d+(?:\.\d+)?)s/i);
+  if (match && match[1]) {
+    const sec = Math.ceil(parseFloat(match[1]));
+    return Math.max(sec, 5);
+  }
+  if (str.includes("FreeTier") || str.includes("limit: 20") || str.includes("RESOURCE_EXHAUSTED")) {
+    return 3600; // 1 hour cooldown for daily free-tier quota exhaustion
+  }
+  return 60;
 }
 
 function isQuotaOrTransientError(err: any): boolean {
@@ -439,10 +476,33 @@ export async function executeWeatherAgent(
     }
   });
 
-  const preferredModel = process.env.MODEL || "gemini-3.8-flash";
-  const candidateModels = [preferredModel];
-  if (!candidateModels.includes("gemini-3.1-flash-lite")) {
+  // Prioritize active, responsive models with available quota
+  const configuredModel = process.env.MODEL;
+  const candidateModels: string[] = [];
+
+  // 1. Add configured model if specified and not in cooldown
+  if (configuredModel && !isModelInCooldown(configuredModel)) {
+    candidateModels.push(configuredModel);
+  }
+
+  // 2. High-performance, separate quota tier: gemini-3.1-flash-lite
+  if (!candidateModels.includes("gemini-3.1-flash-lite") && !isModelInCooldown("gemini-3.1-flash-lite")) {
     candidateModels.push("gemini-3.1-flash-lite");
+  }
+
+  // 3. Fallback to latest flash alias if available
+  if (!candidateModels.includes("gemini-flash-latest") && !isModelInCooldown("gemini-flash-latest")) {
+    candidateModels.push("gemini-flash-latest");
+  }
+
+  // 4. Fallback to gemini-3.8-flash only if not in cooldown
+  if (!candidateModels.includes("gemini-3.8-flash") && !isModelInCooldown("gemini-3.8-flash")) {
+    candidateModels.push("gemini-3.8-flash");
+  }
+
+  // If all models are currently in cooldown, synthesize directly from live telemetry
+  if (candidateModels.length === 0) {
+    return synthesizeDirectWeatherAdvisory(userMessage, userMemories);
   }
 
   let persistentContext = "";
@@ -571,17 +631,16 @@ export async function executeWeatherAgent(
       return "Weather query exceeded maximum tool-call rounds.";
     } catch (err: any) {
       if (isQuotaOrTransientError(err)) {
-        console.warn(`[GEMINI RATE LIMIT / TRANSIENT] Model ${modelName} encountered:`, err?.message || err);
-        // Continue to next candidate model if available
+        const cooldown = extractCooldownSeconds(err);
+        modelCooldowns.set(modelName, Date.now() + cooldown * 1000);
+        console.log(`[WeatherAgent] Model ${modelName} reached quota; applying ${cooldown}s cooldown. Trying fallback.`);
         continue;
       }
-      console.error(`Error in executeWeatherAgent with model ${modelName}:`, err);
-      // For any unexpected error, fall through to direct operational synthesis
+      console.log(`[WeatherAgent] Model ${modelName} unavailable, falling back.`);
       break;
     }
   }
 
   // If all candidate AI models encountered quota exhaustion or errors, fall back to direct telemetry synthesis
-  console.info("[WEATHERGPT] Engaging direct operational synthesis pipeline.");
   return await synthesizeDirectWeatherAdvisory(userMessage, userMemories);
 }

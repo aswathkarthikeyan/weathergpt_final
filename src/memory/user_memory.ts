@@ -28,8 +28,11 @@ export async function loadUserMemories(userId: string): Promise<Record<string, s
     if (snap.exists()) {
       const data = snap.data();
       const memories: Record<string, string> = {};
-      if (data.persona) memories["persona"] = String(data.persona);
-      if (data.preferences) memories["preferences"] = String(data.preferences);
+      for (const [k, v] of Object.entries(data)) {
+        if (k !== "userId" && k !== "updatedAt" && v !== undefined && v !== null) {
+          memories[k] = String(v);
+        }
+      }
       userMemoryStore.set(safeUserId, memories);
       return memories;
     }

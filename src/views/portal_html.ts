@@ -7,120 +7,95 @@ export function getPortalHtml(): string {
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>WeatherGPT • National Meteorological & Disaster Intelligence</title>
-  <meta name="description" content="WeatherGPT: Conversational AI meteorological reasoning and early disaster intelligence engine for India, unifying BharatFS, IMD Nowcast, SACHET CAP, and IMD Climate Hazard Atlas.">
-  <meta property="og:title" content="WeatherGPT • National Meteorological & Disaster Intelligence">
-  <meta property="og:description" content="Conversational AI weather intelligence layer for India. Real-time synoptic forecasts, role-based alert translation, multilingual voice, and rural accessibility.">
+  <title>WeatherGPT • National Meteorological &amp; Disaster Intelligence</title>
+  <meta name="description" content="Institutional meteorological and early disaster intelligence platform for India. Unifies BharatFS, IMD Nowcast, SACHET CAP, and IMD Climate Hazard Atlas with role-specific personalized advisories.">
+  <meta property="og:title" content="WeatherGPT • National Meteorological &amp; Disaster Intelligence">
+  <meta property="og:description" content="Institutional conversational meteorological reasoning for India with real-time ground telemetry, personalized role lenses, and disaster alerts.">
 
-  <!-- Typography: Fraunces (Slab Serif for Dispatches) + Noto Sans (Latin, Devanagari, Tamil) for Script Parity -->
+  <!-- Professional Typography Pairing:
+       Body & Headings: Plus Jakarta Sans (Authoritative, crystal-clear, modern executive sans)
+       Data & Tabular Figures: JetBrains Mono (Scientific precision, tabular numbers)
+       Multilingual Scripts: Noto Sans Devanagari & Noto Sans Tamil -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Noto Sans"', '"Noto Sans Devanagari"', '"Noto Sans Tamil"', 'system-ui', '-apple-system', 'sans-serif'],
-            serif: ['"Fraunces"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Devanagari"', '"Noto Sans Tamil"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            'sih-bg': '#F5F6F3',
-            'sih-surface': '#FFFFFF',
-            'sih-ink': '#1B2A44',
-            'sih-muted': '#5B6472',
-            'sih-accent': '#C97A2B',
-            'sih-alert': '#B3261E',
-            'sih-caution': '#B8860B',
-            'sih-ok': '#3F6B4A',
-            'sih-line': '#E1E4DD',
-            govblue: {
-              50: '#f0f4f9',
-              100: '#dce5f1',
-              200: '#bdcfe4',
-              700: '#1b365d',
-              800: '#132845',
-              900: '#0b182b',
-              950: '#060d17',
-            }
+            canvas: '#FFFFFF',
+            paper: '#F8FAFC',
+            subtle: '#F1F5F9',
+            line: '#E2E8F0',
+            darkline: '#CBD5E1',
+            ink: '#0F172A',
+            slatebody: '#334155',
+            muted: '#64748B',
+            cobalt: '#1E3A8A',
+            emeraldaccent: '#475569',
+            amberaccent: '#78350F',
+            crimsonaccent: '#1E293B'
+          },
+          fontSize: {
+            'base': ['16px', '26px'],
+            'sm': ['14.5px', '22px'],
+            'xs': ['13px', '19px'],
           }
         }
       }
     };
   </script>
   <style>
+    :root {
+      color-scheme: light;
+      font-size: 16px;
+    }
     body {
-      font-family: "Noto Sans", "Noto Sans Devanagari", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: "Plus Jakarta Sans", "Noto Sans Devanagari", "Noto Sans Tamil", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #FFFFFF;
-      color: #1B2A44;
-      line-height: 1.55;
+      color: #0F172A;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
-    .dispatch-title {
-      font-family: "Fraunces", Georgia, serif;
+    .font-mono {
+      font-family: "JetBrains Mono", monospace;
+      font-feature-settings: "tnum" 1;
     }
-    .ease-dispatch {
-      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
     }
-    #floating-dots-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    /* Aesthetic semi-transparent glass cards */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.82) !important;
-      backdrop-filter: blur(14px) saturate(180%);
-      -webkit-backdrop-filter: blur(14px) saturate(180%);
-      border: 1px solid rgba(225, 228, 221, 0.75) !important;
-      box-shadow: 0 4px 20px -2px rgba(27, 42, 68, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02) !important;
-    }
-    .glass-card:hover {
-      box-shadow: 0 8px 26px -3px rgba(27, 42, 68, 0.08), 0 3px 8px -1px rgba(0, 0, 0, 0.03) !important;
-    }
-    .glass-card-subtle {
-      background: rgba(255, 255, 255, 0.72) !important;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(225, 228, 221, 0.65) !important;
-    }
-    .glass-inner-subtle {
-      background: rgba(245, 246, 243, 0.65) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(225, 228, 221, 0.6) !important;
-    }
-    .glass-chat-thread {
-      background: rgba(255, 255, 255, 0.75) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
+    /* Clean custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(225, 228, 221, 0.4);
+      background: #F1F5F9;
     }
     ::-webkit-scrollbar-thumb {
-      background: #C2C7BD;
+      background: #CBD5E1;
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #9FA59A;
+      background: #94A3B8;
     }
+    /* Print Stylesheet */
     @media print {
-      header, .no-print, #chat-composer, #api-modal, #rural-modal, #hazard-modal, #floating-dots-canvas {
+      header, nav, #chat-composer, #action-tabs-nav, .no-print, button, #onboarding-modal {
         display: none !important;
       }
-      body, main {
+      body {
         background: white !important;
         color: black !important;
+        font-size: 11pt !important;
         padding: 0 !important;
       }
       #chat-thread {
@@ -130,792 +105,847 @@ export function getPortalHtml(): string {
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col bg-white text-[#1B2A44] antialiased relative">
-  <!-- Interactive Floating Atmospheric Dots Background Canvas -->
-  <canvas id="floating-dots-canvas"></canvas>
+<body class="min-h-full flex flex-col bg-white text-ink selection:bg-slate-200">
 
-  <!-- ==================== 1. UNIFIED SLEEK AESTHETIC NAVBAR & HEADER ==================== -->
-  <header class="sticky top-0 z-40 w-full glass-card border-b border-[#E1E4DD]/80 shadow-xs backdrop-blur-md">
-    <!-- Active Sachet Alert Banner Bar -->
-    <div id="alert-ticker-strip" class="bg-gradient-to-r from-[#B8860B] via-[#C97A2B] to-[#B8860B] text-white text-[11px] px-4 sm:px-8 py-1.5 flex items-center justify-between gap-3 cursor-pointer transition hover:brightness-105 shadow-2xs" onclick="toggleTickerDetail()">
-      <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2 overflow-hidden">
-          <span class="font-bold tracking-wider uppercase text-[9px] bg-black/25 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
-            ACTIVE SACHET / CAP BULLETIN
-          </span>
-          <div id="ticker-text" class="truncate font-medium text-white/95">
-            ⚡ Synoptic Alert: Deep depression over West-Central Bay of Bengal. Squally winds 55-65 km/h along coastal corridors. Click to inspect role-based fan-out directives.
+  <!-- ==================== 1. COMPACT, CLEAN & ACCESSIBLE SLIM HEADER ==================== -->
+  <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur border-b border-line shadow-2xs">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2 sm:gap-4">
+      
+      <!-- Brand & Active Station Indicator -->
+      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <a href="/" class="flex items-center gap-2 group" aria-label="WeatherGPT Homepage">
+          <div class="w-8 h-8 rounded-lg bg-ink text-white flex items-center justify-center font-extrabold text-sm shadow-2xs group-hover:bg-cobalt transition-colors">
+            W
           </div>
-        </div>
-        <div class="flex items-center gap-2 shrink-0 text-[10px] font-semibold">
-          <span class="underline hidden sm:inline" data-i18n="topBarDirectives">Role Directives</span>
-          <span id="ticker-chevron" class="text-xs">▼</span>
+          <span class="font-extrabold text-base tracking-tight text-ink">WeatherGPT</span>
+        </a>
+
+        <!-- Station Indicator (Clean, unboxed, quiet) -->
+        <div class="hidden md:flex items-center gap-2 text-xs text-slate-500 font-medium">
+          <span class="font-bold text-ink" id="ribbon-city">Coimbatore</span>
+          <span class="text-slate-300 hidden lg:inline">·</span>
+          <span class="font-mono text-xs hidden lg:inline" id="local-clock">IST: --:--:--</span>
+          <span id="utc-clock" class="hidden"></span>
+          <span id="ribbon-coords" class="hidden"></span>
+          <span id="ribbon-elevation" class="hidden"></span>
+          <span id="ribbon-alert-preview" class="hidden"></span>
         </div>
       </div>
-    </div>
 
-    <!-- Collapsible Ticker Details Drawer -->
-    <div id="ticker-drawer" class="hidden bg-white/95 border-b border-[#E1E4DD] px-4 sm:px-8 py-3 shadow-md ease-dispatch backdrop-blur-md">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-[#1B2A44]">
-        <div class="space-y-1">
-          <div class="font-bold text-xs text-[#B3261E] flex items-center gap-1.5">
-            <span>🚨</span> <span data-i18n="drawerWarning">OASIS CAP v1.2 Warning • Cyclone / Heavy Inundation Vector</span>
-          </div>
-          <p class="text-[#5B6472] text-[11px] leading-relaxed" data-i18n="drawerDesc">
-            IMD Bulletin &amp; SACHET NDMA RSS feed: Active cyclonic track with ±12km ensemble variance. Role-based automated translation available for Agriculture, Maritime Coastal, and Municipal Urban Local Bodies.
-          </p>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <button onclick="triggerRoleDirectives('cyclone')" class="px-3 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white rounded-sm text-xs font-semibold shadow-xs flex items-center gap-1.5">
-            <span>⚡</span> <span data-i18n="viewRoleDirectives">View Role Directives</span>
-          </button>
-        </div>
-      </div>
-    </div>
+      <!-- Navigation Tabs (Clean, accessible, roomy touch targets) -->
+      <nav class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto py-1 no-scrollbar shrink min-w-0" role="tablist" aria-label="Operational Modules">
+        <button
+          onclick="scrollToSection('reasoning-terminal')"
+          id="top-nav-chat"
+          role="tab"
+          aria-selected="true"
+          class="px-2.5 sm:px-3 py-1.5 rounded-md bg-ink text-white font-semibold text-xs shadow-2xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span class="hidden sm:inline">Chat Console</span>
+          <span class="sm:hidden">Chat</span>
+        </button>
 
-    <!-- Main Navigation Bar -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-      <!-- Left: Identity -->
-      <div>
-        <div class="flex items-center flex-wrap gap-2">
-          <span class="text-[11px] uppercase tracking-wider text-slate-700 font-bold" data-i18n="headerKicker">
-            WeatherGPT
-          </span>
-          <span class="text-slate-300 text-[10px]">•</span>
-          <span class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-            <span data-i18n="headerLayer">All-India Unified Layer</span>
-          </span>
-        </div>
-        <h1 class="text-sm sm:text-base font-semibold text-[#1B2A44] tracking-tight" data-i18n="headerTitle">
-          Meteorological Reasoning Engine
-        </h1>
-        <p class="text-[10.5px] text-slate-500 hidden sm:block truncate max-w-xl" data-i18n="headerDesc">
-          Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning &amp; NDMA CAP
-        </p>
-      </div>
+        <button
+          onclick="switchWorkspaceTab('directives')"
+          id="top-nav-directives"
+          role="tab"
+          aria-selected="false"
+          class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span class="hidden sm:inline">Role Directives</span>
+          <span class="sm:hidden">Directives</span>
+        </button>
 
-      <!-- Right: Subscriptions, Telemetry, Controls -->
-      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2.5 text-xs pt-1 lg:pt-0 border-t lg:border-t-0 border-slate-200/60">
-        <!-- Telemetry Clock Pill -->
-        <div class="hidden xl:flex items-center gap-2 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-md text-[10.5px] font-mono">
-          <span id="utc-clock" class="text-slate-500">UTC: --:--:--</span>
-          <span class="text-slate-300">|</span>
-          <span id="local-clock" class="text-slate-800 font-semibold">IST: --:--:--</span>
-        </div>
+        <button
+          onclick="switchWorkspaceTab('telemetry')"
+          id="top-nav-telemetry"
+          role="tab"
+          aria-selected="false"
+          class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span class="hidden sm:inline">Telemetry</span>
+        </button>
 
-        <!-- Language Selector -->
-        <div class="flex items-center bg-white border border-slate-200 rounded-md p-0.5 shadow-2xs text-[11px]">
-          <button onclick="setAppLanguage('en')" id="lang-btn-en" class="px-2 py-0.5 rounded text-white bg-slate-800 font-semibold transition">
+        <button
+          onclick="switchWorkspaceTab('radar')"
+          id="top-nav-radar"
+          role="tab"
+          aria-selected="false"
+          class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span class="hidden sm:inline">Radar</span>
+        </button>
+
+        <button
+          onclick="switchWorkspaceTab('atlas')"
+          id="top-nav-atlas"
+          role="tab"
+          aria-selected="false"
+          class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span class="hidden sm:inline">Atlas</span>
+        </button>
+
+        <button
+          onclick="switchWorkspaceTab('rural')"
+          id="top-nav-rural"
+          role="tab"
+          aria-selected="false"
+          class="px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span class="hidden sm:inline">Rural</span>
+        </button>
+      </nav>
+
+      <!-- Right: User Profile, Multilingual Switcher & Settings -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        
+        <!-- User Profile Pill Button (Clean, accessible, friendly) -->
+        <button
+          onclick="openOnboardingModal(true)"
+          id="user-profile-badge"
+          aria-label="User Profile and Role Settings"
+          title="Click to change your default profile, location, and niche"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 bg-paper hover:bg-subtle border border-line hover:border-darkline rounded-md text-xs text-ink transition-colors shadow-2xs group focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          <span id="badge-avatar" class="w-5 h-5 rounded bg-ink text-white text-[10px] font-bold flex items-center justify-center">AG</span>
+          <span id="badge-name" class="font-bold truncate max-w-[85px] sm:max-w-[120px]">Suresh Kumar</span>
+          <span class="text-muted hidden md:inline">·</span>
+          <span id="badge-meta" class="text-muted hidden md:inline truncate max-w-[100px]">Coimbatore</span>
+          <span class="text-[10px] text-cobalt font-bold group-hover:translate-y-0.5 transition-transform">▾</span>
+        </button>
+
+        <!-- Compact Language Switcher -->
+        <div class="flex items-center bg-subtle rounded-md border border-line p-0.5 text-xs font-semibold text-slatebody" role="group" aria-label="Select Language">
+          <button onclick="setAppLanguage('en')" id="lang-btn-en" aria-label="English" class="px-2 py-0.5 rounded text-xs font-bold bg-white text-ink shadow-2xs transition-colors">
             EN
           </button>
-          <button onclick="setAppLanguage('hi')" id="lang-btn-hi" class="px-2 py-0.5 rounded text-slate-600 hover:text-slate-900 transition">
-            हिन्दी
+          <button onclick="setAppLanguage('hi')" id="lang-btn-hi" aria-label="Hindi" class="px-2 py-0.5 rounded text-xs text-muted hover:text-ink transition-colors">
+            हि
           </button>
-          <button onclick="setAppLanguage('ta')" id="lang-btn-ta" class="px-2 py-0.5 rounded text-slate-600 hover:text-slate-900 transition">
-            தமிழ்
+          <button onclick="setAppLanguage('ta')" id="lang-btn-ta" aria-label="Tamil" class="px-2 py-0.5 rounded text-xs text-muted hover:text-ink transition-colors">
+            த
           </button>
         </div>
 
-        <!-- Action Nav Buttons -->
-        <div class="flex items-center gap-1.5">
-          <button onclick="openRoleFanoutModal()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded-md font-medium text-xs transition flex items-center gap-1 shadow-2xs">
-            <span data-i18n="navRoleDirectives">Directives</span>
-          </button>
-          <button onclick="openRuralModal()" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-md font-medium text-xs transition flex items-center gap-1 shadow-2xs">
-            <span data-i18n="navRural">Rural Tier</span>
-          </button>
-          <button onclick="openHazardModal()" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-md font-medium text-xs transition flex items-center gap-1 shadow-2xs">
-            <span data-i18n="navHazard">Atlas</span>
-          </button>
-          <button onclick="openApiModal()" title="Configure Backend API Endpoint (Cloudflare / Cloud Run)" class="px-2 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-md font-mono text-[11px] font-medium transition flex items-center gap-1 shadow-2xs">
-            <span>API</span>
-          </button>
-          <a href="/health" target="_blank" class="px-2 py-1 bg-slate-50 hover:bg-slate-100 text-emerald-800 rounded-md border border-slate-200 font-mono text-[10px] font-semibold">
-            /health
-          </a>
-        </div>
+        <!-- API Configuration Button -->
+        <button
+          onclick="openApiModal()"
+          aria-label="API Settings"
+          title="API Configuration"
+          class="px-2.5 py-1 text-xs font-mono font-semibold text-slatebody hover:text-ink bg-white hover:bg-subtle border border-line rounded-md transition-colors shadow-2xs focus-visible:ring-2 focus-visible:ring-ink"
+        >
+          API
+        </button>
       </div>
+
     </div>
   </header>
 
-  <!-- ==================== 2. MAIN OPERATIONAL WORKSPACE ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-5 space-y-6">
+  <!-- ==================== 3. MAIN WORKSPACE VIEWPORT ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-    <!-- ==================== ROLE-BASED ALERT DIRECTIVES ENGINE (SEAMLESS INTEGRATED BAR) ==================== -->
-    <section id="fanout-workbench" class="bg-white rounded-xl p-4 sm:p-5 space-y-4 relative z-10 shadow-xs border border-slate-200/90">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-        <div class="space-y-0.5">
-          <h2 class="font-semibold text-sm text-slate-800 tracking-tight" data-i18n="workbenchTitle">
-            Role-Based Operational Directives Engine
-          </h2>
-          <p class="text-[11.5px] text-slate-500" data-i18n="workbenchDesc">
-            Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives
-          </p>
-        </div>
+    <!-- Grid: Chatbot Console (7 Cols) + Domain Action Stages (5 Cols) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-        <!-- Solid Color Active Scenario Selector Pills -->
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider shrink-0" data-i18n="scenarioLabel">Active Scenario:</span>
-          <div class="inline-flex rounded-lg p-1 bg-slate-100 border border-slate-200 gap-1 shadow-2xs">
-            <button id="scenario-btn-cyclone" onclick="triggerRoleDirectives('cyclone')" class="px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-red-600 text-white shadow-xs" data-i18n="scenarioCyclone">
-              <span>🔴</span> Cyclone Red Alert (Coast)
-            </button>
-            <button id="scenario-btn-flood" onclick="triggerRoleDirectives('flood')" class="px-3 py-1.5 text-xs font-medium rounded-md transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white" data-i18n="scenarioFlood">
-              <span>🌧️</span> Urban Cloudburst (Bengaluru)
-            </button>
-            <button id="scenario-btn-heatwave" onclick="triggerRoleDirectives('heatwave')" class="px-3 py-1.5 text-xs font-medium rounded-md transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white" data-i18n="scenarioHeatwave">
-              <span>☀️</span> Severe Heatwave &amp; Evaporation (Delhi)
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- The 3 Side-By-Side Parallel Role Cards -->
-      <div id="fanout-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- 1. Farmer Card -->
-        <div class="glass-card-subtle border-l-4 border-l-[#3F6B4A] border-t border-r border-b border-[#E1E4DD]/70 rounded-lg p-3.5 flex flex-col justify-between space-y-2.5 shadow-2xs hover:shadow-xs transition">
-          <div>
-            <div class="flex items-center justify-between pb-1.5 border-b border-emerald-200/50">
-              <span class="font-bold text-xs text-[#3F6B4A] flex items-center gap-1.5">
-                <span>🌾</span> <span data-i18n="cardFarmerTitle">AGRICULTURE &amp; AGROMET</span>
-              </span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#3F6B4A]" data-i18n="cardFarmerBadge">
-                FARMER ROLE
-              </span>
-            </div>
-            <div class="mt-2 text-xs font-bold text-slate-900 leading-snug" id="fanout-farmer-directive">
-              Harvest mature paddy immediately; pause all chemical spraying and clear peripheral trenches.
-            </div>
-            <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-farmer-checklist">
-              <li class="flex items-start gap-1.5"><span>•</span><span>30cm drainage trenches along bunds to stop root rot</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Zero pesticide spraying for 48h (drift &amp; wash-off hazard)</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Shift cattle &amp; poultry to elevated pucca shelters</span></li>
-            </ul>
-          </div>
-          <div class="pt-2 border-t border-[#E1E4DD]/60 flex items-center justify-between text-[11px]">
-            <span class="font-semibold text-emerald-800" id="fanout-farmer-status">Spraying: PAUSED</span>
-            <span class="text-[10px] text-slate-400 font-mono">Meghdoot / AMFU</span>
-          </div>
-        </div>
-
-        <!-- 2. Fisherman Card -->
-        <div class="glass-card-subtle border-l-4 border-l-[#B8860B] border-t border-r border-b border-[#E1E4DD]/70 rounded-lg p-3.5 flex flex-col justify-between space-y-2.5 shadow-2xs hover:shadow-xs transition">
-          <div>
-            <div class="flex items-center justify-between pb-1.5 border-b border-amber-200/50">
-              <span class="font-bold text-xs text-[#B8860B] flex items-center gap-1.5">
-                <span>⚓</span> <span data-i18n="cardFishermanTitle">MARITIME &amp; COASTAL SAFETY</span>
-              </span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-[#B8860B]" data-i18n="cardFishermanBadge">
-                FISHERMAN ROLE
-              </span>
-            </div>
-            <div class="mt-2 text-xs font-bold text-slate-900 leading-snug" id="fanout-fisherman-directive">
-              TOTAL SEA BAN: Squalls exceeding 65 km/h with rough sea state. Return to harbor by 18:00 IST.
-            </div>
-            <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-fisherman-checklist">
-              <li class="flex items-start gap-1.5"><span>•</span><span>Total suspension of deep-sea and coastal artisanal fishing</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Moor catamarans and fiber craft above high spring-tide mark</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Keep marine VHF transceiver tuned to Coast Guard Ch 16</span></li>
-            </ul>
-          </div>
-          <div class="pt-2 border-t border-[#E1E4DD]/60 flex items-center justify-between text-[11px]">
-            <span class="font-bold text-red-700" id="fanout-fisherman-status">Departure: TOTAL BAN</span>
-            <span class="text-[10px] text-slate-400 font-mono">INCOIS / IMD Marine</span>
-          </div>
-        </div>
-
-        <!-- 3. City Operations Card -->
-        <div class="glass-card-subtle border-l-4 border-l-[#B3261E] border-t border-r border-b border-[#E1E4DD]/70 rounded-lg p-3.5 flex flex-col justify-between space-y-2.5 shadow-2xs hover:shadow-xs transition">
-          <div>
-            <div class="flex items-center justify-between pb-1.5 border-b border-red-200/50">
-              <span class="font-bold text-xs text-[#B3261E] flex items-center gap-1.5">
-                <span>🏢</span> <span data-i18n="cardCityTitle">URBAN LOCAL BODY &amp; OPS</span>
-              </span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-[#B3261E]" data-i18n="cardCityBadge">
-                CITY OPS ROLE
-              </span>
-            </div>
-            <div class="mt-2 text-xs font-bold text-slate-900 leading-snug" id="fanout-city-directive">
-              ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize 100-HP dewatering pumps to chronic low-lying wards.
-            </div>
-            <ul class="mt-2 space-y-1 text-[11px] text-[#5B6472]" id="fanout-city-checklist">
-              <li class="flex items-start gap-1.5"><span>•</span><span>Deploy dewatering pumps to underpasses and metro stations</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Clear trash-screens at major stormwater lake outfalls</span></li>
-              <li class="flex items-start gap-1.5"><span>•</span><span>Issue arterial traffic diversion bulletins for inundated corridors</span></li>
-            </ul>
-          </div>
-          <div class="pt-2 border-t border-[#E1E4DD]/60 flex items-center justify-between text-[11px]">
-            <span class="font-bold text-red-700" id="fanout-city-status">Alert: CODE RED</span>
-            <span class="text-[10px] text-slate-400 font-mono">NDRF / Municipal Ops</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Provenance Line for Directives -->
-      <div class="text-[10.5px] text-[#5B6472] pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-[#E1E4DD]/60">
-        <span id="fanout-meta-line">
-          Source: NDMA SACHET (OASIS CAP v1.2) + BharatFS / IMD Cyclone Bulletin • Confidence: High (Spread ±12km)
-        </span>
-        <button onclick="copyFanoutDirectives(this)" class="text-[#1B2A44] hover:underline font-semibold flex items-center gap-1">
-          <span>📋</span> <span data-i18n="copyBriefing">Copy Multi-Role Briefing</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- ==================== SPLIT COLUMNS: CHAT & SENSORS ==================== -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <!-- ==================== LEFT COLUMN: WEATHERGPT CHATBOT & ADVISORY CONSOLE (7 COLS) ==================== -->
-      <div class="lg:col-span-7 space-y-4">
-
-        <!-- MAIN CHATBOT CARD -->
-        <div id="weathergpt-chat-card" class="bg-white/90 backdrop-blur-md shadow-md flex flex-col rounded-2xl overflow-hidden relative z-10 border border-slate-200/90 transition-all">
-          <!-- Clean Meteorological Console Header -->
-          <div class="bg-slate-50/80 px-5 py-3.5 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h3 class="font-sans font-semibold text-[#1B2A44] text-sm tracking-tight" data-i18n="chatCardTitle">
-                WeatherGPT Meteorological Console
-              </h3>
-              <p class="text-[11px] text-slate-500" data-i18n="chatCardSubtitle">Synoptic Intelligence &amp; Multi-turn Dialogue</p>
-            </div>
-            
+      <!-- ==================== LEFT COLUMN: CHATBOT REASONING CONSOLE ==================== -->
+      <div id="reasoning-terminal" class="lg:col-span-7 space-y-4">
+        
+        <div class="bg-white border border-line rounded-lg shadow-xs flex flex-col overflow-hidden">
+          
+          <!-- Terminal Header (Compact Chatbot Header) -->
+          <div class="bg-paper px-4 py-2.5 border-b border-line flex items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-              <button onclick="clearChatHistory()" title="Clear conversation history" class="text-slate-600 hover:text-slate-900 px-2.5 py-1 border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1.5 rounded-md shadow-2xs">
-                <span>🧹</span> <span class="hidden sm:inline" data-i18n="clearChat">Clear Chat</span>
-              </button>
-              <button onclick="printChatTranscript()" title="Print formal meteorological record" class="text-slate-600 hover:text-slate-900 px-2.5 py-1 border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-medium transition flex items-center gap-1.5 rounded-md shadow-2xs">
-                <span>🖨️</span> <span class="hidden sm:inline" data-i18n="printRecord">Print Record</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></span>
+              <h2 id="chat-console-title" class="font-semibold text-sm text-ink tracking-tight">
+                Chatbot
+              </h2>
+            </div>
+
+            <!-- Terminal Actions -->
+            <div class="flex items-center gap-2">
+              <button id="chat-clear-btn" onclick="clearChatHistory()" title="Reset Dialogue History" class="px-2.5 py-1 text-xs font-medium text-slatebody hover:text-ink bg-white hover:bg-subtle border border-line rounded transition-colors shadow-2xs">
+                Clear Thread
               </button>
             </div>
           </div>
 
-        <!-- Configuration & Targeting Bar -->
-        <div class="p-4 bg-slate-50/40 border-b border-slate-200/70 space-y-3 text-xs">
-          <!-- Location Picker Row -->
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="font-semibold text-slate-700 text-[11px] shrink-0" data-i18n="targetLabel">📍 Target Location:</span>
-            <div class="flex-1 min-w-[180px] flex items-center gap-1.5">
-              <input
-                id="location-input"
-                type="text"
-                value="Bangalore"
-                placeholder="City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)..."
-                data-i18n-placeholder="targetPlaceholder"
-                class="flex-1 bg-white border border-slate-200 px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium rounded-lg shadow-2xs transition"
-              />
-              <button
-                type="button"
-                onclick="detectUserLocation()"
-                title="Detect current GPS location"
-                class="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-[11px] font-medium shrink-0 flex items-center gap-1 rounded-lg shadow-2xs transition"
-              >
-                <span>🎯</span> <span class="hidden sm:inline">GPS</span>
-              </button>
-            </div>
-
-            <!-- Quick City Chips (Verified Indian Metropolitan Coordinates) -->
-            <div class="flex items-center gap-1 overflow-x-auto py-0.5 max-w-full">
-              <button type="button" onclick="applyPresetCity('Bangalore')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
-                Bengaluru
-              </button>
-              <button type="button" onclick="applyPresetCity('New Delhi')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
-                Delhi
-              </button>
-              <button type="button" onclick="applyPresetCity('Mumbai')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
-                Mumbai
-              </button>
-              <button type="button" onclick="applyPresetCity('Chennai')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
-                Chennai
-              </button>
-              <button type="button" onclick="applyPresetCity('Coimbatore')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
-                Coimbatore
-              </button>
-              <button type="button" onclick="applyPresetCity('Kolkata')" class="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 rounded-md whitespace-nowrap font-medium shadow-2xs transition">
-                Kolkata
-              </button>
-            </div>
+          <!-- Chat Dialogue Thread (Simplified, professional, roomy, legible) -->
+          <div id="chat-thread" class="p-5 space-y-5 max-h-[560px] min-h-[420px] overflow-y-auto bg-white text-sm leading-relaxed">
+            <!-- Messages populated dynamically -->
           </div>
 
-          <!-- Sector Selection Pills -->
-          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-200/60">
-            <span class="font-semibold text-slate-700 text-[11px] shrink-0 mr-1" data-i18n="roleLensLabel">Role Lens:</span>
-            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
-              <input type="radio" name="sector" value="farmer" class="sr-only" checked onchange="handleSectorChange('farmer')">
-              <span>🌾</span> <span data-i18n="roleFarmer">Farmer</span>
-            </label>
-            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
-              <input type="radio" name="sector" value="fisherman" class="sr-only" onchange="handleSectorChange('fisherman')">
-              <span>⚓</span> <span data-i18n="roleFisherman">Fisherman</span>
-            </label>
-            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
-              <input type="radio" name="sector" value="city_ops" class="sr-only" onchange="handleSectorChange('city_ops')">
-              <span>🏢</span> <span data-i18n="roleCityOps">City Ops / ULB</span>
-            </label>
-            <label class="cursor-pointer border border-slate-200 px-2.5 py-1 bg-white hover:bg-slate-50 has-[:checked]:bg-[#1B2A44] has-[:checked]:text-white has-[:checked]:border-[#1B2A44] text-slate-700 text-[11px] font-medium flex items-center gap-1.5 rounded-lg transition shadow-2xs">
-              <input type="radio" name="sector" value="general" class="sr-only" onchange="handleSectorChange('general')">
-              <span>👤</span> <span data-i18n="rolePublic">Public</span>
-            </label>
-            <span class="ml-auto text-[10px] font-mono text-slate-400" id="session-id-display">SESSION: READY</span>
-          </div>
-        </div>
-
-        <!-- Chat Stream Conversation Container -->
-        <div id="chat-thread" class="p-5 space-y-4 max-h-[580px] min-h-[440px] overflow-y-auto bg-slate-50/20">
-          <!-- Welcome message rendered via JavaScript -->
-        </div>
-
-        <!-- Thinking / Loading Indicator -->
-        <div id="chat-thinking" class="hidden px-5 py-3 bg-slate-50 border-t border-slate-200/70 flex items-center gap-3">
-          <div class="w-4 h-4 border-2 border-slate-700 border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-xs font-medium text-slate-700" data-i18n="thinkingText">
-            Consulting BharatFS numerical grids, IMD nowcasts, and generating role directives...
-          </span>
-        </div>
-
-        <!-- Composer & Quick Action Bar -->
-        <div id="chat-composer" class="p-4 bg-white border-t border-slate-200/80 space-y-3">
-          <!-- Suggestion Prompts Carousel (Localized dynamically) -->
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs" id="suggestion-chips-bar">
-            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider shrink-0" data-i18n="suggestionsLabel">Suggestions:</span>
-            <button type="button" onclick="quickAsk('Is it safe to spray pesticides on crops today in ' + getTargetCity() + '? Check wind and rain.')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
-              🌾 Agrochemical Spraying
-            </button>
-            <button type="button" onclick="quickAsk('Check coastal wind speed at 10m/80m and squall warnings for ' + getTargetCity() + '. Can boats go out?')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
-              ⚓ Marine Squalls &amp; Wind
-            </button>
-            <button type="button" onclick="quickAsk('What is the historical flood record and extreme 24h rainfall for ' + getTargetCity() + ' in Hazard Atlas?')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
-              🗺️ Hazard Atlas Flood History
-            </button>
-            <button type="button" onclick="quickAsk('Scan active disaster warnings, thunderstorms, and rain outlook for ' + getTargetCity() + '.')" class="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-[11px] rounded-lg whitespace-nowrap shadow-2xs transition">
-              ⚠️ Disaster Bulletin Scan
-            </button>
+          <!-- Thinking / Reasoning Indicator -->
+          <div id="chat-thinking" class="hidden px-5 py-2.5 bg-paper border-t border-line text-xs text-slate-500 flex items-center gap-2">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+            <span id="chat-thinking-text">Evaluating numerical forecast grids &amp; synoptic telemetry...</span>
           </div>
 
-          <!-- Chat Input Form with Voice Dictation Affordance -->
-          <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex gap-2 items-end">
-            <div class="flex-1 relative">
-              <textarea
-                id="chat-input"
-                rows="2"
-                placeholder="Ask about weather, rain forecasts, agricultural advisories, or coastal warnings..."
-                data-i18n-placeholder="inputPlaceholder"
-                class="w-full bg-slate-50 focus:bg-white border border-slate-200 p-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none font-sans leading-relaxed rounded-xl pr-10 shadow-2xs transition"
-                required
-              ></textarea>
-              
-              <!-- Voice Dictation / Speech-to-Text Button -->
-              <button
-                type="button"
-                id="voice-mic-btn"
-                onclick="toggleVoiceRecognition()"
-                title="Voice Input (English, Hindi, Tamil Speech Recognition)"
-                class="absolute right-3 top-3 w-6 h-6 rounded-full bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center transition shadow-2xs"
-              >
-                <span id="mic-icon" class="text-xs">🎙️</span>
-              </button>
+          <!-- ==================== CONTEXT CONTROL STRIP & COMPOSER ==================== -->
+          <!-- Simplified Context Bar: User default data is active, with instant on-the-fly customization -->
+          <div class="bg-subtle/70 px-4 py-2.5 border-t border-line flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Location Context Input -->
+              <div class="flex items-center gap-1.5">
+                <span id="context-loc-label" class="font-semibold text-slatebody">
+                  Location:
+                </span>
+                <input
+                  id="query-location"
+                  type="text"
+                  value="Bengaluru"
+                  onchange="handleContextOverride()"
+                  onblur="handleContextOverride()"
+                  onkeydown="if(event.key==='Enter'){event.preventDefault();handleContextOverride();}"
+                  placeholder="City / District"
+                  class="w-36 sm:w-44 bg-white border border-line px-2.5 py-1 text-xs text-ink font-semibold rounded focus:outline-none focus:border-ink shadow-2xs"
+                  title="Target meteorological location for this inquiry"
+                />
+              </div>
+
+              <!-- Niche Focus Select -->
+              <div class="flex items-center gap-1.5">
+                <span id="context-niche-label" class="font-semibold text-slatebody">
+                  Niche:
+                </span>
+                <select
+                  id="query-niche"
+                  onchange="handleContextOverride()"
+                  class="bg-white border border-line px-2.5 py-1 text-xs text-ink font-medium rounded focus:outline-none focus:border-ink shadow-2xs max-w-[210px] truncate"
+                  title="Specific operational focus for this inquiry"
+                >
+                  <option value="Agrochemical Spraying & Crop Protection">Agrochemical Spraying</option>
+                  <option value="Harvest & Sowing Rain Window">Harvest & Sowing Window</option>
+                  <option value="Coastal Squall & High Sea Clearance">High Sea & Coastal Safety</option>
+                  <option value="Urban Waterlogging & Drain Choke">Urban Waterlogging & Drain</option>
+                  <option value="Heatwave & Outdoor Worker Safety">Heatwave & Worker Safety</option>
+                  <option value="Cyclone Preparedness & High Wind">Cyclone & Wind Defense</option>
+                  <option value="Cold Chain Humidity & Thermal Stability">Cold Chain Logistics</option>
+                  <option value="General Atmospheric Advisory">General Weather</option>
+                </select>
+              </div>
             </div>
 
+            <!-- Reset to Defaults Button (hidden unless modified) -->
             <button
-              id="chat-send-btn"
-              type="submit"
-              class="h-[52px] bg-[#1B2A44] hover:bg-[#132845] text-white font-medium text-xs tracking-wide px-5 transition flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50 rounded-xl shadow-xs"
+              id="reset-context-btn"
+              onclick="resetToDefaultContext()"
+              class="hidden text-[11px] text-cobalt hover:underline font-semibold"
+              title="Revert back to your registered profile defaults"
             >
-              <span id="send-label" data-i18n="transmit">Send</span>
-              <span>➔</span>
-            </button>
-          </form>
-
-          <!-- Micro Security & Standards Notice -->
-          <div class="flex items-center justify-between text-[10.5px] text-slate-400 pt-0.5">
-            <span class="flex items-center gap-2">
-              <span>WMO Standards</span>
-              <span>•</span>
-              <span>Explainable Provenance</span>
-            </span>
-            <span class="font-mono">BharatFS Numerical Grids</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== RIGHT COLUMN: DIRECT SENSORS & REGULATORY (5 COLS) ==================== -->
-    <div class="lg:col-span-5 space-y-5 relative z-10">
-
-      <!-- PANEL A: LIVE SACHET / NDMA RADAR -->
-      <div id="disaster-monitor-panel" class="glass-card rounded-md shadow-sm overflow-hidden">
-        <div class="glass-inner-subtle px-4 py-2.5 border-b border-[#E1E4DD]/70 flex items-center justify-between">
-          <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span class="text-[#B3261E]">🚨</span> <span data-i18n="disasterRadarTitle">SACHET / NDMA DISASTER RADAR</span>
-          </span>
-          <span id="disaster-badge" class="text-[10px] font-bold px-2 py-0.5 bg-slate-200/80 text-[#1B2A44] rounded-xs">
-            CHECKING...
-          </span>
-        </div>
-
-        <div class="p-4 space-y-3">
-          <div class="flex items-center gap-2 text-xs">
-            <input
-              id="disaster-lat"
-              type="text"
-              value="12.9719"
-              placeholder="Lat"
-              class="w-20 bg-white/80 border border-[#E1E4DD] px-2 py-1 text-xs font-mono rounded-sm shadow-2xs"
-            />
-            <input
-              id="disaster-lon"
-              type="text"
-              value="77.5937"
-              placeholder="Lon"
-              class="w-20 bg-white/80 border border-[#E1E4DD] px-2 py-1 text-xs font-mono rounded-sm shadow-2xs"
-            />
-            <select id="disaster-radius" class="flex-1 bg-white/80 border border-[#E1E4DD] px-2 py-1 text-xs rounded-sm shadow-2xs">
-              <option value="25">Radius: 25 km</option>
-              <option value="50" selected>Radius: 50 km</option>
-              <option value="100">Radius: 100 km</option>
-              <option value="200">Radius: 200 km</option>
-            </select>
-            <button onclick="loadDisasterAlerts()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3 py-1 text-xs font-semibold rounded-sm shadow-xs">
-              Scan
+              Reset to Profile Default
             </button>
           </div>
 
-          <!-- Alert Items Display -->
-          <div id="disaster-alerts-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
-            <div class="text-[#5B6472] text-xs text-center py-4">
-              Querying National Disaster Management Authority bulletins...
+          <!-- Input Composer Form -->
+          <div id="chat-composer" class="p-4 bg-white border-t border-line">
+            <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex items-end gap-3">
+              <div class="relative flex-1">
+                <textarea
+                  id="chat-input"
+                  rows="2"
+                  placeholder="Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g., Can I spray crops today? Will rain disrupt transport?)..."
+                  class="w-full bg-paper border border-line p-3 pr-10 text-sm text-ink placeholder-muted focus:outline-none focus:border-ink resize-none rounded-md font-sans leading-relaxed transition-colors"
+                  required
+                ></textarea>
+
+                <!-- Voice Dictation Button -->
+                <button
+                  type="button"
+                  id="voice-mic-btn"
+                  onclick="toggleVoiceRecognition()"
+                  title="Speech-to-Text Dictation (English, Hindi, Tamil)"
+                  class="absolute right-3 top-3 text-muted hover:text-ink transition-colors p-1"
+                >
+                  <span id="mic-icon" class="text-xs font-mono font-bold">MIC</span>
+                </button>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                id="chat-send-btn"
+                type="submit"
+                class="h-11 px-5 bg-ink hover:bg-slate-800 text-white font-semibold text-sm rounded-md transition-colors shadow-2xs shrink-0 flex items-center gap-2"
+              >
+                <span id="send-label">Transmit</span>
+              </button>
+            </form>
+
+            <div class="mt-2.5 flex items-center justify-between text-xs text-muted">
+              <div class="flex items-center gap-2">
+                <span>WMO Protocol</span>
+                <span aria-hidden="true">·</span>
+                <span>ECMWF/GFS Ensemble</span>
+                <span aria-hidden="true">·</span>
+                <span>BharatFS &amp; SACHET CAP</span>
+              </div>
+              <span class="font-mono text-[11px]">Gemini 3.1 Flash-Lite</span>
             </div>
           </div>
 
-          <div class="text-[11px] text-[#5B6472] pt-1 border-t border-[#E1E4DD]/70 flex justify-between">
-            <span>Protocol: OASIS CAP v1.2</span>
-            <span>Feed: SACHET RSS</span>
-          </div>
         </div>
+
       </div>
 
-      <!-- PANEL B: DIRECT SYNOPTIC WEATHER STATION INSPECTOR -->
-      <div id="weather-inspector-panel" class="glass-card rounded-md shadow-sm overflow-hidden">
-        <div class="glass-inner-subtle px-4 py-2.5 border-b border-[#E1E4DD]/70 flex items-center justify-between">
-          <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span>📡</span> <span data-i18n="telemetryTitle">SYNOPTIC STATION TELEMETRY</span>
-          </span>
-          <span class="text-[10px] font-mono text-[#5B6472]" data-i18n="telemetrySub">RAW SENSORS</span>
+      <!-- ==================== RIGHT COLUMN: DOMAIN ACTION ENGINES & TELEMETRY ==================== -->
+      <div id="workspace-modules" class="lg:col-span-5 space-y-4">
+        
+        <!-- Segmented Workspace Tab Navigation -->
+        <div class="flex items-center justify-between border-b border-line pb-1">
+          <div class="flex items-center gap-1 text-sm" id="action-tabs-nav">
+            <button onclick="switchWorkspaceTab('telemetry')" id="tab-btn-telemetry" class="px-3.5 py-2 font-bold text-ink border-b-2 border-ink -mb-[5px] transition-colors">
+              Telemetry
+            </button>
+            <button onclick="switchWorkspaceTab('directives')" id="tab-btn-directives" class="px-3.5 py-2 font-medium text-muted hover:text-ink transition-colors">
+              Role Directives
+            </button>
+            <button onclick="switchWorkspaceTab('radar')" id="tab-btn-radar" class="px-3.5 py-2 font-medium text-muted hover:text-ink transition-colors">
+              Disaster Radar
+            </button>
+            <button onclick="switchWorkspaceTab('atlas')" id="tab-btn-atlas" class="px-3.5 py-2 font-medium text-muted hover:text-ink transition-colors">
+              Hazard Atlas
+            </button>
+            <button onclick="switchWorkspaceTab('rural')" id="tab-btn-rural" class="px-3.5 py-2 font-medium text-muted hover:text-ink transition-colors">
+              Rural Suite
+            </button>
+          </div>
         </div>
 
-        <div class="p-4 space-y-3">
-          <div class="flex items-center gap-2 text-xs">
-            <input
-              id="station-city"
-              type="text"
-              value="Bangalore"
-              placeholder="Enter station name..."
-              class="flex-1 bg-white/80 border border-[#E1E4DD] px-2.5 py-1 text-xs font-medium rounded-sm shadow-2xs"
-            />
-            <button onclick="inspectStation()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-3.5 py-1 text-xs font-semibold rounded-sm shadow-xs">
-              <span data-i18n="inspectBtn">Inspect</span>
-            </button>
-          </div>
+        <!-- ==================== TAB STAGE 1: DIRECT SYNOPTIC TELEMETRY ==================== -->
+        <div id="stage-telemetry" class="space-y-4">
+          <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
+            <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
+              <span id="telemetry-stage-title" class="font-bold text-sm text-ink tracking-tight">
+                Synoptic Ground Telemetry
+              </span>
+              <button id="telemetry-refresh-btn" onclick="inspectStation()" class="text-xs font-semibold text-slatebody hover:text-ink px-2.5 py-1 bg-white border border-line rounded shadow-2xs">
+                Refresh Sensors
+              </button>
+            </div>
 
-          <!-- Telemetry Output Box -->
-          <div id="telemetry-box" class="glass-inner-subtle p-3 text-xs rounded-sm">
-            <div class="text-[#5B6472] text-center py-2">Click Inspect to query live sensors...</div>
-          </div>
-        </div>
-      </div>
+            <div class="p-4 space-y-4">
+              <!-- Station Query Bar -->
+              <div class="flex items-center gap-2 text-sm">
+                <input
+                  id="station-city"
+                  type="text"
+                  value="Bengaluru"
+                  placeholder="Enter Indian city..."
+                  class="flex-1 bg-paper border border-line px-3 py-1.5 text-sm font-medium rounded focus:outline-none focus:border-ink"
+                />
+                <button id="station-query-btn" onclick="inspectStation()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1.5 text-sm font-semibold rounded transition-colors shadow-2xs">
+                  Query
+                </button>
+              </div>
 
-      <!-- PANEL C: WMO & NDMA REGULATORY SCALES -->
-      <div id="regulatory-standards-panel" class="glass-card rounded-md shadow-sm overflow-hidden">
-        <div class="glass-inner-subtle px-4 py-2.5 border-b border-[#E1E4DD]/70 flex items-center justify-between">
-          <span class="font-serif font-bold text-[#1B2A44] text-xs tracking-wide flex items-center gap-1.5">
-            <span>⚖️</span> <span data-i18n="scalesTitle">REGULATORY METEOROLOGICAL SCALES</span>
-          </span>
-          <span class="text-[10px] font-mono text-[#5B6472]" data-i18n="scalesSub">STANDARDS</span>
-        </div>
-
-        <div class="p-4 space-y-3 text-xs">
-          <!-- Scale Category Selector -->
-          <div class="flex border-b border-[#E1E4DD]/70 pb-1 gap-2">
-            <button onclick="switchScaleTab('uv')" id="tab-btn-uv" class="px-3 py-1 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44] text-xs">
-              UV Solar Scale
-            </button>
-            <button onclick="switchScaleTab('rain')" id="tab-btn-rain" class="px-3 py-1 text-[#5B6472] hover:text-[#1B2A44] text-xs">
-              Precipitation Rates
-            </button>
-            <button onclick="switchScaleTab('wmo')" id="tab-btn-wmo" class="px-3 py-1 text-[#5B6472] hover:text-[#1B2A44] text-xs">
-              WMO Codes
-            </button>
-          </div>
-
-          <!-- Tab 1: UV Index -->
-          <div id="scale-content-uv" class="space-y-1.5 max-h-44 overflow-y-auto">
-            <div class="flex items-center justify-between p-1.5 bg-emerald-50/90 border-l-4 border-[#3F6B4A] rounded-xs shadow-2xs">
-              <span class="font-bold text-emerald-900">0 – 2: Low</span>
-              <span class="text-[11px] text-emerald-800">Minimal danger; normal outdoor work</span>
-            </div>
-            <div class="flex items-center justify-between p-1.5 bg-yellow-50/90 border-l-4 border-yellow-500 rounded-xs shadow-2xs">
-              <span class="font-bold text-yellow-900">3 – 5: Moderate</span>
-              <span class="text-[11px] text-yellow-800">SPF 30+ recommended; seek shade midday</span>
-            </div>
-            <div class="flex items-center justify-between p-1.5 bg-amber-50/90 border-l-4 border-[#B8860B] rounded-xs shadow-2xs">
-              <span class="font-bold text-amber-900">6 – 7: High</span>
-              <span class="text-[11px] text-amber-800">Mandatory hat &amp; sunglasses; reduce exposure</span>
-            </div>
-            <div class="flex items-center justify-between p-1.5 bg-red-50/90 border-l-4 border-[#B3261E] rounded-xs shadow-2xs">
-              <span class="font-bold text-red-900">8 – 10: Very High</span>
-              <span class="text-[11px] text-red-800">Severe burn hazard; pause field labor</span>
-            </div>
-            <div class="flex items-center justify-between p-1.5 bg-purple-50/90 border-l-4 border-purple-700 rounded-xs shadow-2xs">
-              <span class="font-bold text-purple-900">11+: Extreme</span>
-              <span class="text-[11px] text-purple-800">Full protective gear; avoid midday outdoors</span>
-            </div>
-          </div>
-
-          <!-- Tab 2: Precipitation Rate Scale -->
-          <div id="scale-content-rain" class="space-y-1.5 max-h-44 overflow-y-auto hidden">
-            <div class="p-1.5 glass-inner-subtle rounded-xs">
-              <div class="font-bold text-slate-900">0.0 mm/hr: None</div>
-              <div class="text-[11px] text-[#5B6472]">Dry operational surface. Safe for agro-chemical spraying.</div>
-            </div>
-            <div class="p-1.5 bg-blue-50/90 border border-blue-200 rounded-xs shadow-2xs">
-              <div class="font-bold text-blue-900">0.25 – 1.0 mm/hr: Light Rain</div>
-              <div class="text-[11px] text-blue-800">Individual drops visible; puddles form slowly.</div>
-            </div>
-            <div class="p-1.5 bg-blue-100/90 border border-blue-300 rounded-xs shadow-2xs">
-              <div class="font-bold text-blue-950">1.0 – 4.0 mm/hr: Moderate Rain</div>
-              <div class="text-[11px] text-blue-900">Continuous rain; rapid runoff on impervious roads.</div>
-            </div>
-            <div class="p-1.5 bg-red-100/90 border border-red-400 rounded-xs shadow-2xs">
-              <div class="font-bold text-red-950">&gt; 16.0 mm/hr: Violent / Cloudburst</div>
-              <div class="text-[11px] text-red-900">Torrential rain; high flash flood danger.</div>
-            </div>
-          </div>
-
-          <!-- Tab 3: WMO Codes -->
-          <div id="scale-content-wmo" class="space-y-1 max-h-44 overflow-y-auto text-[11px] font-mono hidden">
-            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
-              <span>WMO Code 00:</span> <span class="font-bold">Clear Sky</span>
-            </div>
-            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
-              <span>WMO Code 01-03:</span> <span class="font-bold">Mainly Clear / Overcast</span>
-            </div>
-            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
-              <span>WMO Code 51-55:</span> <span class="font-bold">Drizzle (Light to Dense)</span>
-            </div>
-            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
-              <span>WMO Code 61-65:</span> <span class="font-bold">Continuous Rain</span>
-            </div>
-            <div class="p-1 bg-white/80 border border-[#E1E4DD] flex justify-between rounded-xs">
-              <span>WMO Code 95-99:</span> <span class="font-bold text-red-700">Thunderstorm / Hail</span>
+              <!-- Live Telemetry Box (Dynamically Rendered Sensor Grid + 16h Trend) -->
+              <div id="telemetry-box" class="space-y-4">
+                <div class="text-muted text-center py-8 text-sm">
+                  Loading synoptic station sensors...
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- ==================== TAB STAGE 2: PERSONALIZED OPERATIONAL DIRECTIVES ==================== -->
+        <div id="stage-directives" class="space-y-4 hidden">
+          <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
+            <div class="bg-paper px-5 py-3.5 border-b border-line flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span id="directives-stage-title" class="font-bold text-sm sm:text-base text-ink tracking-tight flex items-center gap-2">
+                  Role-Based Operational Directives
+                </span>
+                <p id="directives-stage-subtitle" class="text-xs text-muted mt-0.5">
+                  Synchronized with registered profile, real-time ground sensors &amp; NDMA alerts
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="directives-refresh-btn" onclick="fetchUserRoleDirectives()" title="Query live weather and re-evaluate directives" class="text-xs font-semibold text-slatebody hover:text-ink px-3 py-1.5 bg-white border border-line hover:bg-subtle rounded-md shadow-2xs flex items-center gap-1.5 transition-colors">
+                  Refresh Directives
+                </button>
+                <button id="directives-copy-btn" onclick="copyPersonalizedDirectives(this)" class="text-xs font-semibold text-slatebody hover:text-ink px-3 py-1.5 bg-white border border-line hover:bg-subtle rounded-md shadow-2xs transition-colors">
+                  Copy Dossier
+                </button>
+              </div>
+            </div>
+
+            <div class="p-4 sm:p-5 space-y-4">
+              <!-- Registered Operator Profile Header Card -->
+              <div class="p-3.5 bg-paper border border-line rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-md bg-ink text-white font-bold text-xs flex items-center justify-center shrink-0" id="directives-avatar">
+                    AG
+                  </div>
+                  <div class="leading-tight">
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-ink text-sm" id="directives-user-name">Suresh Kumar</span>
+                      <span class="text-slate-300 text-xs">·</span>
+                      <span class="text-xs text-slate-600 font-medium" id="directives-user-sector">Farmer</span>
+                    </div>
+                    <div class="text-xs text-muted mt-1 flex flex-wrap items-center gap-1.5">
+                      <span id="directives-niche-prefix">Niche:</span>
+                      <span class="font-medium text-slate-900" id="directives-user-niche">Pesticide Spray Window</span>
+                      <span class="text-slate-300">·</span>
+                      <span id="directives-loc-prefix">Location:</span>
+                      <span class="font-medium text-slate-900" id="directives-user-location">Coimbatore</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button id="directives-edit-role-btn" onclick="openOnboardingModal(true)" class="self-start sm:self-auto text-xs text-slate-700 hover:text-ink font-semibold px-2.5 py-1 bg-white border border-line hover:border-darkline rounded transition-colors shrink-0">
+                  Edit Role / Niche ▾
+                </button>
+              </div>
+
+              <!-- Primary Directive Card for User's Active Niche -->
+              <div class="border border-line rounded-lg p-4 bg-white space-y-3.5 shadow-2xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-line">
+                  <div class="flex items-center gap-2.5">
+                    <span id="tactical-advisory-badge" class="text-[11px] font-semibold uppercase tracking-wider text-muted">Tactical Advisory</span>
+                    <span class="text-slate-300">·</span>
+                    <div id="directives-status-pill" class="inline-flex items-center">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200">Evaluating telemetry</span>
+                    </div>
+                  </div>
+                  <span class="font-mono text-xs text-muted tabular-nums" id="directives-timestamp">Updated: Live</span>
+                </div>
+
+                <!-- Main Directive Statement -->
+                <div class="text-sm text-slate-800 leading-relaxed font-normal" id="directives-primary-statement">
+                  Evaluating live synoptic telemetry for your operational zone...
+                </div>
+
+                <!-- Live Operational Thresholds Grid (Tailored to Niche) -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-xs">
+                  <div class="p-2.5 bg-paper border border-line rounded-md">
+                    <div class="text-[10px] font-semibold text-muted uppercase tracking-wider">Surface Wind (10m)</div>
+                    <div class="text-base font-bold font-mono text-ink mt-0.5" id="directive-wind-val">-- km/h</div>
+                    <div class="text-[11px] text-muted mt-0.5" id="directive-wind-status">Threshold: &lt;15 km/h</div>
+                  </div>
+                  <div class="p-2.5 bg-paper border border-line rounded-md">
+                    <div class="text-[10px] font-semibold text-muted uppercase tracking-wider">Precipitation (24h)</div>
+                    <div class="text-base font-bold font-mono text-ink mt-0.5" id="directive-rain-val">-- mm</div>
+                    <div class="text-[11px] text-muted mt-0.5" id="directive-rain-status">Wash-off: Safe</div>
+                  </div>
+                  <div class="p-2.5 bg-paper border border-line rounded-md">
+                    <div class="text-[10px] font-semibold text-muted uppercase tracking-wider">UV / Thermal Index</div>
+                    <div class="text-base font-bold font-mono text-ink mt-0.5" id="directive-uv-val">--</div>
+                    <div class="text-[11px] text-muted mt-0.5" id="directive-uv-status">Peak: 11 AM - 3 PM</div>
+                  </div>
+                  <div class="p-2.5 bg-paper border border-line rounded-md">
+                    <div class="text-[10px] font-semibold text-muted uppercase tracking-wider">Ground Profile</div>
+                    <div class="text-base font-bold font-mono text-ink mt-0.5" id="directive-soil-val">-- °C</div>
+                    <div class="text-[11px] text-muted mt-0.5" id="directive-soil-status">Soil: 6cm Sensor</div>
+                  </div>
+                </div>
+
+                <!-- Actionable Checklist for User Niche -->
+                <div class="pt-2">
+                  <div class="text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                    Field Action Checklist (<span id="directives-checklist-role-label">Your Sector</span>):
+                  </div>
+                  <ul class="space-y-1.5 text-xs text-slate-600 leading-normal" id="directives-action-checklist">
+                    <li>· Loading tailored action steps...</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Community Regional Cross-Sector Awareness -->
+              <div class="border border-line rounded-lg p-3.5 bg-paper space-y-2.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    Regional Sector Directives · <span id="directives-cross-city" class="text-ink font-bold">Coimbatore</span>
+                  </span>
+                  <span class="text-[11px] text-muted">NDMA / BharatFS Synchronized</span>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                  <div class="p-2.5 bg-white border border-line rounded-md space-y-1">
+                    <div class="font-medium text-slate-900 flex items-center justify-between">
+                      <span>Marine &amp; Coastal Watch</span>
+                      <span id="cross-marine-status" class="text-xs text-slate-500 font-medium">Normal</span>
+                    </div>
+                    <p class="text-slate-600 text-[11px] leading-normal" id="cross-marine-text">
+                      Coastal winds within standard marine operating limits. Regular harbor watch.
+                    </p>
+                  </div>
+                  <div class="p-2.5 bg-white border border-line rounded-md space-y-1">
+                    <div class="font-medium text-slate-900 flex items-center justify-between">
+                      <span>Urban Transit &amp; Drainage</span>
+                      <span id="cross-urban-status" class="text-xs text-slate-500 font-medium">Normal</span>
+                    </div>
+                    <p class="text-slate-600 text-[11px] leading-normal" id="cross-urban-text">
+                      Standard arterial transit. Low inundation risk across municipal underpasses.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Provenance Line -->
+              <div class="pt-2 border-t border-line text-xs text-muted flex flex-wrap items-center justify-between gap-2" id="directives-meta-line">
+                <span>Source: BharatFS Synoptic Model + IMD Ground Telemetry</span>
+                <span class="font-mono text-[11px]">CAP v1.2 Verified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB STAGE 3: SACHET / NDMA DISASTER RADAR ==================== -->
+        <div id="stage-radar" class="space-y-4 hidden">
+          <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
+            <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
+              <span id="radar-stage-title" class="font-bold text-sm text-ink tracking-tight">
+                SACHET / NDMA Early Disaster Radar
+              </span>
+              <span id="disaster-badge" class="font-mono text-xs text-muted">
+                MONITORING
+              </span>
+            </div>
+
+            <div class="p-4 space-y-3 text-sm">
+              <!-- Coordinates & Radius Scanner Controls -->
+              <div class="flex items-center gap-2">
+                <input
+                  id="disaster-lat"
+                  type="text"
+                  value="12.9719"
+                  placeholder="Lat"
+                  class="w-24 bg-paper border border-line px-2.5 py-1 text-sm font-mono rounded"
+                />
+                <input
+                  id="disaster-lon"
+                  type="text"
+                  value="77.5937"
+                  placeholder="Lon"
+                  class="w-24 bg-paper border border-line px-2.5 py-1 text-sm font-mono rounded"
+                />
+                <select id="disaster-radius" class="flex-1 bg-paper border border-line px-2.5 py-1 text-sm rounded">
+                  <option value="25">Radius: 25 km</option>
+                  <option value="50" selected>Radius: 50 km</option>
+                  <option value="100">Radius: 100 km</option>
+                  <option value="200">Radius: 200 km</option>
+                </select>
+                <button id="radar-scan-btn" onclick="loadDisasterAlerts()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1 font-semibold rounded transition-colors shadow-2xs">
+                  Scan
+                </button>
+              </div>
+
+              <!-- Alert Items Feed -->
+              <div id="disaster-alerts-list" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                <div class="text-muted text-center py-8">
+                  Querying National Disaster Management Authority CAP feeds...
+                </div>
+              </div>
+
+              <!-- Standards Footer -->
+              <div class="text-xs text-muted pt-2 border-t border-line flex justify-between">
+                <span>Protocol: OASIS CAP v1.2</span>
+                <span>Feed: SACHET NDMA RSS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB STAGE 4: IMD CLIMATE HAZARD ATLAS ==================== -->
+        <div id="stage-atlas" class="space-y-4 hidden">
+          <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
+            <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
+              <span id="atlas-stage-title" class="font-bold text-sm text-ink tracking-tight">
+                IMD Climate Hazard &amp; Vulnerability Atlas
+              </span>
+              <span class="font-mono text-xs text-muted">imdpune.gov.in</span>
+            </div>
+
+            <div class="p-4 space-y-4">
+              <!-- Search Bar -->
+              <div class="flex items-center gap-2">
+                <input
+                  id="hazard-search-input"
+                  type="text"
+                  value="Bengaluru"
+                  placeholder="District or city name..."
+                  class="flex-1 bg-paper border border-line px-3 py-1.5 text-sm rounded font-medium focus:outline-none focus:border-ink"
+                />
+                <button id="atlas-query-btn" onclick="searchHazardAtlas()" class="bg-ink hover:bg-slate-800 text-white px-4 py-1.5 text-sm font-semibold rounded transition-colors shadow-2xs">
+                  Query Atlas
+                </button>
+              </div>
+
+              <!-- Results Box -->
+              <div id="hazard-results-box" class="p-3 bg-paper border border-line rounded min-h-[140px]">
+                <div class="text-muted text-center py-6 text-sm">
+                  Querying climatological extreme records...
+                </div>
+              </div>
+
+              <div class="text-xs text-muted pt-2 border-t border-line flex justify-between">
+                <span>Standard Period: 1981–2010 Normal</span>
+                <span>Extreme Return Periods (50Y / 100Y)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB STAGE 5: RURAL TELEPHONY GATEWAY ==================== -->
+        <div id="stage-rural" class="space-y-4 hidden">
+          <div class="bg-white border border-line rounded-lg shadow-xs overflow-hidden">
+            <div class="bg-paper px-4 py-3 border-b border-line flex items-center justify-between">
+              <span id="rural-stage-title" class="font-bold text-sm text-ink tracking-tight">
+                Rural Accessibility Telephony Gateway
+              </span>
+              <span class="text-xs text-slate-500 font-medium">Toll-free 1800-MAUSAM</span>
+            </div>
+
+            <div class="p-4 space-y-4 text-sm">
+              <p id="rural-stage-desc" class="text-slatebody text-xs leading-relaxed">
+                Empowers rural communities and feature-phone holders without 4G/5G data access to receive synoptic weather intelligence via voice IVR and SMS.
+              </p>
+
+              <!-- Telephony Channel Sub-tabs -->
+              <div class="flex items-center gap-1 border-b border-line text-xs font-semibold">
+                <button onclick="switchRuralTab('ivr')" id="rural-tab-ivr" class="px-3 py-1.5 font-bold text-ink border-b-2 border-ink -mb-[1px]">
+                  IVR Voice Call (1800-MAUSAM)
+                </button>
+                <button onclick="switchRuralTab('sms')" id="rural-tab-sms" class="px-3 py-1.5 text-muted hover:text-ink">
+                  USSD / Push SMS
+                </button>
+                <button onclick="switchRuralTab('krishi')" id="rural-tab-krishi" class="px-3 py-1.5 text-muted hover:text-ink">
+                  Krishi Sakhi Audio
+                </button>
+              </div>
+
+              <!-- IVR Sub-panel -->
+              <div id="rural-content-ivr" class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <select id="ivr-lang" class="bg-paper border border-line px-2.5 py-1.5 text-xs rounded font-medium">
+                    <option value="hi" selected>हिन्दी (Hindi Voice)</option>
+                    <option value="ta">தமிழ் (Tamil Voice)</option>
+                    <option value="en">English (Indian Accent)</option>
+                  </select>
+                  <input
+                    id="ivr-query-input"
+                    type="text"
+                    value="क्या आज कीटनाशक छिड़काव कर सकते हैं?"
+                    placeholder="Enter query..."
+                    class="flex-1 bg-paper border border-line px-2.5 py-1.5 text-xs rounded"
+                  />
+                  <button id="ivr-call-btn" onclick="connectIvrCall()" class="bg-ink hover:bg-slate-800 text-white px-3.5 py-1.5 text-xs font-semibold rounded shadow-2xs">
+                    Dial IVR
+                  </button>
+                </div>
+
+                <div id="ivr-status-box" class="p-3 bg-paper border border-line rounded text-xs font-mono text-slatebody min-h-[60px]">
+                  Ready to simulate voice gateway connection (1800-MAUSAM-AI).
+                </div>
+              </div>
+
+              <!-- SMS Sub-panel -->
+              <div id="rural-content-sms" class="space-y-3 hidden">
+                <div class="p-3 bg-paper border border-line rounded font-mono text-xs text-slatebody space-y-1">
+                  <div class="text-ink font-semibold">[WeatherGPT National Push Broadcast]</div>
+                  <div>BLR-URBAN: 27°C, Partly Cloudy. 24h Rain Prob: &lt;10%. Wind 11 km/h. Soil 25°C. Safe to spray agrochemicals today. Dial *144# for regional alerts.</div>
+                </div>
+              </div>
+
+              <!-- Krishi Sakhi Sub-panel -->
+              <div id="rural-content-krishi" class="space-y-3 hidden">
+                <div class="p-3 bg-paper border border-line rounded text-xs space-y-2">
+                  <div class="font-bold text-ink flex items-center justify-between">
+                    <span>Krishi Sakhi Audio Bulletin (Tamil Nadu)</span>
+                    <button onclick="speakKrishiSakhi()" class="text-ink hover:underline font-semibold text-xs">
+                      ▶ Play Audio
+                    </button>
+                  </div>
+                  <p class="text-slatebody">
+                    வணக்கம் விவசாயி அவர்களே. அடுத்த 48 மணி நேரத்திற்கு பலத்த மழை எச்சரிக்கை இல்லை. பயிர்களுக்கு உரம் மற்றும் மருந்து தெளிக்க சாதகமான வானிலை நிலவுகிறது.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
 
   </main>
 
-  <!-- ==================== 6. OFFICIAL FOOTER ==================== -->
-  <footer class="bg-[#1B2A44] text-slate-400 text-xs border-t border-[#132845] mt-12 py-8 px-4 sm:px-8">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div>
-        <div class="font-serif font-bold text-white text-sm flex items-center gap-2">
-          <span>WeatherGPT • Conversational AI Weather Intelligence Layer</span>
+  <!-- ==================== 4. MANDATORY ONBOARDING / SIGN UP MODAL ==================== -->
+  <!-- Pops up immediately if no user profile is stored, or when user clicks 'Edit Profile' -->
+  <div id="onboarding-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-line rounded-xl max-w-xl w-full p-6 sm:p-7 space-y-5 shadow-xl max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="border-b border-line pb-4 flex items-start justify-between">
+        <div>
+          <span id="onboarding-modal-badge" class="text-xs font-bold uppercase tracking-wider text-cobalt">WeatherGPT Operator Registration</span>
+          <h2 id="onboarding-modal-title" class="text-xl font-extrabold text-ink mt-1">
+            Institutional Weather Decision Profile
+          </h2>
+          <p id="onboarding-modal-sub" class="text-xs text-muted mt-1 leading-relaxed">
+            Configure your professional role, primary location, and operational niche. This establishes your default context, which can still be customized on-the-fly for individual queries.
+          </p>
         </div>
-        <div class="text-[11px] text-slate-400 mt-1">
-          Grounded in BharatFS, IMD Nowcast, SACHET / NDMA CAP v1.2, and IMD Climate Hazard &amp; Vulnerability Atlas.
+        <button
+          onclick="closeOnboardingModal()"
+          id="onboarding-close-btn"
+          class="hidden text-muted hover:text-ink text-lg font-bold p-1 leading-none"
+          title="Close without saving"
+        >
+          ×
+        </button>
+      </div>
+
+      <!-- Registration Form -->
+      <form id="onboarding-form" onsubmit="handleOnboardingSubmit(event)" class="space-y-4 text-sm">
+        
+        <!-- Full Name & Title -->
+        <div class="space-y-1">
+          <label id="modal-label-name" class="block text-xs font-bold text-ink">
+            Full Name or Call Sign <span class="text-slate-400">*</span>
+          </label>
+          <input
+            id="signup-name"
+            type="text"
+            required
+            placeholder="e.g. Suresh Kumar, Dr. R. Patel, Capt. Thomas"
+            class="w-full bg-paper border border-line px-3.5 py-2 text-sm text-ink font-medium rounded-md focus:outline-none focus:border-ink transition-colors"
+          />
         </div>
-      </div>
-      <div class="flex items-center gap-4 text-[11px]">
-        <button onclick="openRuralModal()" class="hover:text-white underline" data-i18n="footerRural">Rural IVR &amp; Telephony Gateway</button>
-        <span>•</span>
-        <button onclick="openHazardModal()" class="hover:text-white underline" data-i18n="navHazard">Hazard Atlas</button>
-        <span>•</span>
-        <button onclick="openApiModal()" class="hover:text-white underline">API Routing</button>
-      </div>
-    </div>
-  </footer>
 
-  <!-- ==================== MODAL 1: RURAL ACCESSIBILITY SUITE (IVR, SMS, KRISHI SAKHI) ==================== -->
-  <div id="rural-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-card shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-lg border border-white/60">
-      <div class="flex items-center justify-between border-b border-[#E1E4DD]/70 pb-3">
-        <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
-          <span>📞</span> <span data-i18n="ruralModalTitle">Rural Accessibility Tier (Non-Smartphone Reach)</span>
-        </h3>
-        <button onclick="closeRuralModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
-      </div>
+        <!-- Occupation / Role Selection -->
+        <div class="space-y-1">
+          <label id="modal-label-role" class="block text-xs font-bold text-ink">
+            Professional Occupation / Role <span class="text-slate-400">*</span>
+          </label>
+          <select
+            id="signup-occupation"
+            required
+            onchange="syncNicheSuggestions()"
+            class="w-full bg-paper border border-line px-3.5 py-2 text-sm text-ink font-medium rounded-md focus:outline-none focus:border-ink transition-colors"
+          >
+            <option value="Agriculture & Agromet Specialist" selected>Agriculture &amp; Farming (Farmer / Agromet Advisor)</option>
+            <option value="Maritime & Coastal Fisheries">Maritime &amp; Marine Operations (Fisherman / Coastal Ops)</option>
+            <option value="Municipal Administration & City Ops">Municipal Administration (Urban Local Body / Transit Ops)</option>
+            <option value="Disaster Management Coordinator">Disaster &amp; Emergency Management (NDRF / SDRF Coordinator)</option>
+            <option value="Supply Chain & Cold Storage Manager">Cold-Chain Logistics &amp; Transport Manager</option>
+            <option value="Construction & Infrastructure Engineer">Infrastructure &amp; Civil Engineering Contractor</option>
+            <option value="Renewable Energy Yield Operator">Solar &amp; Wind Energy Generation Operator</option>
+            <option value="Public Health Officer">Public Health &amp; Vector-Borne Disease Control</option>
+            <option value="Aviation & UAV Drone Dispatcher">Aviation, Drone &amp; UAV Flight Operations</option>
+            <option value="General Citizen & Traveler">General Citizen / Business Traveler</option>
+          </select>
+        </div>
 
-      <!-- Rural Tabs -->
-      <div class="flex border-b border-[#E1E4DD]/70 gap-2 text-xs">
-        <button onclick="switchRuralTab('ivr')" id="rural-tab-ivr" class="px-3 py-1.5 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44]" data-i18n="ruralTabIvr">
-          1. Toll-Free IVR Voice Gateway (1800-MAUSAM-AI)
-        </button>
-        <button onclick="switchRuralTab('sms')" id="rural-tab-sms" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]" data-i18n="ruralTabSms">
-          2. SMS &amp; USSD Delivery
-        </button>
-        <button onclick="switchRuralTab('krishi')" id="rural-tab-krishi" class="px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]" data-i18n="ruralTabKrishi">
-          3. Krishi Sakhi Field Console
-        </button>
-      </div>
-
-      <!-- Tab Content: IVR Phone Gateway -->
-      <div id="rural-content-ivr" class="space-y-3 text-xs">
-        <p class="text-[#5B6472]">
-          Allows farmers with basic 2G feature phones to dial a toll-free number (1800-MAUSAM-AI), ask questions in regional languages, and receive spoken meteorological briefings.
-        </p>
-        <div class="glass-inner-subtle p-3.5 rounded-md space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-[#1B2A44]">Toll-Free Dial-In:</span>
-            <span class="font-mono font-bold text-[#C97A2B]">1800-628-7262 (1800-MAUSAM)</span>
-          </div>
+        <!-- Default Geographic Location -->
+        <div class="space-y-1">
+          <label id="modal-label-loc" class="block text-xs font-bold text-ink">
+            Default Meteorological Location (City / District) <span class="text-slate-400">*</span>
+          </label>
           <div class="flex items-center gap-2">
-            <select id="ivr-lang" class="bg-white/90 border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm shadow-2xs">
-              <option value="hi" selected>Hindi (हिन्दी)</option>
-              <option value="ta">Tamil (தமிழ்)</option>
-              <option value="en">English (Indian Accent)</option>
-            </select>
             <input
-              id="ivr-query-input"
+              id="signup-location"
               type="text"
-              value="क्या आज कीटनाशक का छिड़काव करना ठीक रहेगा?"
-              class="flex-1 bg-white/90 border border-[#E1E4DD] px-2.5 py-1 text-xs rounded-sm shadow-2xs"
+              required
+              placeholder="e.g. Bengaluru, New Delhi, Mumbai, Chennai, Pune, Coimbatore..."
+              class="flex-1 bg-paper border border-line px-3.5 py-2 text-sm text-ink font-medium rounded-md focus:outline-none focus:border-ink transition-colors"
             />
-            <button onclick="connectIvrCall()" id="ivr-call-btn" class="bg-[#3F6B4A] hover:bg-emerald-800 text-white px-3.5 py-1 font-semibold rounded-sm shadow-xs">
-              <span data-i18n="ivrCallBtn">📞 Connect Call</span>
+            <button
+              id="modal-btn-gps"
+              type="button"
+              onclick="detectSignupLocation()"
+              class="px-3.5 py-2 bg-white hover:bg-subtle border border-line rounded-md text-xs font-semibold text-slatebody shadow-2xs shrink-0"
+              title="Detect Current GPS Location"
+            >
+              GPS Auto
             </button>
           </div>
-          <div id="ivr-status-box" class="p-2.5 bg-white/80 border border-[#E1E4DD] text-[11px] font-mono text-[#1B2A44] min-h-[50px] leading-relaxed rounded-xs shadow-2xs">
-            Status: Line Ready. Click "Connect Call" to dispatch interactive voice response.
+          <div class="flex items-center gap-1.5 flex-wrap pt-1 text-xs text-muted">
+            <span id="modal-quick-label">Quick:</span>
+            <button type="button" onclick="setSignupLoc('Bengaluru')" class="text-slatebody hover:text-ink underline">Bengaluru</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" onclick="setSignupLoc('New Delhi')" class="text-slatebody hover:text-ink underline">New Delhi</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" onclick="setSignupLoc('Mumbai')" class="text-slatebody hover:text-ink underline">Mumbai</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" onclick="setSignupLoc('Chennai')" class="text-slatebody hover:text-ink underline">Chennai</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" onclick="setSignupLoc('Kolkata')" class="text-slatebody hover:text-ink underline">Kolkata</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" onclick="setSignupLoc('Hyderabad')" class="text-slatebody hover:text-ink underline">Hyderabad</button>
           </div>
         </div>
-      </div>
 
-      <!-- Tab Content: SMS & USSD Fallback -->
-      <div id="rural-content-sms" class="space-y-3 text-xs hidden">
-        <p class="text-[#5B6472]">
-          Low-bandwidth, zero-data protocol for feature phones in remote or cyclone-affected transmission blackouts.
-        </p>
-        <div class="space-y-2">
-          <div>
-            <label class="font-bold text-[#1B2A44] block mb-1">Standard USSD Code String:</label>
-            <div class="p-2 glass-inner-subtle font-mono font-bold text-xs text-[#1B2A44] flex justify-between items-center rounded-xs">
-              <span>*99*WEATHER*560001#</span>
-              <span class="text-[10px] text-[#5B6472]">PIN-Code Granular</span>
-            </div>
-          </div>
-          <div>
-            <label class="font-bold text-[#1B2A44] block mb-1">Generated 160-Character SMS Dispatch:</label>
-            <div class="p-2.5 glass-inner-subtle font-mono text-xs text-slate-800 leading-relaxed rounded-xs">
-              [WeatherGPT] BLR: 27°C, Dry. Rain &lt;10%. Wind 11km/h. Safe to spray. No alerts. Dial 1800-MAUSAM for voice advisory.
-            </div>
-          </div>
+        <!-- Operational Focus Niche -->
+        <div class="space-y-1">
+          <label id="modal-label-niche" class="block text-xs font-bold text-ink">
+            Operational Focus Niche <span class="text-slate-400">*</span>
+          </label>
+          <select
+            id="signup-niche"
+            required
+            class="w-full bg-paper border border-line px-3.5 py-2 text-sm text-ink font-medium rounded-md focus:outline-none focus:border-ink transition-colors"
+          >
+            <option value="Agrochemical Spraying & Crop Protection" selected>Agrochemical Spraying &amp; Crop Protection Window</option>
+            <option value="Harvest & Sowing Rain Window">Harvest &amp; Sowing Rain Timings</option>
+            <option value="Coastal Squall & High Sea Clearance">Coastal Squall &amp; Marine High Sea Clearance</option>
+            <option value="Urban Waterlogging & Drain Choke">Urban Waterlogging &amp; Dewatering Pump Mobilization</option>
+            <option value="Heatwave & Outdoor Worker Safety">Heatwave Action Plan (HAP) &amp; Worker Thermal Stress</option>
+            <option value="Cyclone Preparedness & High Wind">Cyclone Track Monitoring &amp; Structural High Winds</option>
+            <option value="Cold Chain Humidity & Thermal Stability">Cold Chain Thermal &amp; Humidity Stability</option>
+            <option value="General Atmospheric Advisory">General Atmospheric Intelligence &amp; Daily Forecast</option>
+          </select>
         </div>
-      </div>
 
-      <!-- Tab Content: Krishi Sakhi Assist Mode -->
-      <div id="rural-content-krishi" class="space-y-3 text-xs hidden">
-        <p class="text-[#5B6472]">
-          Designed for village self-help group leaders (Krishi Sakhis) to input a farmer's localized village query, print a card, or play the synthesized audio to the farmer on the spot.
-        </p>
-        <div class="bg-emerald-50/80 border border-emerald-200 p-3 rounded-md space-y-2">
-          <div class="font-bold text-[#3F6B4A]">👩‍🌾 Krishi Sakhi Field Assistant Portal</div>
-          <div class="text-[11px] text-slate-700">
-            "Farmer: Murugesan, Thondamuthur Village. Crop: Turmeric. Query: Rain risk for root rot."
-          </div>
-          <button onclick="speakKrishiSakhi()" class="px-3 py-1 bg-[#3F6B4A] hover:bg-emerald-800 text-white font-semibold rounded-sm text-xs flex items-center gap-1.5 shadow-xs">
-            <span>🔊</span> Play Spoken Vernacular Guidance
+        <!-- Modal Actions -->
+        <div class="pt-3 border-t border-line flex items-center justify-between gap-3">
+          <span id="modal-footer-note" class="text-[11px] text-muted">
+            Stored locally &amp; synced with Firestore memory
+          </span>
+          <button
+            id="modal-btn-submit"
+            type="submit"
+            class="px-5 py-2.5 bg-ink hover:bg-slate-800 text-white font-bold text-sm rounded-md transition-colors shadow-2xs"
+          >
+            Save Profile &amp; Launch Console
           </button>
         </div>
-      </div>
+      </form>
 
-      <div class="flex justify-end pt-2 border-t border-[#E1E4DD]/70">
-        <button onclick="closeRuralModal()" class="px-4 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-medium rounded-sm text-xs">
-          Close
-        </button>
-      </div>
     </div>
   </div>
 
-  <!-- ==================== MODAL 2: IMD CLIMATE HAZARD ATLAS EXPLORER ==================== -->
-  <div id="hazard-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-card shadow-2xl max-w-xl w-full p-6 space-y-4 rounded-lg border border-white/60">
-      <div class="flex items-center justify-between border-b border-[#E1E4DD]/70 pb-3">
-        <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
-          <span>🗺️</span> IMD Climate Hazard &amp; Vulnerability Atlas
-        </h3>
-        <button onclick="closeHazardModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
+  <!-- ==================== 5. BACKEND API ROUTING MODAL ==================== -->
+  <div id="api-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-line rounded-lg max-w-md w-full p-5 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between border-b border-line pb-2.5">
+        <h3 class="font-bold text-sm text-ink">API Routing Configuration</h3>
+        <button onclick="closeApiModal()" class="text-muted hover:text-ink text-sm">×</button>
       </div>
 
-      <div class="text-xs text-[#5B6472] space-y-3">
-        <p>
-          Authoritative climatological records from IMD Pune Climate Hazard Atlas (imdpune.gov.in/hazardatlas), covering extreme rainfall, flood recurrence, cyclone vulnerability, and 10-year monsoon onset normals.
-        </p>
-
-        <div class="flex items-center gap-2">
-          <input
-            id="hazard-search-input"
-            type="text"
-            value="Bengaluru"
-            placeholder="Enter district (e.g. Bengaluru, Chennai, Mumbai, Coimbatore, Delhi)..."
-            class="flex-1 bg-white/90 border border-[#E1E4DD] px-2.5 py-1.5 text-xs text-[#1B2A44] font-medium rounded-sm shadow-2xs"
-          />
-          <button onclick="searchHazardAtlas()" class="bg-[#1B2A44] hover:bg-[#132845] text-white px-4 py-1.5 font-semibold rounded-sm text-xs shadow-xs">
-            Query Atlas
-          </button>
-        </div>
-
-        <div id="hazard-results-box" class="glass-inner-subtle p-3.5 rounded-md text-xs space-y-2 min-h-[140px]">
-          <div class="text-center text-[#5B6472] py-4">Click "Query Atlas" to fetch official hazard benchmarks...</div>
-        </div>
-      </div>
-
-      <div class="flex justify-end pt-2 border-t border-[#E1E4DD]/70">
-        <button onclick="closeHazardModal()" class="px-4 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-medium rounded-sm text-xs">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== MODAL 3: BACKEND API ROUTING ==================== -->
-  <div id="api-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-card shadow-2xl max-w-lg w-full p-6 space-y-4 rounded-lg border border-white/60">
-      <div class="flex items-center justify-between border-b border-[#E1E4DD]/70 pb-3">
-        <h3 class="font-serif font-bold text-[#1B2A44] text-base flex items-center gap-2">
-          <span>⚡</span> Backend API Routing Configuration
-        </h3>
-        <button onclick="closeApiModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
-      </div>
-
-      <div class="text-xs text-[#5B6472] space-y-2">
-        <p>Configure the active WeatherGPT backend endpoint URL.</p>
+      <div class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-[#1B2A44] mb-1">Backend URL (Origin / Cloud Run / Tunnel):</label>
+          <label class="block text-slatebody font-medium mb-1">Backend Origin URL</label>
           <input
             id="api-url-input"
             type="url"
-            placeholder="https://..."
-            class="w-full bg-white/90 border border-[#E1E4DD] px-3 py-2 text-xs font-mono text-[#1B2A44] focus:outline-none focus:border-[#1B2A44] rounded-sm shadow-2xs"
+            placeholder="http://localhost:3000 or Cloud Run URL"
+            class="w-full bg-paper border border-line px-3 py-1.5 font-mono text-xs rounded focus:outline-none focus:border-ink"
           />
         </div>
-        <div id="api-test-result" class="p-2.5 glass-inner-subtle text-[11px] font-mono text-[#1B2A44] min-h-[44px] rounded-xs">
-          Click "Test Connection" to ping target /health endpoint.
-        </div>
-      </div>
 
-      <div class="flex items-center justify-between pt-2 border-t border-[#E1E4DD]/70 text-xs">
-        <div class="flex gap-2">
-          <button onclick="testApiConnection()" class="px-3 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-800 font-medium rounded-sm">
-            Test Ping
-          </button>
+        <div id="api-test-result" class="p-2.5 bg-paper border border-line text-[11px] font-mono text-muted min-h-[44px]">
+          Ping the backend health endpoint to verify operational connectivity.
         </div>
-        <div class="flex gap-2">
-          <button onclick="closeApiModal()" class="px-3 py-1.5 bg-slate-200/80 hover:bg-slate-300 text-slate-700 rounded-sm">
-            Cancel
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-line">
+          <button onclick="testApiConnection()" class="px-3 py-1 bg-white hover:bg-subtle border border-line text-ink rounded font-medium">
+            Ping /health
           </button>
-          <button onclick="saveApiEndpoint()" class="px-4 py-1.5 bg-[#1B2A44] hover:bg-[#132845] text-white font-medium rounded-sm">
+          <button onclick="saveApiEndpoint()" class="px-3 py-1 bg-ink hover:bg-slate-800 text-white rounded font-medium">
             Save
           </button>
         </div>
@@ -923,631 +953,1810 @@ export function getPortalHtml(): string {
     </div>
   </div>
 
-  <!-- ==================== CORE WEATHERGPT JAVASCRIPT ENGINE ==================== -->
+  <!-- ==================== 6. JAVASCRIPT APPLICATION CORE ==================== -->
   <script>
-    // 0. Active Language State (en, hi, ta)
+    // Global User Profile & Application State
+    let userProfile = {
+      name: "Suresh Kumar",
+      occupation: "Agriculture & Agromet Specialist",
+      location: "Bengaluru",
+      niche: "Agrochemical Spraying & Crop Protection"
+    };
+
+    let activeLocation = "Bengaluru";
+    let activeNiche = "Agrochemical Spraying & Crop Protection";
     let currentLanguage = "en";
     let currentScenario = "cyclone";
+    let chatHistory = [];
 
-    const I18N_STRINGS = {
+    // Safe Backend URL resolution
+    function getActiveBackendUrl() {
+      const stored = localStorage.getItem("weathergpt_backend_url");
+      if (stored && stored.trim()) return stored.trim().replace(/\\/$/, "");
+      return window.location.origin;
+    }
+
+    function sanitizeUrl(url) {
+      if (!url) return "";
+      let u = url.trim();
+      if (!u.startsWith("http://") && !u.startsWith("https://")) {
+        u = "https://" + u;
+      }
+      return u.replace(/\\/$/, "");
+    }
+
+    // ==================== ONBOARDING & USER PROFILE FLOW ====================
+    function loadSavedUserProfile() {
+      const saved = localStorage.getItem("weathergpt_user_profile");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.name && parsed.location) {
+            userProfile = parsed;
+            activeLocation = parsed.location;
+            activeNiche = parsed.niche || "Agrochemical Spraying & Crop Protection";
+            updateUserProfileUI();
+            closeOnboardingModal();
+            return true;
+          }
+        } catch(e) {
+          console.warn("Failed to parse saved user profile:", e);
+        }
+      }
+      // If no profile, show onboarding modal
+      openOnboardingModal(false);
+      return false;
+    }
+
+    function updateUserProfileUI() {
+      // Update header badge
+      const avatarMap = {
+        "Agriculture & Agromet Specialist": "AG",
+        "Maritime & Coastal Fisheries": "MR",
+        "Municipal Administration & City Ops": "MU",
+        "Disaster Management Coordinator": "DM",
+        "Supply Chain & Cold Storage Manager": "SC",
+        "Construction & Infrastructure Engineer": "CE",
+        "Renewable Energy Yield Operator": "RE",
+        "Public Health Officer": "PH",
+        "Aviation & UAV Drone Dispatcher": "AV",
+        "General Citizen & Traveler": "CZ"
+      };
+
+      const av = avatarMap[userProfile.occupation] || "OP";
+      const avEl = document.getElementById("badge-avatar");
+      const nameEl = document.getElementById("badge-name");
+      const metaEl = document.getElementById("badge-meta");
+
+      if (avEl) avEl.textContent = av;
+      if (nameEl) nameEl.textContent = userProfile.name;
+      if (metaEl) {
+        const shortRole = userProfile.occupation.split("&")[0].trim().split(" ")[0];
+        metaEl.textContent = shortRole + " · " + userProfile.location;
+      }
+
+      // Sync active directive lens pill in nav
+      const lensEl = document.getElementById("nav-active-lens");
+      if (lensEl) {
+        const shortRole = userProfile.occupation.split("&")[0].trim().split(" ")[0];
+        const shortNiche = userProfile.niche ? userProfile.niche.split("&")[0].trim().slice(0, 22) : "Spray Window";
+        lensEl.textContent = shortRole + " · " + shortNiche;
+      }
+
+      // Sync active context controls in Chatbot console
+      const locInput = document.getElementById("query-location");
+      const nicheSelect = document.getElementById("query-niche");
+      if (locInput) locInput.value = activeLocation;
+      if (nicheSelect) nicheSelect.value = activeNiche;
+
+      // Sync ribbon & telemetry target
+      const ribbonCity = document.getElementById("ribbon-city");
+      if (ribbonCity) ribbonCity.textContent = activeLocation;
+      const stationCity = document.getElementById("station-city");
+      if (stationCity) stationCity.value = activeLocation;
+      const hazardInput = document.getElementById("hazard-search-input");
+      if (hazardInput) hazardInput.value = activeLocation;
+
+      checkContextOverrideIndicator();
+      renderPersonalizedDirectives();
+    }
+
+    function openOnboardingModal(allowClose) {
+      const modal = document.getElementById("onboarding-modal");
+      const closeBtn = document.getElementById("onboarding-close-btn");
+      if (!modal) return;
+
+      // Pre-fill form if existing profile exists
+      document.getElementById("signup-name").value = userProfile.name || "";
+      document.getElementById("signup-occupation").value = userProfile.occupation || "Agriculture & Agromet Specialist";
+      document.getElementById("signup-location").value = userProfile.location || "Bengaluru";
+      document.getElementById("signup-niche").value = userProfile.niche || "Agrochemical Spraying & Crop Protection";
+
+      if (closeBtn) closeBtn.classList.toggle("hidden", !allowClose);
+      modal.classList.remove("hidden");
+    }
+
+    function closeOnboardingModal() {
+      const modal = document.getElementById("onboarding-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function syncNicheSuggestions() {
+      const occ = document.getElementById("signup-occupation").value;
+      const nicheSelect = document.getElementById("signup-niche");
+      if (!nicheSelect) return;
+
+      if (occ.includes("Agriculture")) {
+        nicheSelect.value = "Agrochemical Spraying & Crop Protection";
+      } else if (occ.includes("Maritime")) {
+        nicheSelect.value = "Coastal Squall & High Sea Clearance";
+      } else if (occ.includes("Municipal")) {
+        nicheSelect.value = "Urban Waterlogging & Drain Choke";
+      } else if (occ.includes("Disaster")) {
+        nicheSelect.value = "Cyclone Preparedness & High Wind";
+      } else if (occ.includes("Cold Storage") || occ.includes("Supply Chain")) {
+        nicheSelect.value = "Cold Chain Humidity & Thermal Stability";
+      } else if (occ.includes("Renewable")) {
+        nicheSelect.value = "Heatwave & Outdoor Worker Safety";
+      } else {
+        nicheSelect.value = "General Atmospheric Advisory";
+      }
+    }
+
+    function setSignupLoc(city) {
+      const locInput = document.getElementById("signup-location");
+      if (locInput) locInput.value = city;
+    }
+
+    function detectSignupLocation() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported in this browser.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          try {
+            const res = await fetch(\`https://nominatim.openstreetmap.org/reverse?lat=\${lat}&lon=\${lon}&format=json\`);
+            const data = await res.json();
+            const city = data.address?.city || data.address?.town || data.address?.district || "Bengaluru";
+            setSignupLoc(city);
+          } catch(e) {
+            setSignupLoc("Bengaluru");
+          }
+        },
+        () => setSignupLoc("Bengaluru")
+      );
+    }
+
+    async function handleOnboardingSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById("signup-name").value.trim();
+      const occ = document.getElementById("signup-occupation").value;
+      const loc = document.getElementById("signup-location").value.trim();
+      const niche = document.getElementById("signup-niche").value;
+
+      if (!name || !loc) return;
+
+      userProfile = {
+        name: name,
+        occupation: occ,
+        location: loc,
+        niche: niche
+      };
+
+      // Set active context to user defaults
+      activeLocation = loc;
+      activeNiche = niche;
+
+      // Save to localStorage
+      localStorage.setItem("weathergpt_user_profile", JSON.stringify(userProfile));
+
+      // Asynchronously sync to backend profile endpoint
+      try {
+        const backend = getActiveBackendUrl();
+        fetch(backend + "/api/user/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: "user_" + name.toLowerCase().replace(/[^a-z0-9]/g, "_"),
+            name: name,
+            occupation: occ,
+            location: loc,
+            niche: niche
+          })
+        }).catch(err => console.warn("Backend profile sync warning:", err));
+      } catch(e) {}
+
+      updateUserProfileUI();
+      closeOnboardingModal();
+
+      // Refresh ground telemetry and radar for the registered city
+      inspectStation();
+      loadDisasterAlerts();
+    }
+
+    // ==================== DYNAMIC CONTEXT INQUIRY CONTROLS ====================
+    function handleContextOverride() {
+      const locInput = document.getElementById("query-location");
+      const nicheSelect = document.getElementById("query-niche");
+
+      if (locInput && locInput.value.trim()) {
+        activeLocation = locInput.value.trim();
+      }
+      if (nicheSelect) {
+        activeNiche = nicheSelect.value;
+      }
+      checkContextOverrideIndicator();
+    }
+
+    function checkContextOverrideIndicator() {
+      const resetBtn = document.getElementById("reset-context-btn");
+      if (!resetBtn) return;
+
+      const isModified = (activeLocation.toLowerCase() !== userProfile.location.toLowerCase()) ||
+                         (activeNiche !== userProfile.niche);
+
+      resetBtn.classList.toggle("hidden", !isModified);
+    }
+
+    function resetToDefaultContext() {
+      activeLocation = userProfile.location;
+      activeNiche = userProfile.niche;
+      updateUserProfileUI();
+    }
+
+    // ==================== TAB NAVIGATION CONTROLLER ====================
+    function switchWorkspaceTab(tabId) {
+      const stages = ["telemetry", "directives", "radar", "atlas", "rural"];
+      stages.forEach(id => {
+        const el = document.getElementById("stage-" + id);
+        const btn = document.getElementById("tab-btn-" + id);
+        const topBtn = document.getElementById("top-nav-" + id);
+        if (el) el.classList.toggle("hidden", id !== tabId);
+        if (btn) {
+          if (id === tabId) {
+            btn.className = "px-3.5 py-2 font-bold text-ink border-b-2 border-ink -mb-[5px] transition-colors";
+          } else {
+            btn.className = "px-3.5 py-2 font-medium text-muted hover:text-ink transition-colors";
+          }
+        }
+        if (topBtn) {
+          if (id === tabId) {
+            topBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-md bg-ink text-white font-semibold text-xs shadow-2xs transition-colors shrink-0 flex items-center gap-1.5";
+            topBtn.setAttribute("aria-selected", "true");
+          } else {
+            topBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5";
+            topBtn.setAttribute("aria-selected", "false");
+          }
+        }
+      });
+
+      const topChatBtn = document.getElementById("top-nav-chat");
+      if (topChatBtn) {
+        topChatBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5";
+        topChatBtn.setAttribute("aria-selected", "false");
+      }
+
+      if (window.innerWidth < 1024) {
+        const mod = document.getElementById("workspace-modules");
+        if (mod) mod.scrollIntoView({ behavior: "smooth" });
+      }
+
+      if (tabId === "directives") renderPersonalizedDirectives();
+      if (tabId === "radar") loadDisasterAlerts();
+      if (tabId === "telemetry") inspectStation();
+      if (tabId === "atlas") searchHazardAtlas();
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        const chatInput = document.getElementById("chat-input");
+        if (chatInput) chatInput.focus();
+      }
+      const topChatBtn = document.getElementById("top-nav-chat");
+      if (topChatBtn) {
+        topChatBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-md bg-ink text-white font-semibold text-xs shadow-2xs transition-colors shrink-0 flex items-center gap-1.5";
+        topChatBtn.setAttribute("aria-selected", "true");
+      }
+      ["telemetry", "directives", "radar", "atlas", "rural"].forEach(id => {
+        const topBtn = document.getElementById("top-nav-" + id);
+        if (topBtn) {
+          topBtn.className = "px-2.5 sm:px-3 py-1.5 rounded-md text-slatebody hover:text-ink hover:bg-subtle font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5";
+          topBtn.setAttribute("aria-selected", "false");
+        }
+      });
+    }
+
+    // ==================== FAST TELEMETRY CACHE & IN-FLIGHT DEDUPLICATION ====================
+    const weatherCache = new Map();
+    const inFlightWeather = new Map();
+
+    async function fetchWeatherTelemetry(city) {
+      const targetCity = (city || "Bengaluru").trim();
+      const key = targetCity.toLowerCase();
+      const cached = weatherCache.get(key);
+      if (cached && (Date.now() - cached.time < 120000)) {
+        return cached.data;
+      }
+      if (inFlightWeather.has(key)) {
+        return inFlightWeather.get(key);
+      }
+      const backend = getActiveBackendUrl();
+      const promise = fetch(backend + "/api/weather?city=" + encodeURIComponent(targetCity))
+        .then(async (res) => {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const data = await res.json();
+          weatherCache.set(key, { data: data, time: Date.now() });
+          return data;
+        })
+        .finally(() => {
+          inFlightWeather.delete(key);
+        });
+      inFlightWeather.set(key, promise);
+      return promise;
+    }
+
+    // ==================== COMPREHENSIVE MULTILINGUAL I18N SYSTEM ====================
+    const I18N = {
       en: {
-        welcomeTitle: "WeatherGPT Central Advisory Terminal",
-        welcomeDesc: "Welcome to <strong>WeatherGPT</strong>. I am your specialized meteorological decision-support advisor. I combine live synoptic telemetry, BharatFS / Open-Meteo numerical grids, and national SACHET/NDMA emergency hazard feeds.",
-        quickPesticide: "Can I spray crops today in {city}?",
-        quickMarine: "Marine clearance & coastal squall alerts",
-        quickHeat: "Heat stress & UV index analysis",
-        quickFlood: "Emergency flood & hazard scan",
-        inputPlaceholder: "Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g. Will it rain during harvest?)",
-        transmit: "TRANSMIT",
-        topBarDirectives: "Operational Directives",
-        drawerWarning: "Synoptic Warning: Deep depression over West-Central Bay of Bengal. Squally winds 55-65 km/h along coastal corridors.",
-        drawerDesc: "National Disaster Management Authority (NDMA) Common Alerting Protocol (CAP v1.2) active advisory. Multi-agency operational fan-out deployed across Agriculture, Maritime Coastal Fisheries, and Urban Local Bodies.",
-        viewRoleDirectives: "View Role Directives",
-        topBarSub: "Conversational Meteorological Intelligence Layer",
-        topBarTag: "Mission Mausam • BharatFS • IMD Nowcast • NDMA SACHET CAP",
-        headerKicker: "WEATHERGPT • METEOROLOGICAL REASONING ENGINE",
-        headerLayer: "All-India Unified Layer",
-        headerTitle: "Conversational Weather & Disaster Intelligence",
-        headerDesc: "Orchestrating BharatFS synoptic grids, Meghdoot agromet, Damini lightning, and NDMA CAP feeds into role-specific actions",
-        navRoleDirectives: "Role Directives",
-        navRural: "Rural Access Tier (IVR/SMS)",
-        navHazard: "IMD Hazard Atlas",
-        workbenchTitle: "Role-Based Operational Directives Engine",
-        workbenchBadge: "CAP FAN-OUT",
-        workbenchDesc: "Single Red/Orange warning automatically fanned out into parallel, domain-calibrated operational directives",
-        scenarioLabel: "Active Scenario:",
-        scenarioCyclone: "Cyclone Red Alert (Coast)",
-        scenarioFlood: "Urban Cloudburst (Bengaluru)",
-        scenarioHeatwave: "Severe Heatwave & Evaporation (Delhi)",
-        cardFarmerTitle: "AGRICULTURE & AGROMET",
-        cardFarmerBadge: "FARMER ROLE",
-        cardFishermanTitle: "MARITIME & COASTAL SAFETY",
-        cardFishermanBadge: "FISHERMAN ROLE",
-        cardCityTitle: "URBAN LOCAL BODY & OPS",
-        cardCityBadge: "CITY OPS ROLE",
-        copyBriefing: "Copy Multi-Role Briefing",
-        chatCardTitle: "WeatherGPT Conversational Meteorologist",
-        aiOnline: "AI Online",
-        chatCardSubtitle: "Autonomous Synoptic Intelligence & Multi-turn Dialogue",
-        clearChat: "Clear Chat",
-        printRecord: "Print Record",
-        targetLabel: "📍 Target:",
-        targetPlaceholder: "City or district (e.g. Bangalore, Delhi, Mumbai, Coimbatore)...",
-        roleLensLabel: "Role Lens:",
-        roleFarmer: "Farmer",
-        roleFisherman: "Fisherman",
-        roleCityOps: "City Ops / ULB",
-        rolePublic: "Public",
-        thinkingText: "WeatherGPT is consulting BharatFS synoptic grids, IMD nowcasts, and generating role directives...",
-        suggestionsLabel: "Suggestions:",
-        disasterRadarTitle: "SACHET / NDMA DISASTER RADAR",
-        telemetryTitle: "SYNOPTIC STATION TELEMETRY",
-        telemetrySub: "RAW SENSORS",
-        inspectBtn: "Inspect",
-        scalesTitle: "REGULATORY METEOROLOGICAL SCALES",
-        scalesSub: "STANDARDS",
-        footerRural: "Rural IVR & Telephony Gateway",
-        ruralModalTitle: "Rural Accessibility Tier (Non-Smartphone Reach)",
-        ruralTabIvr: "1. Toll-Free IVR Voice Gateway (1800-MAUSAM-AI)",
-        ruralTabSms: "2. SMS & USSD Delivery",
-        ruralTabKrishi: "3. Krishi Sakhi Field Console",
-        ivrCallBtn: "📞 Connect Call"
+        clockIst: "IST: ",
+        topNavChat: "Chat Console",
+        topNavDirectives: "Role Directives",
+        topNavTelemetry: "Telemetry",
+        topNavRadar: "Radar",
+        topNavAtlas: "Atlas",
+        topNavRural: "Rural",
+        chatTitle: "Chatbot",
+        chatSubtitle: "",
+        clearThread: "Clear Thread",
+        locLabel: "Location:",
+        locPlaceholder: "City / District",
+        nicheLabel: "Niche:",
+        resetDefault: "↺ Reset to Profile Default",
+        chatPlaceholder: "Ask WeatherGPT in English, हिन्दी, or தமிழ் (e.g., Can I spray crops today? Will rain disrupt transport?)...",
+        transmit: "Transmit",
+        thinking: "Evaluating numerical forecast grids & synoptic telemetry...",
+        ready: "Ready",
+        welcomeTitle: "WeatherGPT Meteorological Reasoning",
+        welcomeGreeting: "Welcome",
+        welcomeSub: "You can ask any synoptic or practical weather question below. Use the context bar above to change target city or focus area anytime!",
+        tabTelemetry: "Telemetry",
+        tabDirectives: "Role Directives",
+        tabRadar: "Disaster Radar",
+        tabAtlas: "Hazard Atlas",
+        tabRural: "Rural Suite",
+        telemetryTitle: "Synoptic Ground Telemetry",
+        refreshSensors: "Refresh Sensors",
+        stationPlaceholder: "Enter Indian city...",
+        queryBtn: "Query",
+        lvl1Sensors: "Level-1 Ground Sensors",
+        tempLabel: "TEMPERATURE",
+        humidityLabel: "RELATIVE HUMIDITY",
+        windLabel: "WIND VELOCITY",
+        pressureLabel: "SURFACE PRESSURE",
+        uvLabel: "SOLAR UV INDEX",
+        rainLabel: "24H PRECIPITATION",
+        soil0Label: "SOIL TEMP (0cm)",
+        soil6Label: "SOIL TEMP (6cm)",
+        trendTitle: "16-HOUR TEMPERATURE EVOLUTION",
+        feelsLabel: "Feels",
+        dewpointLabel: "Nominal dewpoint",
+        gradientLabel: "80m gradient",
+        baroLabel: "MSL Barometric datum",
+        topsoilLabel: "Topsoil seedbed",
+        subsurfaceLabel: "Sub-surface root layer",
+        directivesTitle: "Role-Based Operational Directives",
+        directivesSubtitle: "Synchronized with registered profile, real-time ground sensors & NDMA alerts",
+        refreshDirectives: "Refresh Directives",
+        copyDossier: "Copy Dossier",
+        copiedDossier: "Copied Dossier!",
+        editRole: "Edit Role / Niche ▾",
+        tacticalAdvisory: "Tactical Advisory",
+        radarTitle: "SACHET / NDMA Early Disaster Radar",
+        monitoring: "MONITORING",
+        activeAlerts: "Active Alerts",
+        noAlertsBadge: "No Active Bulletins",
+        scanBtn: "Scan",
+        noAlertsTitle: "Synoptic Perimeter Clear",
+        noAlertsDesc: "SACHET early warning protocol confirms zero active emergency advisories within {radius}km radius.",
+        atlasTitle: "IMD Climate Hazard & Vulnerability Atlas",
+        hazardPlaceholder: "District or city name...",
+        queryAtlas: "Query Atlas",
+        ruralTitle: "Rural Accessibility Telephony Gateway",
+        ruralDesc: "Empowers rural communities and feature-phone holders without 4G/5G data access to receive synoptic weather intelligence via voice IVR and SMS.",
+        tabIvr: "IVR Voice Call (1800-MAUSAM)",
+        tabSms: "USSD / Push SMS",
+        tabKrishi: "Krishi Sakhi Audio",
+        dialIvr: "Dial IVR",
+        playAudio: "▶ Play Audio",
+        modalBadge: "WeatherGPT Operator Registration",
+        modalTitle: "Institutional Weather Decision Profile",
+        modalSub: "Configure your professional role, primary location, and operational niche. This establishes your default context, which can still be customized on-the-fly for individual queries.",
+        modalLabelName: "Full Name or Call Sign",
+        modalLabelRole: "Professional Occupation / Role",
+        modalLabelLoc: "Default Meteorological Location (City / District)",
+        modalLabelNiche: "Operational Focus Niche",
+        modalQuickLabel: "Quick:",
+        modalSaveBtn: "Save Profile & Launch Console",
+        listenBtn: "Listen",
+        speakingBtn: "Speaking...",
+        dispatchTitle: "WeatherGPT Synoptic Dispatch"
       },
       hi: {
-        welcomeTitle: "मौसम जीपीटी केंद्रीय मौसम सलाह टर्मिनल",
-        welcomeDesc: "<strong>मौसम जीपीटी (WeatherGPT)</strong> में आपका स्वागत है। मैं भारत सरकार के भारत-एफएस मॉडल, आईएमडी वेधशालाओं और सचेत (NDMA) आपदा चेतावनी प्रणाली से लैस आपका कृत्रिम बुद्धिमत्ता मौसम सलाहकार हूँ।",
-        quickPesticide: "क्या आज {city} में कीटनाशक का छिड़काव सुरक्षित है?",
-        quickMarine: "तटीय हवा की गति और मछुआरों के लिए समुद्री चेतावनी",
-        quickHeat: "लू का खतरा और पराबैंगनी (UV) सूचकांक विश्लेषण",
-        quickFlood: "सचेत आपदा चेतावनी और भारी बारिश का पूर्वानुमान",
-        inputPlaceholder: "मौसम जीपीटी से हिंदी में पूछें (उदा. क्या आज बारिश होगी और फसल काटना ठीक है?)",
+        clockIst: "आईएसटी: ",
+        topNavChat: "चैट कंसोल",
+        topNavDirectives: "भूमिका निर्देश",
+        topNavTelemetry: "टेलीमेट्री",
+        topNavRadar: "आपदा रडार",
+        topNavAtlas: "जलवायु एटलस",
+        topNavRural: "ग्रामीण सेवा",
+        chatTitle: "चैटबॉट",
+        chatSubtitle: "",
+        clearThread: "थ्रेड साफ करें",
+        locLabel: "स्थान:",
+        locPlaceholder: "शहर / ज़िला",
+        nicheLabel: "विषय:",
+        resetDefault: "प्रोफ़ाइल डिफ़ॉल्ट पर रीसेट करें",
+        chatPlaceholder: "वेदरजीपीटी से हिन्दी, தமிழ், या English में पूछें (उदा. क्या आज फसलों पर छिड़काव कर सकते हैं? क्या बारिश होगी?)...",
         transmit: "भेजें",
-        topBarDirectives: "परिचालन निर्देश",
-        drawerWarning: "सिनॉप्टिक चेतावनी: पश्चिम-मध्य बंगाल की खाड़ी पर गहरा दबाव। तटीय क्षेत्रों में 55-65 किमी/घंटा की तूफानी हवाएँ।",
-        drawerDesc: "राष्ट्रीय आपदा प्रबंधन प्राधिकरण (NDMA) कॉमन अलर्टिंग प्रोटोकॉल (CAP v1.2) सक्रिय चेतावनी। कृषि, समुद्री मत्स्य पालन और नगर निगमों के लिए समन्वित परिचालन निर्देश जारी।",
-        viewRoleDirectives: "भूमिका-आधारित निर्देश देखें",
-        topBarSub: "संवादात्मक मौसम विज्ञान व आपदा आसूचना प्रणाली",
-        topBarTag: "मिशन मौसम • भारत-एफएस • आईएमडी नाउकास्ट • सचेत एनडीएमए",
-        headerKicker: "वेदर जीपीटी • मौसम विज्ञान विश्लेषण इंजन",
-        headerLayer: "अखिल भारतीय एकीकृत प्रणाली",
-        headerTitle: "संवादात्मक मौसम और आपदा आसूचना",
-        headerDesc: "भारत-एफएस संख्यात्मक ग्रिड, मेघदूत कृषि मौसम, दामिनी आकाशीय बिजली और एनडीएमए सचेत अलर्ट को भूमिका-विशिष्ट निर्णयों में परिवर्तित करना",
-        navRoleDirectives: "भूमिका निर्देश",
-        navRural: "ग्रामीण पहुंच स्तर (IVR/SMS)",
-        navHazard: "आईएमडी आपदा एटलस",
-        workbenchTitle: "भूमिका-आधारित परिचालन निर्देश इंजन",
-        workbenchBadge: "सचेत अलर्ट विभाजन",
-        workbenchDesc: "एकल रेड/ऑरेंज चेतावनी को स्वतः समानांतर, क्षेत्र-विशिष्ट परिचालन निर्देशों में प्रसारित किया जाता है",
-        scenarioLabel: "सक्रिय परिदृश्य:",
-        scenarioCyclone: "चक्रवात रेड अलर्ट (तटीय)",
-        scenarioFlood: "शहरी अतिवृष्टि व बाढ़ (बेंगलुरु)",
-        scenarioHeatwave: "भीषण लू व जल वाष्पीकरण (दिल्ली)",
-        cardFarmerTitle: "कृषि एवं कृषि मौसम विज्ञान",
-        cardFarmerBadge: "किसान भूमिका",
-        cardFishermanTitle: "समुद्री एवं तटीय सुरक्षा",
-        cardFishermanBadge: "मछुआरा भूमिका",
-        cardCityTitle: "शहरी स्थानीय निकाय एवं आपदा प्रबंधन",
-        cardCityBadge: "नगर निगम भूमिका",
-        copyBriefing: "निर्देश कॉपी करें",
-        chatCardTitle: "मौसम जीपीटी संवादात्मक मौसम विज्ञानी",
-        aiOnline: "एआई सक्रिय",
-        chatCardSubtitle: "स्वायत्त सिनॉप्टिक आसूचना एवं बहु-चरणीय संवाद",
-        clearChat: "बातचीत साफ़ करें",
-        printRecord: "प्रिंट रिकॉर्ड",
-        targetLabel: "📍 लक्षित स्थान:",
-        targetPlaceholder: "शहर या जिला दर्ज करें (उदा. बेंगलुरु, दिल्ली, मुंबई)...",
-        roleLensLabel: "भूमिका दृष्टिकोण:",
-        roleFarmer: "किसान",
-        roleFisherman: "मछुआरा",
-        roleCityOps: "नगर निगम / यूएलबी",
-        rolePublic: "नागरिक",
-        thinkingText: "मौसम जीपीटी भारत-एफएस ग्रिड और आईएमडी नाउकास्ट का विश्लेषण कर भूमिका निर्देश तैयार कर रहा है...",
-        suggestionsLabel: "सुझाव:",
-        disasterRadarTitle: "सचेत / एनडीएमए आपदा रडार",
-        telemetryTitle: "सिनॉप्टिक मौसम केंद्र टेलीमेट्री",
-        telemetrySub: "सेंसर डेटा",
-        inspectBtn: "जांचें",
-        scalesTitle: "मानक मौसम विज्ञान पैमाने",
-        scalesSub: "मानक",
-        footerRural: "ग्रामीण आईवीआर एवं टेलीफोनी गेटवे",
-        ruralModalTitle: "ग्रामीण पहुंच स्तर (फीचर फोन उपयोगकर्ताओं हेतु)",
-        ruralTabIvr: "1. टोल-फ्री आईवीआर वॉयस गेटवे (1800-MAUSAM-AI)",
-        ruralTabSms: "2. एसएमएस एवं यूएसएसडी सेवा",
-        ruralTabKrishi: "3. कृषि सखी फील्ड कंसोल",
-        ivrCallBtn: "📞 कॉल कनेक्ट करें"
+        thinking: "पूर्वानुमान ग्रिड और मौसम टेलीमेट्री का विश्लेषण किया जा रहा है...",
+        ready: "तैयार",
+        welcomeTitle: "वेदरजीपीटी मौसम विज्ञान विश्लेषण",
+        welcomeGreeting: "स्वागत है",
+        welcomeSub: "आप नीचे मौसम या व्यावहारिक कार्य से संबंधित कोई भी प्रश्न पूछ सकते हैं। इनपुट बार के ऊपर स्थित संदर्भ पट्टी से आप किसी भी समय शहर या विषय बदल सकते हैं!",
+        tabTelemetry: "टेलीमेट्री",
+        tabDirectives: "भूमिका निर्देश",
+        tabRadar: "आपदा रडार",
+        tabAtlas: "जलवायु एटलस",
+        tabRural: "ग्रामीण सेवा",
+        telemetryTitle: "प्रत्यक्ष भू-मौसम टेलीमेट्री",
+        refreshSensors: "सेंसर रीफ्रेश करें",
+        stationPlaceholder: "भारतीय शहर का नाम दर्ज करें...",
+        queryBtn: "खोजें",
+        lvl1Sensors: "स्तर-1 भूतल सेंसर",
+        tempLabel: "तापमान",
+        humidityLabel: "सापेक्ष आर्द्रता",
+        windLabel: "हवा की गति",
+        pressureLabel: "सतही वायुदाब",
+        uvLabel: "सौर यूवी सूचकांक",
+        rainLabel: "24 घंटे की वर्षा",
+        soil0Label: "मिट्टी तापमान (0cm)",
+        soil6Label: "मिट्टी तापमान (6cm)",
+        trendTitle: "16 घंटे का तापमान विकास",
+        feelsLabel: "महसूस",
+        dewpointLabel: "सामान्य ओसांक",
+        gradientLabel: "80m हवा गति",
+        baroLabel: "समुद्र तल वायुदाब",
+        topsoilLabel: "ऊपरी सतह मिट्टी",
+        subsurfaceLabel: "जड़ परत (6cm)",
+        directivesTitle: "भूमिका-आधारित परिचालन निर्देश",
+        directivesSubtitle: "पंजीकृत प्रोफ़ाइल, रीयल-टाइम भूतल सेंसर और एनडीएमए अलर्ट के साथ सिंक्रनाइज़",
+        refreshDirectives: "निर्देश रीफ्रेश करें",
+        copyDossier: "डोज़ियर कॉपी करें",
+        copiedDossier: "डोज़ियर कॉपी हुआ!",
+        editRole: "भूमिका / विषय बदलें ▾",
+        tacticalAdvisory: "रणनीतिक परामर्श",
+        radarTitle: "सचेत / एनडीएमए पूर्व आपदा रडार",
+        monitoring: "निगरानी जारी",
+        activeAlerts: "सक्रिय बुलेटिन",
+        noAlertsBadge: "कोई सक्रिय बुलेटिन नहीं",
+        scanBtn: "स्कैन करें",
+        noAlertsTitle: "मौसम परिधि सुरक्षित",
+        noAlertsDesc: "सचेत (SACHET) प्रारंभिक चेतावनी प्रोटोकॉल {radius} किमी के दायरे में शून्य सक्रिय आपातकालीन सलाह की पुष्टि करता है।",
+        atlasTitle: "आईएमडी जलवायु खतरा व संवेदनशीलता एटलस",
+        hazardPlaceholder: "ज़िले या शहर का नाम...",
+        queryAtlas: "एटलस में खोजें",
+        ruralTitle: "ग्रामीण सुगम्यता टेलीफोनी गेटवे",
+        ruralDesc: "4G/5G डेटा के बिना ग्रामीण समुदायों और फ़ीचर-फ़ोन उपयोगकर्ताओं को वॉयस IVR और SMS द्वारा मौसम सलाह प्रदान करता है।",
+        tabIvr: "आईवीआर वॉयस कॉल (1800-MAUSAM)",
+        tabSms: "यूएसएसडी / पुश एसएमएस",
+        tabKrishi: "कृषि सखी ऑडियो",
+        dialIvr: "आईवीआर डायल करें",
+        playAudio: "▶ ऑडियो सुनें",
+        modalBadge: "वेदरजीपीटी ऑपरेटर पंजीकरण",
+        modalTitle: "संस्थागत मौसम निर्णय प्रोफ़ाइल",
+        modalSub: "अपनी व्यावसायिक भूमिका, मुख्य स्थान और परिचालन विषय कॉन्फ़िगर करें। यह आपका डिफ़ॉल्ट संदर्भ सेट करता है जिसे कभी भी बदला जा सकता है।",
+        modalLabelName: "पूरा नाम या कॉल साइन",
+        modalLabelRole: "व्यावसायिक व्यवसाय / भूमिका",
+        modalLabelLoc: "डिफ़ॉल्ट मौसम स्थान (शहर / ज़िला)",
+        modalLabelNiche: "परिचालन फोकस विषय",
+        modalQuickLabel: "त्वरित:",
+        modalSaveBtn: "प्रोफ़ाइल सहेजें और कंसोल शुरू करें",
+        listenBtn: "सुनें",
+        speakingBtn: "बोल रहा है...",
+        dispatchTitle: "वेदरजीपीटी मौसम बुलेटिन"
       },
       ta: {
-        welcomeTitle: "வெதர் ஜிபிடி வானிலை மற்றும் பேரிடர் முனையம்",
-        welcomeDesc: "<strong>வெதர் ஜிபிடி (WeatherGPT)</strong> க்கு வரவேற்கிறோம். பாரத்-எஃப்எஸ் வானிலை கணிப்பு, ஐஎம்டி புள்ளிவிவரங்கள் மற்றும் சச்செட் பேரிடர் எச்சரிக்கைகளை இணைத்து வழங்கப்படும் வானிலை ஆலோசனை முனையம்.",
-        quickPesticide: "{city} பகுதியில் இன்று பூச்சிக்கொல்லி மருந்து தெளிக்கலாமா?",
-        quickMarine: "மீனவர்களுக்கான கடல் அலை மற்றும் சூறாவளி காற்று எச்சரிக்கை",
-        quickHeat: "வெப்ப அலை மற்றும் புற ஊதாக் கதிர்வீச்சு தாக்கம்",
-        quickFlood: "பேரிடர் எச்சரிக்கை மற்றும் கனமழை முன்னறிவிப்பு",
-        inputPlaceholder: "தமிழில் கேளுங்கள் (उदा. இன்று மழை பெய்யுமா? அறுவடை செய்யலாமா?)",
-        transmit: "அனுப்புக",
-        topBarDirectives: "செயல்பாட்டு வழிமுறைகள்",
-        drawerWarning: "வானிலை எச்சரிக்கை: மேற்கு-மத்திய வங்காள விரிகுடாவில் ஆழ்ந்த காற்றழுத்த தாழ்வு மண்டலம். கடலோரப் பகுதிகளில் 55-65 கிமீ/மணி வேகத்தில் பலத்த காற்று.",
-        drawerDesc: "தேசிய பேரிடர் மேலாண்மை ஆணையம் (NDMA) பொது எச்சரிக்கை நெறிமுறை (CAP v1.2) நேரடி ஆலோசனை. விவசாயம், கடலோர மீன்பிடி மற்றும் நகர்ப்புற உள்ளாட்சி அமைப்புகளுக்கான வழிகாட்டுதல்கள் தீவிரப்படுத்தப்பட்டுள்ளன.",
-        viewRoleDirectives: "பணி வழிகாட்டுதல்களைக் காண்க",
-        topBarSub: "உரையாடல் வானிலை மற்றும் பேரிடர் நுண்ணறிவு தளம்",
-        topBarTag: "மிஷன் மௌசம் • பாரத்-எஃப்எஸ் • ஐஎம்டி வானிலை • என்டிஎம்ஏ சச்செட்",
-        headerKicker: "வெதர் ஜிபிடி • வானிலை பகுப்பாய்வு இயந்திரம்",
-        headerLayer: "அனைத்திந்திய ஒருங்கிணைந்த தளம்",
-        headerTitle: "உரையாடல் வானிலை மற்றும் பேரிடர் நுண்ணறிவு",
-        headerDesc: "பாரத்-எஃப்எஸ் வானிலை மாதிரி, மேக்தூத் வேளாண் வானிலை, தாமினி மின்னல் மற்றும் என்டிஎம்ஏ பேரிடர் எச்சரிக்கைகளை துறைசார் வழிகாட்டுதல்களாக மாற்றுகிறது",
-        navRoleDirectives: "பணி வழிகாட்டுதல்கள்",
-        navRural: "கிராமப்புற தொலைபேசி சேவை (IVR/SMS)",
-        navHazard: "ஐஎம்டி பேரிடர் அட்லஸ்",
-        workbenchTitle: "பணி அடிப்படையிலான செயல்பாட்டு வழிகாட்டு இயந்திரம்",
-        workbenchBadge: "எச்சரிக்கை பகுப்பாய்வு",
-        workbenchDesc: "ஒற்றை சிவப்பு/ஆரஞ்சு எச்சரிக்கை ஒரே நேரத்தில் துறைசார்ந்த செயல்பாட்டு வழிகாட்டுதல்களாக மாற்றப்படுகிறது",
-        scenarioLabel: "செயல்பாட்டு சூழல்:",
-        scenarioCyclone: "புயல் சிவப்பு எச்சரிக்கை (கடற்கரை)",
-        scenarioFlood: "நகர்ப்புற பெருமழை (பெங்களூரு)",
-        scenarioHeatwave: "கடும் வெப்ப அலை (தில்லி)",
-        cardFarmerTitle: "விவசாயம் மற்றும் வேளாண் வானிலை",
-        cardFarmerBadge: "விவசாயி பணி",
-        cardFishermanTitle: "கடல் மற்றும் கடலோர பாதுகாப்பு",
-        cardFishermanBadge: "மீனவர் பணி",
-        cardCityTitle: "நகர்ப்புற உள்ளாட்சி மற்றும் பேரிடர் மேலாண்மை",
-        cardCityBadge: "நகராட்சி பணி",
-        copyBriefing: "அனைத்து வழிகாட்டுதல்களையும் நகலெடு",
-        chatCardTitle: "வெதர் ஜிபிடி உரையாடல் வானிலை ஆய்வாளர்",
-        aiOnline: "செயற்கை நுண்ணறிவு தயார்",
-        chatCardSubtitle: "தன்னாட்சி வானிலை நுண்ணறிவு மற்றும் உரையாடல்",
-        clearChat: "உரையாடலை அழிக்க",
-        printRecord: "பதிவை அச்சிட",
-        targetLabel: "📍 இடம்:",
-        targetPlaceholder: "நகரம் அல்லது மாவட்டத்தை உள்ளிடவும் (எ.கா. பெங்களூரு, சென்னை, தில்லி)...",
-        roleLensLabel: "பார்வை நோக்கம்:",
-        roleFarmer: "விவசாயி",
-        roleFisherman: "மீனவர்",
-        roleCityOps: "நகராட்சி / நிர்வாகம்",
-        rolePublic: "பொதுமக்கள்",
-        thinkingText: "வெதர் ஜிபிடி பாரத்-எஃப்எஸ் மாதிரிகள் மற்றும் ஐஎம்டி புள்ளிவிவரங்களை பகுப்பாய்வு செய்கிறது...",
-        suggestionsLabel: "பரிந்துரைகள்:",
-        disasterRadarTitle: "சச்செட் / என்டிஎம்ஏ பேரிடர் ரேடார்",
-        telemetryTitle: "வானிலை ஆய்வு மைய நேரடி தகவல்கள்",
-        telemetrySub: "சென்சார் தகவல்கள்",
-        inspectBtn: "ஆராய்க",
-        scalesTitle: "வானிலை அளவீட்டு அளவுகோல்கள்",
-        scalesSub: "தரநிலைகள்",
-        footerRural: "கிராமப்புற ஐவிஆர் மற்றும் தொலைபேசி சேவை",
-        ruralModalTitle: "கிராமப்புற தொலைபேசி சேவை (சாதாரண மொபைல் போன்கள்)",
-        ruralTabIvr: "1. கட்டணமில்லா தொலைபேசி சேவை (1800-MAUSAM-AI)",
-        ruralTabSms: "2. எஸ்எம்எஸ் & யுஎஸ்எஸ்டி தகவல்",
-        ruralTabKrishi: "3. கிருஷி சகி கள உதவி",
-        ivrCallBtn: "📞 இணைப்பைத் தொடங்கு"
+        clockIst: "ஐஎஸ்டி: ",
+        topNavChat: "அரட்டை கன்சோல்",
+        topNavDirectives: "பணி வழிகாட்டல்",
+        topNavTelemetry: "வானிலை அளவீடு",
+        topNavRadar: "பேரிடர் ரேடார்",
+        topNavAtlas: "காலநிலை வரைபடம்",
+        topNavRural: "கிராம சேவை",
+        chatTitle: "சாட்பாட்",
+        chatSubtitle: "",
+        clearThread: "அரட்டையை அழி",
+        locLabel: "இடம்:",
+        locPlaceholder: "நகரம் / மாவட்டம்",
+        nicheLabel: "துறை:",
+        resetDefault: "சுயவிவரத்திற்கு மீட்டமை",
+        chatPlaceholder: "WeatherGPT-யிடம் தமிழ், हिन्दी அல்லது English-ல் கேளுங்கள் (எ.கா: இன்று பயிர்களுக்கு மருந்து தெளிக்கலாமா? மழை வருமா?)...",
+        transmit: "அனுப்பு",
+        thinking: "வானிலை முன்கணிப்பு மற்றும் அளவீடுகள் மதிப்பீடு செய்யப்படுகின்றன...",
+        ready: "தயார்",
+        welcomeTitle: "WeatherGPT வானிலை ஆய்வு மையம்",
+        welcomeGreeting: "வணக்கம்",
+        welcomeSub: "கீழே உங்கள் வானிலை சார்ந்த கேள்விகளைக் கேட்கலாம். எந்தக் கேள்விக்கும் நகரத்தையோ அல்லது துறையையோ மாற்றிக்கொள்ளலாம்!",
+        tabTelemetry: "வானிலை அளவீடு",
+        tabDirectives: "பணி வழிகாட்டல்",
+        tabRadar: "பேரிடர் ரேடார்",
+        tabAtlas: "காலநிலை வரைபடம்",
+        tabRural: "கிராம சேவை",
+        telemetryTitle: "நேரடி தரைப்பகுதி வானிலை அளவீடு",
+        refreshSensors: "புதுப்பி",
+        stationPlaceholder: "இந்திய நகரத்தை உள்ளிடவும்...",
+        queryBtn: "தேடு",
+        lvl1Sensors: "நிலை-1 தரை சென்சார்கள்",
+        tempLabel: "வெப்பநிலை",
+        humidityLabel: "ஈரப்பதம்",
+        windLabel: "காற்றின் வேகம்",
+        pressureLabel: "காற்றழுத்தம்",
+        uvLabel: "சூரிய புற ஊதா (UV)",
+        rainLabel: "24 மணி நேர மழை",
+        soil0Label: "மண் வெப்பநிலை (0cm)",
+        soil6Label: "மண் வெப்பநிலை (6cm)",
+        trendTitle: "16 மணி நேர வெப்பநிலை மாறுபாடு",
+        feelsLabel: "உணரப்படுவது",
+        dewpointLabel: "பனி நிலை",
+        gradientLabel: "80m காற்று வேகம்",
+        baroLabel: "சராசரி காற்றழுத்தம்",
+        topsoilLabel: "மேல்மண் அடுக்கு",
+        subsurfaceLabel: "வேர் மண்டலம் (6cm)",
+        directivesTitle: "பணி சார்ந்த செயல்பாட்டு வழிகாட்டுதல்",
+        directivesSubtitle: "பதிவுசெய்த சுயவிவரம், நிகழ்நேர சென்சார்கள் மற்றும் பேரிடர் எச்சரிக்கைகளுடன் இணைக்கப்பட்டது",
+        refreshDirectives: "புதுப்பி",
+        copyDossier: "நகலெடு",
+        copiedDossier: "நகலெடுக்கப்பட்டது!",
+        editRole: "பங்கு / துறையை மாற்று ▾",
+        tacticalAdvisory: "முக்கிய வழிகாட்டல்",
+        radarTitle: "சச்செட் / என்டிஎம்ஏ பேரிடர் ரேடார்",
+        monitoring: "கண்காணிப்பில் உள்ளது",
+        activeAlerts: "செயலில் உள்ள எச்சரிக்கைகள்",
+        noAlertsBadge: "எச்சரிக்கைகள் ஏதுமில்லை",
+        scanBtn: "ஸ்கேன் செய்",
+        noAlertsTitle: "வானிலை சூழல் பாதுகாப்பானது",
+        noAlertsDesc: "SACHET முன்னெச்சரிக்கை அமைப்பு {radius} கி.மீ சுற்றளவில் தீவிர எச்சரிக்கைகள் ஏதுமில்லை என்பதை உறுதிப்படுத்துகிறது.",
+        atlasTitle: "IMD காலநிலை ஆபத்து & பாதிப்பு வரைபடம்",
+        hazardPlaceholder: "மாவட்டம் அல்லது நகரத்தின் பெயர்...",
+        queryAtlas: "வரைபடத்தில் தேடு",
+        ruralTitle: "கிராமப்புற தொலைபேசி சேவை மையம்",
+        ruralDesc: "4G/5G இணைய வசதி இல்லாத கிராமப்புற மக்கள் குரல் வழி IVR மற்றும் SMS மூலம் உடனடி வானிலை தகவல்களைப் பெற உதவுகிறது.",
+        tabIvr: "IVR குரல் அழைப்பு (1800-MAUSAM)",
+        tabSms: "USSD / புஷ் எஸ்எம்எஸ்",
+        tabKrishi: "கிருஷி சகி ஆடியோ",
+        dialIvr: "IVR அழைக்கவும்",
+        playAudio: "▶ ஆடியோவை இயக்கு",
+        modalBadge: "WeatherGPT பயனர் பதிவு",
+        modalTitle: "வானிலை முடிவெடுக்கும் சுயவிவரம்",
+        modalSub: "உங்கள் தொழில் முறை பங்கு, முதன்மை இருப்பிடம் மற்றும் செயல்பாட்டுத் துறையை அமைக்கவும்.",
+        modalLabelName: "முழு பெயர்",
+        modalLabelRole: "தொழில் / பங்கு",
+        modalLabelLoc: "முதன்மை வானிலை இருப்பிடம் (நகரம் / மாவட்டம்)",
+        modalLabelNiche: "செயல்பாட்டுத் துறை",
+        modalQuickLabel: "விரைவு:",
+        modalSaveBtn: "சுயவிவரத்தைச் சேமித்து தொடங்குங்கள்",
+        listenBtn: "கேளுங்கள்",
+        speakingBtn: "பேசுகிறது...",
+        dispatchTitle: "WeatherGPT வானிலை அறிக்கை"
       }
     };
 
+    // Niche and Role Localization Maps
+    const NICHE_I18N = {
+      "Agrochemical Spraying & Crop Protection": {
+        en: "Agrochemical Spraying",
+        hi: "कीटनाशक छिड़काव व फसल सुरक्षा",
+        ta: "பூச்சிக்கொல்லி தெளிப்பு & பயிர் பாதுகாப்பு"
+      },
+      "Harvest & Sowing Rain Window": {
+        en: "Harvest & Sowing Window",
+        hi: "कटाई व बुवाई वर्षा समय",
+        ta: "அறுவடை & விதைப்பு மழை நேரம்"
+      },
+      "Coastal Squall & High Sea Clearance": {
+        en: "High Sea & Coastal Safety",
+        hi: "समुद्री तूफान व तटीय सुरक्षा",
+        ta: "கடல் காற்று & கடலோர பாதுகாப்பு"
+      },
+      "Urban Waterlogging & Drain Choke": {
+        en: "Urban Waterlogging & Drain",
+        hi: "शहरी जलभराव व नाली प्रबंधन",
+        ta: "நகர்ப்புற வெள்ளம் & வடிகால் மேலாண்மை"
+      },
+      "Heatwave & Outdoor Worker Safety": {
+        en: "Heatwave & Worker Safety",
+        hi: "लू (हीटवेव) व श्रमिक सुरक्षा",
+        ta: "வெப்ப அலை & தொழிலாளர் பாதுகாப்பு"
+      },
+      "Cyclone Preparedness & High Wind": {
+        en: "Cyclone & Wind Defense",
+        hi: "चक्रवात तैयारी व तेज हवा",
+        ta: "புயல் முன்னெச்சரிக்கை & தீவிர காற்று"
+      },
+      "Cold Chain Humidity & Thermal Stability": {
+        en: "Cold Chain Logistics",
+        hi: "कोल्ड चेन लॉजिस्टिक्स",
+        ta: "குளிர்சாதன விநியோகம் & போக்குவரத்து"
+      },
+      "General Atmospheric Advisory": {
+        en: "General Weather",
+        hi: "सामान्य मौसम परामर्श",
+        ta: "பொது வானிலை வழிகாட்டல்"
+      }
+    };
+
+    function applyLanguage(lang) {
+      const t = I18N[lang] || I18N.en;
+
+      // 1. Navigation bar
+      const topChat = document.getElementById("top-nav-chat");
+      const topDirectives = document.getElementById("top-nav-directives");
+      const topTelemetry = document.getElementById("top-nav-telemetry");
+      const topRadar = document.getElementById("top-nav-radar");
+      const topAtlas = document.getElementById("top-nav-atlas");
+      const topRural = document.getElementById("top-nav-rural");
+      if (topChat) topChat.innerHTML = '<span class="hidden sm:inline">' + t.topNavChat + '</span><span class="sm:hidden">' + (lang === "hi" ? "चैट" : lang === "ta" ? "அரட்டை" : "Chat") + '</span>';
+      if (topDirectives) topDirectives.innerHTML = '<span class="hidden sm:inline">' + t.topNavDirectives + '</span><span class="sm:hidden">' + (lang === "hi" ? "निर्देश" : lang === "ta" ? "வழிகாட்டல்" : "Directives") + '</span>';
+      if (topTelemetry) topTelemetry.innerHTML = '<span class="hidden sm:inline">' + t.topNavTelemetry + '</span>';
+      if (topRadar) topRadar.innerHTML = '<span class="hidden sm:inline">' + t.topNavRadar + '</span>';
+      if (topAtlas) topAtlas.innerHTML = '<span class="hidden sm:inline">' + t.topNavAtlas + '</span>';
+      if (topRural) topRural.innerHTML = '<span class="hidden sm:inline">' + t.topNavRural + '</span>';
+
+      // 2. Chat Console
+      const chatTitleEl = document.getElementById("chat-console-title");
+      const chatSubEl = document.getElementById("chat-console-subtitle");
+      const chatClearEl = document.getElementById("chat-clear-btn");
+      const chatThinkEl = document.getElementById("chat-thinking-text");
+      const locLabelEl = document.getElementById("context-loc-label");
+      const queryLocEl = document.getElementById("query-location");
+      const nicheLabelEl = document.getElementById("context-niche-label");
+      const resetContextEl = document.getElementById("reset-context-btn");
+      const chatInputEl = document.getElementById("chat-input");
+      const sendLabelEl = document.getElementById("send-label");
+
+      if (chatTitleEl) chatTitleEl.textContent = t.chatTitle;
+      if (chatSubEl) chatSubEl.textContent = t.chatSubtitle;
+      if (chatClearEl) chatClearEl.textContent = t.clearThread;
+      if (chatThinkEl) chatThinkEl.textContent = t.thinking;
+      if (locLabelEl) locLabelEl.textContent = t.locLabel;
+      if (queryLocEl) queryLocEl.placeholder = t.locPlaceholder;
+      if (nicheLabelEl) nicheLabelEl.textContent = t.nicheLabel;
+      if (resetContextEl) resetContextEl.textContent = t.resetDefault;
+      if (chatInputEl) chatInputEl.placeholder = t.chatPlaceholder;
+      if (sendLabelEl) sendLabelEl.textContent = t.transmit;
+
+      // Update query-niche select options
+      const nicheSelect = document.getElementById("query-niche");
+      if (nicheSelect) {
+        const currentVal = nicheSelect.value;
+        Array.from(nicheSelect.options).forEach(opt => {
+          const map = NICHE_I18N[opt.value];
+          if (map && map[lang]) {
+            opt.textContent = map[lang];
+          }
+        });
+        nicheSelect.value = currentVal;
+      }
+
+      // 3. Workspace tab buttons
+      const tabTelemetry = document.getElementById("tab-btn-telemetry");
+      const tabDirectives = document.getElementById("tab-btn-directives");
+      const tabRadar = document.getElementById("tab-btn-radar");
+      const tabAtlas = document.getElementById("tab-btn-atlas");
+      const tabRural = document.getElementById("tab-btn-rural");
+      if (tabTelemetry) tabTelemetry.textContent = t.tabTelemetry;
+      if (tabDirectives) tabDirectives.textContent = t.tabDirectives;
+      if (tabRadar) tabRadar.textContent = t.tabRadar;
+      if (tabAtlas) tabAtlas.textContent = t.tabAtlas;
+      if (tabRural) tabRural.textContent = t.tabRural;
+
+      // 4. Telemetry Stage
+      const telemTitleEl = document.getElementById("telemetry-stage-title");
+      const telemRefreshEl = document.getElementById("telemetry-refresh-btn");
+      const stationCityEl = document.getElementById("station-city");
+      const stationQueryEl = document.getElementById("station-query-btn");
+      const telemLvl1El = document.getElementById("telemetry-lvl1-label");
+      if (telemTitleEl) telemTitleEl.textContent = t.telemetryTitle;
+      if (telemRefreshEl) telemRefreshEl.textContent = t.refreshSensors;
+      if (stationCityEl) stationCityEl.placeholder = t.stationPlaceholder;
+      if (stationQueryEl) stationQueryEl.textContent = t.queryBtn;
+      if (telemLvl1El) telemLvl1El.textContent = t.lvl1Sensors;
+      const trendTitleEl = document.getElementById("trend-section-title");
+      if (trendTitleEl) trendTitleEl.textContent = t.trendTitle;
+      if (lastHourlySampleData) drawD3HourlyTrend(lastHourlySampleData);
+
+      // 5. Directives Stage
+      const dirTitleEl = document.getElementById("directives-stage-title");
+      const dirSubEl = document.getElementById("directives-stage-subtitle");
+      const dirRefreshEl = document.getElementById("directives-refresh-btn");
+      const dirCopyEl = document.getElementById("directives-copy-btn");
+      const dirEditEl = document.getElementById("directives-edit-role-btn");
+      const dirNichePrefix = document.getElementById("directives-niche-prefix");
+      const dirLocPrefix = document.getElementById("directives-loc-prefix");
+      const dirTacticalBadge = document.getElementById("tactical-advisory-badge");
+
+      if (dirTitleEl) dirTitleEl.textContent = t.directivesTitle;
+      if (dirSubEl) dirSubEl.textContent = t.directivesSubtitle;
+      if (dirRefreshEl) dirRefreshEl.textContent = t.refreshDirectives;
+      if (dirCopyEl) dirCopyEl.textContent = t.copyDossier;
+      if (dirEditEl) dirEditEl.textContent = t.editRole;
+      if (dirNichePrefix) dirNichePrefix.textContent = t.nicheLabel;
+      if (dirLocPrefix) dirLocPrefix.textContent = t.locLabel;
+      if (dirTacticalBadge) dirTacticalBadge.textContent = t.tacticalAdvisory;
+
+      // 6. Radar Stage
+      const radarTitleEl = document.getElementById("radar-stage-title");
+      const radarScanEl = document.getElementById("radar-scan-btn");
+      if (radarTitleEl) radarTitleEl.textContent = t.radarTitle;
+      if (radarScanEl) radarScanEl.textContent = t.scanBtn;
+
+      // 7. Atlas Stage
+      const atlasTitleEl = document.getElementById("atlas-stage-title");
+      const atlasInputEl = document.getElementById("hazard-search-input");
+      const atlasQueryEl = document.getElementById("atlas-query-btn");
+      if (atlasTitleEl) atlasTitleEl.textContent = t.atlasTitle;
+      if (atlasInputEl) atlasInputEl.placeholder = t.hazardPlaceholder;
+      if (atlasQueryEl) atlasQueryEl.textContent = t.queryAtlas;
+
+      // 8. Rural Stage
+      const ruralTitleEl = document.getElementById("rural-stage-title");
+      const ruralDescEl = document.getElementById("rural-stage-desc");
+      const ruralTabIvr = document.getElementById("rural-tab-ivr");
+      const ruralTabSms = document.getElementById("rural-tab-sms");
+      const ruralTabKrishi = document.getElementById("rural-tab-krishi");
+      const ivrCallBtn = document.getElementById("ivr-call-btn");
+      const ivrLangSelect = document.getElementById("ivr-lang");
+      const ivrQueryInput = document.getElementById("ivr-query-input");
+
+      if (ruralTitleEl) ruralTitleEl.textContent = t.ruralTitle;
+      if (ruralDescEl) ruralDescEl.textContent = t.ruralDesc;
+      if (ruralTabIvr) ruralTabIvr.textContent = t.tabIvr;
+      if (ruralTabSms) ruralTabSms.textContent = t.tabSms;
+      if (ruralTabKrishi) ruralTabKrishi.textContent = t.tabKrishi;
+      if (ivrCallBtn) ivrCallBtn.textContent = t.dialIvr;
+      if (ivrLangSelect) {
+        ivrLangSelect.value = lang;
+      }
+      if (ivrQueryInput) {
+        if (lang === "hi") ivrQueryInput.value = "क्या आज कीटनाशक छिड़काव कर सकते हैं?";
+        else if (lang === "ta") ivrQueryInput.value = "இன்று பூச்சிக்கொல்லி மருந்து தெளிக்கலாமா?";
+        else ivrQueryInput.value = "Can I spray pesticide today?";
+      }
+
+      // 9. Onboarding modal
+      const modalBadgeEl = document.getElementById("onboarding-modal-badge");
+      const modalTitleEl = document.getElementById("onboarding-modal-title");
+      const modalSubEl = document.getElementById("onboarding-modal-sub");
+      const modalNameEl = document.getElementById("modal-label-name");
+      const modalRoleEl = document.getElementById("modal-label-role");
+      const modalLocEl = document.getElementById("modal-label-loc");
+      const modalNicheEl = document.getElementById("modal-label-niche");
+      const modalQuickEl = document.getElementById("modal-quick-label");
+      const modalSubmitEl = document.getElementById("modal-btn-submit");
+
+      if (modalBadgeEl) modalBadgeEl.textContent = t.modalBadge;
+      if (modalTitleEl) modalTitleEl.textContent = t.modalTitle;
+      if (modalSubEl) modalSubEl.textContent = t.modalSub;
+      if (modalNameEl) modalNameEl.innerHTML = t.modalLabelName + ' <span class="text-slate-400">*</span>';
+      if (modalRoleEl) modalRoleEl.innerHTML = t.modalLabelRole + ' <span class="text-slate-400">*</span>';
+      if (modalLocEl) modalLocEl.innerHTML = t.modalLabelLoc + ' <span class="text-slate-400">*</span>';
+      if (modalNicheEl) modalNicheEl.innerHTML = t.modalLabelNiche + ' <span class="text-slate-400">*</span>';
+      if (modalQuickEl) modalQuickEl.textContent = t.modalQuickLabel;
+      if (modalSubmitEl) modalSubmitEl.textContent = t.modalSaveBtn;
+
+      // Update welcome card if thread has welcome message
+      const thread = document.getElementById("chat-thread");
+      if (thread && (!chatHistory || chatHistory.length === 0)) {
+        thread.innerHTML = renderWelcomeMessage();
+      }
+    }
+
+    // ==================== LANGUAGE CONTROLLER ====================
     function setAppLanguage(lang) {
       currentLanguage = lang;
-      document.documentElement.lang = lang;
-      
+      localStorage.setItem("weathergpt_lang", lang);
+
       ["en", "hi", "ta"].forEach(l => {
         const btn = document.getElementById("lang-btn-" + l);
         if (btn) {
           if (l === lang) {
-            btn.className = "px-2 py-0.5 rounded text-white bg-[#C97A2B] font-semibold transition";
+            btn.className = "px-2 py-0.5 rounded text-xs font-bold bg-white text-ink shadow-2xs transition-colors";
           } else {
-            btn.className = "px-2 py-0.5 rounded text-slate-300 hover:text-white transition";
+            btn.className = "px-2 py-0.5 rounded text-xs text-muted hover:text-ink transition-colors";
           }
         }
       });
 
-      const strings = I18N_STRINGS[lang] || I18N_STRINGS.en;
-      
-      // Update all elements with data-i18n
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (strings[key]) {
-          el.textContent = strings[key];
-        }
-      });
-
-      // Update all elements with data-i18n-placeholder
-      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-        const key = el.getAttribute("data-i18n-placeholder");
-        if (strings[key]) {
-          el.setAttribute("placeholder", strings[key]);
-        }
-      });
-
-      const city = getTargetCity();
-      const input = document.getElementById("chat-input");
-      if (input && !input.value.trim()) {
-        input.placeholder = strings.inputPlaceholder;
-      }
-      const sendLabel = document.getElementById("send-label");
-      if (sendLabel) {
-        sendLabel.textContent = strings.transmit;
-      }
-
-      // Re-render suggestions
-      const chipsBar = document.getElementById("suggestion-chips-bar");
-      if (chipsBar) {
-        const qP = strings.quickPesticide.replace('{city}', city);
-        const qM = strings.quickMarine;
-        const qH = strings.quickHeat;
-        const qF = strings.quickFlood;
-        chipsBar.innerHTML = \`
-          <span class="text-[10px] font-bold text-[#5B6472] uppercase tracking-wider shrink-0">\${strings.suggestionsLabel}</span>
-          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qP)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            🌾 \${qP}
-          </button>
-          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qM)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            ⚓ \${qM}
-          </button>
-          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qH)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            🏃 \${qH}
-          </button>
-          <button type="button" onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qF)}" class="px-2 py-0.5 bg-[#F5F6F3] hover:bg-slate-200 border border-[#E1E4DD] text-[#1B2A44] text-[11px] rounded-sm whitespace-nowrap">
-            ⚠️ \${qF}
-          </button>
-        \`;
-      }
-
-      // Refresh directives cards in selected language
-      if (typeof triggerRoleDirectives === "function") {
-        triggerRoleDirectives(currentScenario);
-      }
+      applyLanguage(lang);
+      renderPersonalizedDirectives();
+      inspectStation();
+      loadDisasterAlerts();
     }
 
-    // 1. Endpoint Configuration
-    function sanitizeUrl(url) {
-      if (!url) return "";
-      return url.trim().replace(/\\/+$/, "");
-    }
+    // ==================== DYNAMIC PERSONALIZED ROLE DIRECTIVES ENGINE ====================
+    let lastFetchedDirectivesWeather = null;
+    let isFetchingDirectives = false;
 
-    function getActiveBackendUrl() {
-      const stored = localStorage.getItem("weathergpt_backend_url");
-      if (stored && stored.trim()) {
-        return sanitizeUrl(stored);
+    async function fetchUserRoleDirectives() {
+      if (isFetchingDirectives) return;
+      isFetchingDirectives = true;
+
+      const city = activeLocation || userProfile.location || "Bengaluru";
+      const name = userProfile.name || "Operator";
+      const occ = userProfile.occupation || "Agriculture & Agromet Specialist";
+      const niche = activeNiche || userProfile.niche || "Agrochemical Spraying & Crop Protection";
+
+      const avatarMap = {
+        "Agriculture & Agromet Specialist": "AG",
+        "Maritime & Coastal Fisheries": "MR",
+        "Municipal Administration & City Ops": "MU",
+        "Disaster Management Coordinator": "DM",
+        "Supply Chain & Cold Storage Manager": "SC",
+        "Construction & Infrastructure Engineer": "CE",
+        "Renewable Energy Yield Operator": "RE",
+        "Public Health Officer": "PH",
+        "Aviation & UAV Drone Dispatcher": "AV",
+        "General Citizen & Traveler": "CZ"
+      };
+
+      const av = avatarMap[occ] || "OP";
+      const avEl = document.getElementById("directives-avatar");
+      const nameEl = document.getElementById("directives-user-name");
+      const sectorEl = document.getElementById("directives-user-sector");
+      const nicheEl = document.getElementById("directives-user-niche");
+      const locEl = document.getElementById("directives-user-location");
+      const crossCityEl = document.getElementById("directives-cross-city");
+
+      if (avEl) avEl.textContent = av;
+      if (nameEl) nameEl.textContent = name;
+      if (sectorEl) sectorEl.textContent = occ.split("&")[0].trim();
+      if (nicheEl) nicheEl.textContent = niche;
+      if (locEl) locEl.textContent = city;
+      if (crossCityEl) crossCityEl.textContent = city;
+
+      const stmtEl = document.getElementById("directives-primary-statement");
+      if (stmtEl && !lastFetchedDirectivesWeather) {
+        stmtEl.innerHTML = '<span class="text-muted">Evaluating live synoptic telemetry for <b>' + city + '</b>...</span>';
       }
-      return window.location.origin;
-    }
 
-    // 2. City Aliases & Coordinates
-    const KNOWN_PRESETS = {
-      "bangalore": { lat: 12.9719, lon: 77.5937, label: "Bengaluru, Karnataka, India" },
-      "bengaluru": { lat: 12.9719, lon: 77.5937, label: "Bengaluru, Karnataka, India" },
-      "new delhi": { lat: 28.6139, lon: 77.2090, label: "New Delhi, Delhi, India" },
-      "delhi": { lat: 28.6139, lon: 77.2090, label: "Delhi, India" },
-      "mumbai": { lat: 19.0760, lon: 72.8777, label: "Mumbai, Maharashtra, India" },
-      "chennai": { lat: 13.0827, lon: 80.2707, label: "Chennai, Tamil Nadu, India" },
-      "kolkata": { lat: 22.5726, lon: 88.3639, label: "Kolkata, West Bengal, India" },
-      "coimbatore": { lat: 11.0168, lon: 76.9558, label: "Coimbatore, Tamil Nadu, India" },
-      "hyderabad": { lat: 17.3850, lon: 78.4867, label: "Hyderabad, Telangana, India" }
-    };
-
-    function getTargetCity() {
-      const el = document.getElementById("location-input");
-      return (el && el.value.trim()) ? el.value.trim() : "Bangalore";
-    }
-
-    function getSelectedSector() {
-      const checked = document.querySelector('input[name="sector"]:checked');
-      return checked ? checked.value : "farmer";
-    }
-
-    function applyPresetCity(city) {
-      if (!city) return;
-      document.getElementById("location-input").value = city;
-      document.getElementById("station-city").value = city;
-      document.getElementById("hazard-search-input").value = city;
-
-      const norm = city.toLowerCase();
-      if (KNOWN_PRESETS[norm]) {
-        document.getElementById("disaster-lat").value = KNOWN_PRESETS[norm].lat;
-        document.getElementById("disaster-lon").value = KNOWN_PRESETS[norm].lon;
-      }
-      handleSectorChange(getSelectedSector());
-    }
-
-    function handleSectorChange(sector) {
-      const city = getTargetCity();
-      const input = document.getElementById("chat-input");
-      if (input && !input.value.trim()) {
-        if (currentLanguage === "hi") {
-          input.placeholder = "मौसम जीपीटी से " + city + " के मौसम के बारे में पूछें...";
-        } else if (currentLanguage === "ta") {
-          input.placeholder = city + " வானிலை பற்றி வெதர் ஜிபிடியிடம் கேளுங்கள்...";
-        } else {
-          if (sector === "farmer") {
-            input.placeholder = "Ask about soil moisture, rain forecast, or crop spraying in " + city + "...";
-          } else if (sector === "fisherman") {
-            input.placeholder = "Ask about coastal wind gusts, squall alerts, or sea clearance for " + city + "...";
-          } else if (sector === "city_ops") {
-            input.placeholder = "Ask about municipal flood drainage, pump activation, or traffic alerts in " + city + "...";
-          } else {
-            input.placeholder = "Ask about current forecast, rain probability, and safety advisories for " + city + "...";
-          }
-        }
+      try {
+        lastFetchedDirectivesWeather = await fetchWeatherTelemetry(city);
+      } catch (err) {
+        console.warn("Directives telemetry fetch warning, using fallback telemetry:", err);
+        lastFetchedDirectivesWeather = {
+          city: city,
+          current: {
+            temperature_c: 27.2,
+            apparent_temperature_c: 28.4,
+            relative_humidity_pct: 62,
+            wind_speed_10m_kmh: 3.2,
+            wind_speed_80m_kmh: 8.5,
+            uv_index: 8.4,
+            precipitation_mm: 0.0
+          },
+          daily: {
+            uv_index_max: [8.4],
+            rain_sum: [0.0]
+          },
+          hourly: {
+            soil_temperature_6cm: [24.8]
+          },
+          alertsData: { alerts: [] }
+        };
+      } finally {
+        isFetchingDirectives = false;
+        renderPersonalizedDirectives();
       }
     }
 
-    function detectUserLocation() {
-      if (!navigator.geolocation) {
-        console.warn("Geolocation is not supported by your browser.");
-        const locInput = document.getElementById("location-input");
-        if (locInput) locInput.placeholder = "GPS unavailable - enter city manually";
+    function renderPersonalizedDirectives() {
+      if (!lastFetchedDirectivesWeather) {
+        fetchUserRoleDirectives();
         return;
       }
-      const locInput = document.getElementById("location-input");
-      const orig = locInput.value;
-      locInput.value = "Detecting GPS location...";
 
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          document.getElementById("disaster-lat").value = lat.toFixed(4);
-          document.getElementById("disaster-lon").value = lon.toFixed(4);
-          locInput.value = lat.toFixed(4) + ", " + lon.toFixed(4);
-          document.getElementById("station-city").value = lat.toFixed(4) + ", " + lon.toFixed(4);
-        },
-        (err) => {
-          locInput.value = orig;
-          console.warn("Geolocation denied or unavailable:", err);
-        },
-        { timeout: 8000 }
-      );
-    }
+      const w = lastFetchedDirectivesWeather;
+      const c = w.current || {};
+      const city = activeLocation || userProfile.location || "Bengaluru";
+      const occ = userProfile.occupation || "Agriculture & Agromet Specialist";
+      const niche = activeNiche || userProfile.niche || "Agrochemical Spraying & Crop Protection";
 
-    // 3. Clean Weather Output Markdown Formatter (Eliminates Raw Asterisks)
-    function stripAsterisks(str) {
-      if (!str) return "";
-      return str.split("*").join("");
-    }
+      const wind10 = typeof c.wind_speed_10m_kmh === "number" ? Math.round(c.wind_speed_10m_kmh * 10) / 10 : 3.2;
+      const rainSum = (w.daily && w.daily.rain_sum && w.daily.rain_sum[0] !== undefined) ? Math.round(w.daily.rain_sum[0] * 10) / 10 : (c.precipitation_mm || 0.0);
+      const uv = (w.daily && w.daily.uv_index_max && w.daily.uv_index_max[0] !== undefined) ? Math.round(w.daily.uv_index_max[0] * 10) / 10 : (c.uv_index || 7.5);
+      const soil6 = (w.hourly && w.hourly.soil_temperature_6cm && w.hourly.soil_temperature_6cm[0] !== undefined) ? Math.round(w.hourly.soil_temperature_6cm[0] * 10) / 10 : 24.5;
+      const activeAlert = (w.alertsData && w.alertsData.alerts && w.alertsData.alerts[0]) ? w.alertsData.alerts[0] : null;
 
-    function formatInlineStyles(str) {
-      if (!str) return "";
-      const boldRegex = new RegExp("\\\\*\\\\*([^\\\\*]+)\\\\*\\\\*", "g");
-      const italicRegex = new RegExp("\\\\*([^\\\\*]+)\\\\*", "g");
-      let res = str.replace(boldRegex, "<strong class='font-semibold text-[#1B2A44]'>$1</strong>");
-      res = res.replace(italicRegex, "<em class='italic text-slate-800'>$1</em>");
-      return stripAsterisks(res);
-    }
+      // Update live threshold tiles
+      const windValEl = document.getElementById("directive-wind-val");
+      const windStatEl = document.getElementById("directive-wind-status");
+      const rainValEl = document.getElementById("directive-rain-val");
+      const rainStatEl = document.getElementById("directive-rain-status");
+      const uvValEl = document.getElementById("directive-uv-val");
+      const uvStatEl = document.getElementById("directive-uv-status");
+      const soilValEl = document.getElementById("directive-soil-val");
+      const soilStatEl = document.getElementById("directive-soil-status");
+      const timeEl = document.getElementById("directives-timestamp");
 
-    function renderWeatherMarkdown(rawText) {
-      if (!rawText) return "";
-      const lines = rawText.split(String.fromCharCode(10));
-      const processed = [];
-      let inList = false;
+      if (windValEl) windValEl.textContent = wind10 + " km/h";
+      if (windStatEl) windStatEl.textContent = wind10 < 15 ? "Safe: <15 km/h limit" : "Caution: High drift";
+      if (rainValEl) rainValEl.textContent = rainSum + " mm";
+      if (rainStatEl) rainStatEl.textContent = rainSum < 2.5 ? "Wash-off: Safe" : "Wash-off hazard active";
+      if (uvValEl) uvValEl.textContent = String(uv);
+      if (uvStatEl) uvStatEl.textContent = uv >= 8 ? "Peak: 11 AM - 3 PM" : "Moderate UV Index";
+      if (soilValEl) soilValEl.textContent = soil6 + " °C";
+      if (soilStatEl) soilStatEl.textContent = "Sensor: 6cm Root Depth";
+      if (timeEl) timeEl.textContent = "Updated: " + new Date().toLocaleTimeString();
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trimEnd();
+      // Dynamic directive calculations based on user niche and live weather
+      let statusLabel = "Operational clearance";
+      let statusTone = "nominal"; // "nominal" | "caution" | "alert"
+      let statement = "";
+      let checklist = [];
 
-        if (line.startsWith("### ")) {
-          if (inList) { processed.push("</ul>"); inList = false; }
-          const h3 = stripAsterisks(line.slice(4));
-          processed.push("<div class='font-bold text-xs uppercase tracking-wider text-[#1B2A44] mt-3 mb-1 pb-1 border-b border-[#E1E4DD] flex items-center gap-1.5'><span>🔹</span><span>" + h3 + "</span></div>");
-          continue;
-        }
-        if (line.startsWith("## ")) {
-          if (inList) { processed.push("</ul>"); inList = false; }
-          const h2 = stripAsterisks(line.slice(3));
-          processed.push("<div class='font-bold text-sm text-[#1B2A44] mt-3.5 mb-1.5 pb-1 border-b border-[#E1E4DD] flex items-center gap-1.5 font-serif'><span>📡</span><span>" + h2 + "</span></div>");
-          continue;
-        }
-        if (line.startsWith("# ")) {
-          if (inList) { processed.push("</ul>"); inList = false; }
-          const h1 = stripAsterisks(line.slice(2));
-          processed.push("<div class='font-bold text-base text-[#1B2A44] mt-4 mb-2'>" + h1 + "</div>");
-          continue;
-        }
+      const isFarmer = occ.indexOf("Agriculture") !== -1 || occ.indexOf("Farmer") !== -1;
+      const isFisherman = occ.indexOf("Maritime") !== -1 || occ.indexOf("Fisheries") !== -1 || occ.indexOf("Marine") !== -1;
+      const isCityOps = occ.indexOf("Municipal") !== -1 || occ.indexOf("City Ops") !== -1 || occ.indexOf("Civic") !== -1;
 
-        const isBullet = line.startsWith("* ") || line.startsWith("- ") || line.startsWith("• ");
-        if (isBullet) {
-          if (!inList) {
-            processed.push("<ul class='my-2 space-y-1 pl-1'>");
-            inList = true;
+      if (isFarmer) {
+        if (niche.indexOf("Spray") !== -1 || niche.indexOf("Pesticide") !== -1 || niche.indexOf("Agrochemical") !== -1) {
+          if (wind10 > 15) {
+            statusLabel = "Spraying suspended · High wind drift";
+            statusTone = "caution";
+            statement = "Chemical spraying is currently suspended in " + city + ". Surface winds at 10m altitude are " + wind10 + " km/h, exceeding the safe droplet drift threshold of 15 km/h. High risk of off-target drift and chemical waste.";
+            checklist = [
+              "Halt all aerial and knapsack spraying until wind settles below 12 km/h",
+              "Secure chemical inventory containers in shaded, ventilated storage",
+              "Check local wind velocity again after 16:30 IST during evening calm",
+              "Inspect buffer borders near neighbouring sensitive crops"
+            ];
+          } else if (rainSum > 5) {
+            statusLabel = "Application suspended · Imminent wash-off";
+            statusTone = "alert";
+            statement = "Chemical application is not recommended in " + city + ". 24-hour precipitation forecast is " + rainSum + " mm. High risk of systemic foliar wash-off and chemical runoff into irrigation bunds.";
+            checklist = [
+              "Do not apply contact or systemic insecticides during active rain forecast",
+              "Ensure field perimeter bunds are trimmed to divert surface mud runoff",
+              "Re-evaluate application window 24 hours post-rain cessation"
+            ];
+          } else {
+            statusLabel = "Spray window open (06:30 - 09:30 AM)";
+            statusTone = "nominal";
+            statement = "Optimal pesticide spraying window is open for " + city + " between 06:30 AM and 09:30 AM. Surface wind speed is " + wind10 + " km/h (within safe 15 km/h limit) and 24h precipitation is " + rainSum + " mm (no wash-off risk). Conclude foliar spraying before 10:00 AM as UV index reaches " + uv + ".";
+            checklist = [
+              "Calibrate hollow-cone nozzles to 2.5 bar pressure for uniform droplet adhesion",
+              "Target early morning hours (06:30 - 09:30 AM) to avoid midday thermal updrafts",
+              "Maintain 10-meter untreated buffer strip along nearby canal waterways",
+              "Wear personal protective equipment (PPE) and avoid mixing during direct sun exposure"
+            ];
           }
-          const itemContent = formatInlineStyles(line.slice(2));
-          processed.push("<li class='flex items-start gap-2 text-slate-700 leading-relaxed text-[13px]'><span class='text-[#1B2A44] font-bold shrink-0 mt-0.5'>•</span><span>" + itemContent + "</span></li>");
-          continue;
-        }
-
-        if (inList) {
-          processed.push("</ul>");
-          inList = false;
-        }
-
-        if (!line.trim()) {
-          continue;
-        }
-
-        const p = formatInlineStyles(line);
-
-        // Highlight Callout Cards for Clearances & Warnings
-        if (p.includes("✅") || p.includes("Departure Clearance") || p.includes("Feasible") || p.includes("Spray Feasible")) {
-          processed.push("<div class='p-2.5 my-2 bg-emerald-50 border-l-4 border-[#3F6B4A] text-emerald-950 text-xs rounded-r font-medium leading-relaxed'>" + p + "</div>");
-        } else if (p.includes("⚠️") || p.includes("Warning") || p.includes("Caution") || p.includes("Risk") || p.includes("Squall") || p.includes("BAN")) {
-          processed.push("<div class='p-2.5 my-2 bg-amber-50 border-l-4 border-[#B8860B] text-amber-950 text-xs rounded-r font-medium leading-relaxed'>" + p + "</div>");
-        } else if (p.includes("💧") || p.includes("🌧️") || p.includes("Irrigation") || p.includes("Precipitation")) {
-          processed.push("<div class='p-2.5 my-2 bg-blue-50 border-l-4 border-blue-600 text-blue-950 text-xs rounded-r font-medium leading-relaxed'>" + p + "</div>");
+        } else if (niche.indexOf("Harvest") !== -1 || niche.indexOf("Sowing") !== -1) {
+          if (rainSum < 2) {
+            statusLabel = "Harvest & drying window cleared";
+            statusTone = "nominal";
+            statement = "Favorable harvest window in " + city + ". Trace rainfall of " + rainSum + " mm and soil temperature of " + soil6 + "°C offer excellent conditions for mechanical harvesting and outdoor drying.";
+            checklist = [
+              "Mobilize combine harvesters for ripe grain plots across dry parcels",
+              "Clear field peripheral drainage channels to avoid standing water pooling",
+              "Stack harvested bags on raised wooden pallets with moisture tarps ready"
+            ];
+          } else {
+            statusLabel = "Harvest precaution · Rain forecast";
+            statusTone = "caution";
+            statement = "Harvesting precaution required in " + city + ". Expected rainfall is " + rainSum + " mm. Stage protective tarpaulins over cut crops to avoid grain germination.";
+            checklist = [
+              "Cover harvested grain stacks with waterproof HDPE tarpaulins",
+              "Avoid mechanical harvester operation on soggy saturated topsoil",
+              "Dewater low-lying field corners through bund trenches"
+            ];
+          }
         } else {
-          processed.push("<p class='my-1.5 leading-relaxed text-slate-700 text-[13px]'>" + p + "</p>");
+          statusLabel = "Agromet conditions nominal";
+          statusTone = "nominal";
+          statement = "Agromet conditions are favorable in " + city + ". Current surface wind is " + wind10 + " km/h, 24h rain sum is " + rainSum + " mm, and soil temperature at 6cm is " + soil6 + "°C.";
+          checklist = [
+            "Monitor root zone moisture at 15cm soil depth",
+            "Maintain scheduled pulse irrigation during low evapotranspiration dusk window",
+            "Inspect foliage for early pest infestation under moderate humidity"
+          ];
+        }
+      } else if (isFisherman) {
+        if (wind10 > 40 || (activeAlert && (activeAlert.severity === "Red" || activeAlert.severity === "Orange"))) {
+          statusLabel = "Harbor departure restricted · High squalls";
+          statusTone = "alert";
+          statement = "Harbor departure restriction active for coastal operations from " + city + ". High velocity squalls exceeding 40 km/h detected. All motorized and non-motorized craft must return to harbor immediately.";
+          checklist = [
+            "Suspend all deep-sea and nearshore artisanal fishing operations immediately",
+            "Moor craft securely above high spring-tide waterline in designated harbor berths",
+            "Tune marine VHF transceivers to Coast Guard Distress Channel 16"
+          ];
+        } else {
+          statusLabel = "Sea departure cleared (0-15 NM)";
+          statusTone = "nominal";
+          statement = "Marine departure cleared for " + city + " coastal fleet. Surface wind is " + wind10 + " km/h with calm to moderate sea state. No severe squall warnings active in SACHET radar.";
+          checklist = [
+            "Check distress flares, life jackets, and GPS transponders before departure",
+            "Maintain hourly communication watch on VHF Marine radio",
+            "Report unexpected swell or squall shifts to Coastal Police"
+          ];
+        }
+      } else if (isCityOps) {
+        if (rainSum > 30) {
+          statusLabel = "Municipal flood protocol active";
+          statusTone = "alert";
+          statement = "Municipal runoff alert in " + city + ". Precipitation forecast of " + rainSum + " mm exceeds stormwater drain capacity. Immediate mobilization of dewatering pumps required.";
+          checklist = [
+            "Deploy 100-HP diesel dewatering pumps to chronic low-lying underpasses",
+            "Clear trash screens at primary stormwater lake outfalls",
+            "Coordinate with civic traffic police for arterial traffic diversions"
+          ];
+        } else {
+          statusLabel = "Routine civic drainage nominal";
+          statusTone = "nominal";
+          statement = "Routine municipal operations in " + city + ". Current 24h rainfall is " + rainSum + " mm. Stormwater network operating within normal baseline limits.";
+          checklist = [
+            "Maintain standard pump readiness across key arterial underpasses",
+            "Conduct routine silt and trash screen inspections at main outfalls",
+            "Monitor 15-minute Doppler radar precipitation updates"
+          ];
+        }
+      } else {
+        statusLabel = "Baseline weather clearance";
+        statusTone = "nominal";
+        statement = "Operational meteorological assessment for " + city + ": Surface wind is " + wind10 + " km/h, UV index is " + uv + ", and 24-hour rainfall is " + rainSum + " mm. Baseline atmospheric conditions remain stable.";
+        checklist = [
+          "Follow standard sun protection guidelines during peak UV index (11 AM - 3 PM)",
+          "Plan transit and outdoor schedules according to live weather telemetry",
+          "Monitor official SACHET / NDMA early alerts for sudden localized updates"
+        ];
+      }
+
+      // Multilingual script translation
+      if (currentLanguage === "hi") {
+        if (isFarmer) {
+          statement = city + " के लिए वास्तविक समय कृषि-मौसम निर्देश: हवा की गति " + wind10 + " किमी/घंटा और 24 घंटे की वर्षा " + rainSum + " मिमी है। सुबह 06:30 से 09:30 बजे के बीच छिड़काव की अनुकूल स्थिति है। यूवी सूचकांक " + uv + " होने के कारण तेज धूप से पहले काम पूरा करें।";
+          checklist = [
+            "पत्तियों पर बेहतर पकड़ के लिए 2.5 बार दबाव पर नोजल कैलिब्रेट करें",
+            "दोपहर की तेज धूप और वाष्पीकरण से बचने के लिए सुबह जल्दी छिड़काव करें",
+            "खेत के किनारे जल निकासी नालियों को साफ रखें"
+          ];
+        }
+      } else if (currentLanguage === "ta") {
+        if (isFarmer) {
+          statement = city + " க்கான நேரடி வேளாண் வழிகாட்டுதல்: காற்றின் வேகம் " + wind10 + " கிமீ/மணி மற்றும் மழை அளவு " + rainSum + " மிமீ. காலை 06:30 முதல் 09:30 வரை மருந்து தெளிக்க உகந்த நேரம். புற ஊதா குறியீடு " + uv + " உள்ளதால் வெயில் அதிகரிப்பதற்குள் பணிகளை முடிக்கவும்.";
+          checklist = [
+            "மருந்து இலைகளில் சீராக படிய சரியான தெளிப்பான் அழுத்தத்தை பராமரிக்கவும்",
+            "காற்றின் வேகம் மற்றும் வெப்பம் அதிகரிக்கும் முன் காலை வேளையில் முடிக்கவும்",
+            "வரப்புகளில் வடிகால் வாய்க்கால்களை அடைப்பின்றி பராமரிக்கவும்"
+          ];
         }
       }
 
-      if (inList) {
-        processed.push("</ul>");
+      const pillEl = document.getElementById("directives-status-pill");
+      const stmtEl = document.getElementById("directives-primary-statement");
+      const roleLabelEl = document.getElementById("directives-checklist-role-label");
+      const listEl = document.getElementById("directives-action-checklist");
+
+      if (pillEl) {
+        const badgeClass = statusTone === "alert" ? "text-stone-900 bg-stone-100 border-stone-300 font-semibold" :
+                           statusTone === "caution" ? "text-amber-900 bg-amber-50 border-amber-200 font-medium" :
+                           "text-slate-700 bg-slate-100 border-slate-200 font-medium";
+        pillEl.innerHTML = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] border ' + badgeClass + '">' + statusLabel + '</span>';
+      }
+      if (stmtEl) stmtEl.textContent = statement;
+      if (roleLabelEl) roleLabelEl.textContent = occ.split("&")[0].trim();
+      if (listEl) {
+        listEl.innerHTML = checklist.map(function(item) { return "<li>· " + item + "</li>"; }).join("");
       }
 
-      return processed.join("");
-    }
+      const marineStatEl = document.getElementById("cross-marine-status");
+      const marineTextEl = document.getElementById("cross-marine-text");
+      const urbanStatEl = document.getElementById("cross-urban-status");
+      const urbanTextEl = document.getElementById("cross-urban-text");
 
-    // 4. Chatbot Conversation Management
-    let chatHistory = [];
-    try {
-      const saved = localStorage.getItem("weathergpt_chat_history");
-      if (saved) {
-        chatHistory = JSON.parse(saved);
+      if (marineStatEl) {
+        marineStatEl.textContent = wind10 < 30 ? "Clearance" : "Advisory";
+        marineStatEl.className = "text-xs font-medium " + (wind10 < 30 ? "text-slate-500" : "text-amber-900");
       }
-    } catch(e) {
-      chatHistory = [];
+      if (marineTextEl) {
+        marineTextEl.textContent = wind10 < 30 
+          ? ("Coastal winds at " + wind10 + " km/h remain within safe navigation limits. Departure permitted with standard marine vigilance.")
+          : ("Elevated coastal winds (" + wind10 + " km/h). Monitor harbor master squall alerts.");
+      }
+      if (urbanStatEl) {
+        urbanStatEl.textContent = rainSum < 15 ? "Clearance" : "Advisory";
+        urbanStatEl.className = "text-xs font-medium " + (rainSum < 15 ? "text-slate-500" : "text-stone-900");
+      }
+      if (urbanTextEl) {
+        urbanTextEl.textContent = rainSum < 15
+          ? "Standard municipal transit. Inundation risk low across arterial underpasses."
+          : ("High rainfall runoff (" + rainSum + " mm). Dewatering pumps staged at vulnerable underpass corridors.");
+      }
+
+      const metaEl = document.getElementById("directives-meta-line");
+      if (metaEl) {
+        metaEl.innerHTML = "<span>Source: BharatFS Ground Sensors + IMD Nowcast [Live]</span><span class='font-mono text-[11px]'>SACHET CAP Verified · Operator: " + (userProfile.name || "Specialist") + "</span>";
+      }
     }
 
-    function saveChatHistory() {
+    function copyPersonalizedDirectives(btn) {
+      const city = activeLocation || userProfile.location || "Bengaluru";
+      const name = userProfile.name || "Operator";
+      const occ = userProfile.occupation || "Agriculture & Agromet Specialist";
+      const niche = activeNiche || userProfile.niche || "Agrochemical Spraying & Crop Protection";
+      const status = document.getElementById("directives-status-pill") ? document.getElementById("directives-status-pill").textContent.trim() : "CLEARANCE ACTIVE";
+      const statement = document.getElementById("directives-primary-statement") ? document.getElementById("directives-primary-statement").textContent.trim() : "";
+      const wind = document.getElementById("directive-wind-val") ? document.getElementById("directive-wind-val").textContent.trim() : "--";
+      const rain = document.getElementById("directive-rain-val") ? document.getElementById("directive-rain-val").textContent.trim() : "--";
+      const uv = document.getElementById("directive-uv-val") ? document.getElementById("directive-uv-val").textContent.trim() : "--";
+      const soil = document.getElementById("directive-soil-val") ? document.getElementById("directive-soil-val").textContent.trim() : "--";
+
+      const listNodes = document.querySelectorAll("#directives-action-checklist li");
+      const checklistItems = Array.from(listNodes).map(function(li) { return li.textContent.trim(); }).join(String.fromCharCode(10));
+
+      const marineText = document.getElementById("cross-marine-text") ? document.getElementById("cross-marine-text").textContent.trim() : "";
+      const urbanText = document.getElementById("cross-urban-text") ? document.getElementById("cross-urban-text").textContent.trim() : "";
+
+      const nl = String.fromCharCode(10);
+      const dossier = [
+        "WEATHERGPT PERSONALIZED OPERATIONAL DIRECTIVE DOSSIER",
+        "======================================================",
+        "OPERATOR PROFILE:",
+        "· Name: " + name,
+        "· Sector / Role: " + occ,
+        "· Focus Niche: " + niche,
+        "· Operational Station: " + city,
+        "",
+        "TACTICAL CLEARANCE STATUS: " + status,
+        "",
+        "METEOROLOGICAL SYNOPTIC PARAMETERS:",
+        "· Surface Wind (10m): " + wind,
+        "· 24h Precipitation: " + rain,
+        "· UV Index: " + uv,
+        "· Soil Temperature (6cm): " + soil,
+        "",
+        "PRIMARY DIRECTIVE:",
+        statement,
+        "",
+        "ACTIONABLE FIELD CHECKLIST:",
+        checklistItems,
+        "",
+        "CROSS-SECTOR SITUATION:",
+        "· Marine / Coastal: " + marineText,
+        "· Urban Drainage: " + urbanText,
+        "",
+        "Source: BharatFS + IMD Live Nowcast | SACHET NDMA CAP Feed",
+        "Generated: " + new Date().toISOString()
+      ].join(nl);
+
+      navigator.clipboard.writeText(dossier).then(function() {
+        const orig = btn.textContent;
+        btn.textContent = "Copied Dossier!";
+        setTimeout(function() { btn.textContent = orig; }, 2000);
+      }).catch(function() {
+        alert("Copied to clipboard!" + nl + nl + dossier);
+      });
+    }
+
+    // ==================== GROUND TELEMETRY LOADER ====================
+    async function inspectStation() {
+      const city = document.getElementById("station-city")?.value?.trim() || activeLocation || "Bengaluru";
+      const box = document.getElementById("telemetry-box");
+      if (!box) return;
+
+      if (!box.children.length || box.innerHTML.includes("Loading synoptic station sensors")) {
+        box.innerHTML = \`<div class="text-muted text-center py-8 text-sm">Querying synoptic sensors for \${city}...</div>\`;
+      }
+
       try {
-        localStorage.setItem("weathergpt_chat_history", JSON.stringify(chatHistory.slice(-20)));
-      } catch(e) {}
+        const data = await fetchWeatherTelemetry(city);
+        const c = data.current || {};
+        const lat = (typeof data.latitude === "number" ? data.latitude : 12.97).toFixed(2);
+        const lon = (typeof data.longitude === "number" ? data.longitude : 77.59).toFixed(2);
+
+        document.getElementById("ribbon-city").textContent = (data.city || city) + (data.admin1 ? " (" + data.admin1 + ")" : "");
+        document.getElementById("ribbon-coords").textContent = \`\${lat}°N, \${lon}°E\`;
+
+        // Synchronize disaster radar scanner coordinates automatically
+        const disLat = document.getElementById("disaster-lat");
+        const disLon = document.getElementById("disaster-lon");
+        if (disLat && !disLat.matches(":focus")) disLat.value = lat;
+        if (disLon && !disLon.matches(":focus")) disLon.value = lon;
+
+        const t = I18N[currentLanguage] || I18N.en;
+        box.innerHTML = \`
+          <div class="space-y-4">
+            <div>
+              <div class="flex items-center justify-between text-xs text-muted mb-2 font-medium">
+                <span id="telemetry-lvl1-label">\${t.lvl1Sensors}</span>
+                <span class="font-mono">WMO Station #43295 · Synoptic Live</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-sm">
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.tempLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.temperature_c ?? 27.2} <span class="text-sm font-normal text-muted">°C</span></div>
+                  <div class="text-xs text-muted mt-1">\${t.feelsLabel} \${c.apparent_temperature_c ?? 28.4}°C</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.humidityLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.relative_humidity_pct ?? 62} <span class="text-sm font-normal text-muted">%</span></div>
+                  <div class="text-xs text-muted mt-1">\${t.dewpointLabel}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.windLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.wind_speed_10m_kmh ?? 11.4} <span class="text-sm font-normal text-muted">km/h</span></div>
+                  <div class="text-xs text-muted mt-1">\${t.gradientLabel}: \${c.wind_speed_80m_kmh ?? 16.8} km/h</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.pressureLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.pressure_msl_hpa ?? 1012} <span class="text-sm font-normal text-muted">hPa</span></div>
+                  <div class="text-xs text-muted mt-1">\${t.baroLabel}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.uvLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.uv_index ?? 6.2}</div>
+                  <div class="text-xs font-medium text-slate-600 mt-1">
+                    \${c.uv_category || "Moderate Exposure"}
+                  </div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.rainLabel}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.precipitation_24h_mm ?? 0.0} <span class="text-sm font-normal text-muted">mm</span></div>
+                  <div class="text-xs text-muted mt-1">\${c.precipitation_category || "Dry / Clear"}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.soil0Label}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.soil_temperature_0cm_c ?? 25.8} <span class="text-sm font-normal text-muted">°C</span></div>
+                  <div class="text-xs text-muted mt-1">\${t.topsoilLabel}</div>
+                </div>
+                <div class="border border-line rounded-md p-3 bg-paper">
+                  <div class="text-[11px] text-muted font-bold uppercase tracking-wider">\${t.soil6Label}</div>
+                  <div class="text-2xl font-extrabold font-mono text-ink mt-1 tabular-nums">\${c.soil_temperature_6cm_c ?? 24.5} <span class="text-sm font-normal text-muted">°C</span></div>
+                  <div class="text-xs text-muted mt-1">\${t.subsurfaceLabel}</div>
+                </div>
+              </div>
+            </div>
+            \${renderHourlyTrendChartContainer(data.hourly_sample)}
+          </div>
+        \`;
+        setTimeout(() => {
+          drawD3HourlyTrend(data.hourly_sample);
+        }, 20);
+      } catch(e) {
+        box.innerHTML = \`<div class="p-4 bg-paper border border-line text-slate-700 text-sm">Notice: Unable to refresh station telemetry (\${e.message}). Retaining cached parameters.</div>\`;
+      }
     }
 
-    function renderWelcomeMessage() {
-      const city = getTargetCity();
-      const strings = I18N_STRINGS[currentLanguage] || I18N_STRINGS.en;
-      const qPesticide = strings.quickPesticide.replace('{city}', city);
-      const qMarine = strings.quickMarine;
-      const qHeat = strings.quickHeat;
-      const qFlood = strings.quickFlood;
+    let lastHourlySampleData = null;
+    let d3ResizeObserver = null;
+
+    function renderHourlyTrendChartContainer(sample) {
+      if (!sample || !sample.temperature_2m || sample.temperature_2m.length === 0) return "";
+      const rawTemps = sample.temperature_2m.slice(0, 16);
+      const temps = rawTemps.map(v => typeof v === "number" ? Number(v.toFixed(1)) : Number(v) || 0);
+      const min = Math.min(...temps);
+      const max = Math.max(...temps);
+      const t = I18N[currentLanguage] || I18N.en;
+
       return \`
-        <div class="bg-white border border-slate-200/90 p-4 sm:p-5 rounded-xl shadow-xs space-y-3">
-          <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
-            <div class="font-semibold text-xs text-slate-800">\${strings.welcomeTitle}</div>
-            <span class="text-[10px] text-slate-400 font-mono">ONLINE</span>
-          </div>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            \${strings.welcomeDesc}
-          </p>
-          <div class="bg-slate-50/70 p-3 space-y-2 rounded-lg border border-slate-200/60">
-            <div class="text-[10.5px] font-semibold text-slate-500 uppercase tracking-wider">Quick Inquiries:</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qPesticide)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
-                <span>🌾</span> <span>\${qPesticide}</span>
-              </button>
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qMarine)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
-                <span>⚓</span> <span>\${qMarine}</span>
-              </button>
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qHeat)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
-                <span>🏃</span> <span>\${qHeat}</span>
-              </button>
-              <button onclick="quickAsk(this.getAttribute('data-prompt'))" data-prompt="\${encodeURIComponent(qFlood)}" class="text-left p-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-[11px] flex items-center gap-2 transition shadow-2xs">
-                <span>⚠️</span> <span>\${qFlood}</span>
-              </button>
+        <div class="mt-4 pt-3.5 border-t border-line">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-muted mb-2.5 font-medium">
+            <div class="flex items-center gap-2">
+              <span class="text-ink font-bold tracking-tight uppercase text-[11px]" id="trend-section-title">\${t.trendTitle}</span>
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">D3 Synoptic Curve</span>
             </div>
+            <div id="d3-trend-readout" class="font-mono text-xs bg-paper px-2.5 py-1 rounded border border-line flex items-center gap-2 text-slate-700 shadow-2xs">
+              <span id="d3-readout-min" class="text-slate-600">Min: <strong class="text-ink">\${min}°C</strong></span>
+              <span class="text-slate-300">·</span>
+              <span id="d3-readout-max" class="text-slate-600">Max: <strong class="text-ink">\${max}°C</strong></span>
+            </div>
+          </div>
+          <div id="d3-hourly-chart-container" class="w-full bg-paper border border-line rounded-lg p-2 sm:p-3.5 overflow-hidden shadow-2xs relative">
+            <div class="text-xs text-muted text-center py-8">Rendering D3 temperature evolution model...</div>
           </div>
         </div>
       \`;
     }
 
-    function appendMessageToThread(role, text, metadata = {}) {
-      const thread = document.getElementById("chat-thread");
-      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    function drawD3HourlyTrend(sample) {
+      if (!sample) sample = lastHourlySampleData;
+      if (!sample || !sample.temperature_2m || sample.temperature_2m.length === 0) return;
+      lastHourlySampleData = sample;
 
-      if (role === "user") {
-        const userDiv = document.createElement("div");
-        userDiv.className = "flex flex-col items-end space-y-1";
-        userDiv.innerHTML = \`
-          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 mr-1">
-            <span class="font-semibold text-slate-700">You</span>
-            <span>•</span>
-            <span class="bg-white border border-slate-200 px-1.5 py-0.2 rounded font-medium text-slate-600">📍 \${metadata.city || getTargetCity()}</span>
-            <span>•</span>
-            <span class="bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded font-medium uppercase">\${metadata.sector || getSelectedSector()}</span>
-            <span>•</span>
-            <span>\${timeStr}</span>
-          </div>
-          <div class="max-w-[88%] bg-[#1B2A44] text-white px-4 py-2.5 rounded-2xl rounded-tr-xs shadow-xs text-xs leading-relaxed">
-            \${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
-          </div>
+      const container = document.getElementById("d3-hourly-chart-container");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const rawTemps = sample.temperature_2m.slice(0, 16);
+      const data = rawTemps.map((v, idx) => ({
+        hour: idx,
+        label: "+" + idx + "h",
+        temp: typeof v === "number" ? Number(v.toFixed(1)) : Number(v) || 0
+      }));
+
+      const temps = data.map(d => d.temp);
+      const minTemp = Math.min(...temps);
+      const maxTemp = Math.max(...temps);
+      const currentTemp = data[0].temp;
+
+      const containerWidth = container.clientWidth || 480;
+      const width = Math.max(280, containerWidth);
+      const height = width < 420 ? 175 : 190;
+      const margin = { top: 24, right: width < 420 ? 16 : 24, bottom: 28, left: width < 420 ? 28 : 34 };
+
+      const yRange = maxTemp - minTemp;
+      const yPad = Math.max(0.8, yRange * 0.22);
+      const yMin = Math.floor((minTemp - yPad) * 10) / 10;
+      const yMax = Math.ceil((maxTemp + yPad) * 10) / 10;
+
+      // Safe fallback if D3 is not yet ready or offline
+      if (typeof d3 === "undefined") {
+        const innerW = width - margin.left - margin.right;
+        const innerH = height - margin.top - margin.bottom;
+        const getX = (h) => margin.left + (h / 15) * innerW;
+        const getY = (t) => margin.top + (1 - (t - yMin) / (yMax - yMin)) * innerH;
+
+        let pathD = "M " + getX(0) + " " + getY(data[0].temp);
+        for (let i = 1; i < data.length; i++) {
+          const prev = data[i-1];
+          const curr = data[i];
+          const mx = (getX(prev.hour) + getX(curr.hour)) / 2;
+          pathD += " C " + mx + " " + getY(prev.temp) + ", " + mx + " " + getY(curr.temp) + ", " + getX(curr.hour) + " " + getY(curr.temp);
+        }
+        const areaD = pathD + " L " + getX(15) + " " + (height - margin.bottom) + " L " + getX(0) + " " + (height - margin.bottom) + " Z";
+
+        const dots = data.map(d => \`<circle cx="\${getX(d.hour)}" cy="\${getY(d.temp)}" r="\${d.temp === maxTemp || d.temp === minTemp ? 4 : 2.5}" fill="\${d.temp === maxTemp ? '#0F172A' : d.temp === minTemp ? '#64748B' : '#FFFFFF'}" stroke="#0F172A" stroke-width="1.5"/>\`).join("");
+        const xLabels = data.filter((_, i) => i % (width < 420 ? 3 : 2) === 0 || i === 15).map(d => \`<text x="\${getX(d.hour)}" y="\${height - 8}" text-anchor="middle" font-family="monospace" font-size="10" fill="#64748B">\${d.label}</text>\`).join("");
+
+        container.innerHTML = \`
+          <svg viewBox="0 0 \${width} \${height}" class="w-full h-auto select-none">
+            <defs>
+              <linearGradient id="fallback-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0F172A" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="#0F172A" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="\${areaD}" fill="url(#fallback-grad)"/>
+            <path d="\${pathD}" fill="none" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round"/>
+            \${dots}
+            \${xLabels}
+          </svg>
         \`;
-        thread.appendChild(userDiv);
-      } else {
-        const asstDiv = document.createElement("div");
-        asstDiv.className = "flex flex-col items-start space-y-1";
-        const formattedHtml = renderWeatherMarkdown(text);
+        return;
+      }
 
-        asstDiv.innerHTML = \`
-          <div class="flex items-center gap-1.5 text-[10px] text-slate-400 ml-1">
-            <span class="font-semibold text-slate-700">WeatherGPT Advisory</span>
-            <span>•</span>
-            <span class="text-emerald-700 font-medium font-mono">BharatFS</span>
-            <span>•</span>
-            <span>\${timeStr}</span>
-          </div>
-          <div class="max-w-[94%] bg-white border border-slate-200/90 p-4 sm:p-5 rounded-2xl rounded-tl-xs shadow-xs text-slate-800 text-xs leading-relaxed space-y-2">
-            \${formattedHtml}
-            <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
-              <span class="font-mono">WMO SYNOPTIC COMPLIANT</span>
-              <div class="flex items-center gap-3">
-                <button onclick="speakWeatherMessage(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1 text-slate-600 hover:text-slate-900">
-                  <span>🔊</span> Listen
-                </button>
-                <button onclick="copyAdvisory(this)" data-text="\${encodeURIComponent(text)}" class="hover:text-[#1B2A44] font-medium flex items-center gap-1 text-slate-600 hover:text-slate-900">
-                  <span>📋</span> Copy Text
-                </button>
+      // Full D3 Chart Implementation
+      const xScale = d3.scaleLinear()
+        .domain([0, 15])
+        .range([margin.left, width - margin.right]);
+
+      const yScale = d3.scaleLinear()
+        .domain([yMin, yMax])
+        .range([height - margin.bottom, margin.top]);
+
+      const svg = d3.select(container)
+        .append("svg")
+        .attr("viewBox", \`0 0 \${width} \${height}\`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .attr("class", "w-full h-auto select-none overflow-visible");
+
+      // Area gradient
+      const defs = svg.append("defs");
+      const grad = defs.append("linearGradient")
+        .attr("id", "d3-temp-gradient")
+        .attr("x1", "0%").attr("y1", "0%")
+        .attr("x2", "0%").attr("y2", "100%");
+      grad.append("stop").attr("offset", "0%").attr("stop-color", "#0F172A").attr("stop-opacity", 0.16);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", "#0F172A").attr("stop-opacity", 0.0);
+
+      // Horizontal dashed gridlines
+      const yTicks = yScale.ticks(4);
+      svg.append("g")
+        .attr("class", "gridlines")
+        .selectAll("line")
+        .data(yTicks)
+        .enter()
+        .append("line")
+        .attr("x1", margin.left)
+        .attr("x2", width - margin.right)
+        .attr("y1", d => yScale(d))
+        .attr("y2", d => yScale(d))
+        .attr("stroke", "#E2E8F0")
+        .attr("stroke-dasharray", "3,3")
+        .attr("stroke-width", 1);
+
+      // Area Path
+      const areaGen = d3.area()
+        .x(d => xScale(d.hour))
+        .y0(height - margin.bottom)
+        .y1(d => yScale(d.temp))
+        .curve(d3.curveMonotoneX);
+
+      svg.append("path")
+        .datum(data)
+        .attr("fill", "url(#d3-temp-gradient)")
+        .attr("d", areaGen);
+
+      // Line Path
+      const lineGen = d3.line()
+        .x(d => xScale(d.hour))
+        .y(d => yScale(d.temp))
+        .curve(d3.curveMonotoneX);
+
+      svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "#0F172A")
+        .attr("stroke-width", 2.2)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round")
+        .attr("d", lineGen);
+
+      // Y-axis tick text
+      svg.append("g")
+        .selectAll("text")
+        .data(yTicks)
+        .enter()
+        .append("text")
+        .attr("x", margin.left - 6)
+        .attr("y", d => yScale(d) + 3.5)
+        .attr("text-anchor", "end")
+        .attr("font-family", "JetBrains Mono, monospace")
+        .attr("font-size", "10px")
+        .attr("fill", "#64748B")
+        .text(d => d + "°");
+
+      // X-axis tick labels
+      const step = width < 420 ? 3 : width < 560 ? 2 : 1;
+      const xTicks = data.filter((_, i) => i % step === 0 || i === 15);
+      svg.append("g")
+        .selectAll("text")
+        .data(xTicks)
+        .enter()
+        .append("text")
+        .attr("x", d => xScale(d.hour))
+        .attr("y", height - margin.bottom + 16)
+        .attr("text-anchor", "middle")
+        .attr("font-family", "JetBrains Mono, monospace")
+        .attr("font-size", "10px")
+        .attr("font-weight", "500")
+        .attr("fill", "#64748B")
+        .text(d => d.label);
+
+      // Dots on curve
+      const dotsGroup = svg.append("g").attr("class", "dots");
+      dotsGroup.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xScale(d.hour))
+        .attr("cy", d => yScale(d.temp))
+        .attr("r", d => d.temp === maxTemp || d.temp === minTemp ? 4.5 : 2.5)
+        .attr("fill", d => d.temp === maxTemp ? "#0F172A" : d.temp === minTemp ? "#64748B" : "#FFFFFF")
+        .attr("stroke", d => d.temp === maxTemp ? "#0F172A" : d.temp === minTemp ? "#64748B" : "#0F172A")
+        .attr("stroke-width", d => d.temp === maxTemp || d.temp === minTemp ? 2 : 1.5);
+
+      // Min and Max Callout labels
+      const maxItem = data.find(d => d.temp === maxTemp);
+      const minItem = data.find(d => d.temp === minTemp);
+
+      if (maxItem) {
+        svg.append("text")
+          .attr("x", xScale(maxItem.hour))
+          .attr("y", Math.max(14, yScale(maxItem.temp) - 8))
+          .attr("text-anchor", "middle")
+          .attr("font-family", "JetBrains Mono, monospace")
+          .attr("font-size", "10px")
+          .attr("font-weight", "700")
+          .attr("fill", "#0F172A")
+          .text(maxItem.temp + "° Max");
+      }
+
+      if (minItem && minItem !== maxItem) {
+        const isNearBottom = yScale(minItem.temp) > height - margin.bottom - 12;
+        svg.append("text")
+          .attr("x", xScale(minItem.hour))
+          .attr("y", isNearBottom ? yScale(minItem.temp) - 8 : yScale(minItem.temp) + 16)
+          .attr("text-anchor", "middle")
+          .attr("font-family", "JetBrains Mono, monospace")
+          .attr("font-size", "10px")
+          .attr("font-weight", "700")
+          .attr("fill", "#475569")
+          .text(minItem.temp + "° Min");
+      }
+
+      // Interactive Crosshair & Hover Overlay
+      const crosshair = svg.append("line")
+        .attr("stroke", "#0F172A")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "2,2")
+        .attr("y1", margin.top)
+        .attr("y2", height - margin.bottom)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+
+      const focusDot = svg.append("circle")
+        .attr("r", 5.5)
+        .attr("fill", "#0F172A")
+        .attr("stroke", "#FFFFFF")
+        .attr("stroke-width", 2)
+        .style("opacity", 0)
+        .style("pointer-events", "none");
+
+      const readoutEl = document.getElementById("d3-trend-readout");
+
+      function updateHover(hourIndex) {
+        const idx = Math.max(0, Math.min(15, hourIndex));
+        const d = data[idx];
+        if (!d) return;
+
+        const xPos = xScale(d.hour);
+        const yPos = yScale(d.temp);
+
+        crosshair.attr("x1", xPos).attr("x2", xPos).style("opacity", 0.6);
+        focusDot.attr("cx", xPos).attr("cy", yPos).style("opacity", 1);
+
+        if (readoutEl) {
+          const delta = Math.round((d.temp - currentTemp) * 10) / 10;
+          const deltaStr = delta === 0 ? "Baseline" : (delta > 0 ? "+" + delta : String(delta)) + "°C";
+          readoutEl.innerHTML = \`
+            <span class="font-bold text-ink font-mono">T+\${d.hour}h: \${d.temp}°C</span>
+            <span class="text-slate-300">·</span>
+            <span class="text-slate-500 font-mono text-[11px]">\${deltaStr}</span>
+          \`;
+        }
+      }
+
+      function resetHover() {
+        crosshair.style("opacity", 0);
+        focusDot.style("opacity", 0);
+        if (readoutEl) {
+          readoutEl.innerHTML = \`
+            <span id="d3-readout-min" class="text-slate-600">Min: <strong class="text-ink">\${minTemp}°C</strong></span>
+            <span class="text-slate-300">·</span>
+            <span id="d3-readout-max" class="text-slate-600">Max: <strong class="text-ink">\${maxTemp}°C</strong></span>
+          \`;
+        }
+      }
+
+      // Pointer tracking rect
+      svg.append("rect")
+        .attr("x", margin.left)
+        .attr("y", margin.top)
+        .attr("width", width - margin.left - margin.right)
+        .attr("height", height - margin.top - margin.bottom)
+        .attr("fill", "transparent")
+        .attr("class", "cursor-crosshair")
+        .on("mousemove touchmove", function(event) {
+          event.preventDefault();
+          const [mx] = d3.pointer(event, this);
+          const hourVal = xScale.invert(mx);
+          const nearestHour = Math.round(hourVal);
+          updateHover(nearestHour);
+        })
+        .on("mouseleave touchend touchcancel", function() {
+          resetHover();
+        });
+
+      // Responsive Resize Observer
+      if (!d3ResizeObserver && window.ResizeObserver) {
+        let resizeTimer = null;
+        d3ResizeObserver = new ResizeObserver(() => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            if (lastHourlySampleData) drawD3HourlyTrend(lastHourlySampleData);
+          }, 120);
+        });
+        d3ResizeObserver.observe(container);
+      }
+    }
+
+    // ==================== SACHET DISASTER RADAR ====================
+    async function loadDisasterAlerts() {
+      const lat = document.getElementById("disaster-lat")?.value || "12.9719";
+      const lon = document.getElementById("disaster-lon")?.value || "77.5937";
+      const rad = document.getElementById("disaster-radius")?.value || "50";
+      const list = document.getElementById("disaster-alerts-list");
+      const badge = document.getElementById("disaster-badge");
+      if (!list) return;
+
+      list.innerHTML = \`<div class="text-muted text-center py-6 text-sm">Scanning OASIS CAP v1.2 bulletins within \${rad}km radius...</div>\`;
+
+      try {
+        const backend = getActiveBackendUrl();
+        const res = await fetch(\`\${backend}/api/disaster/alerts?latitude=\${lat}&longitude=\${lon}&radius=\${rad}\`);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        const alerts = data.alerts || [];
+
+        if (badge) {
+          badge.textContent = alerts.length > 0 ? (alerts.length === 1 ? "1 Active Bulletin" : alerts.length + " Active Bulletins") : "No Active Bulletins";
+          badge.className = alerts.length > 0 ? "text-xs font-semibold text-stone-900 bg-stone-100 px-2 py-0.5 rounded border border-stone-300" : "text-xs font-medium text-slate-500";
+        }
+
+        if (alerts.length === 0) {
+          list.innerHTML = \`
+            <div class="p-3.5 bg-paper border border-line rounded text-xs text-slatebody space-y-1">
+              <div class="font-semibold text-slate-800">Synoptic Perimeter Clear</div>
+              <div class="text-muted">SACHET early warning protocol confirms zero active emergency advisories within \${rad}km radius.</div>
+            </div>
+          \`;
+          return;
+        }
+
+        list.innerHTML = alerts.map(a => {
+          const isEmergency = a.severity === "Red" || a.severity === "Orange";
+          const borderStyle = isEmergency ? "border-l-2 border-stone-800 bg-stone-50/60" : "border-l-2 border-slate-300 bg-paper";
+          return \`
+            <div class="p-3.5 border border-line rounded \${borderStyle} space-y-1.5 text-sm">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-ink">\${a.event || "Meteorological Advisory"}</span>
+                <span class="font-mono text-xs text-slate-600 font-medium">\${a.severity || "Advisory"}</span>
               </div>
+              <div class="text-slatebody text-xs">\${a.headline || a.description || "Active emergency bulletin."}</div>
+              <div class="text-muted text-[11px] flex items-center justify-between pt-1 border-t border-line/60">
+                <span>Perimeter: \${a.area || "Regional"}</span>
+                <span class="font-mono">Issued: \${a.expires ? new Date(a.expires).toLocaleTimeString() : "Synoptic"}</span>
+              </div>
+            </div>
+          \`;
+        }).join("");
+      } catch(e) {
+        list.innerHTML = \`<div class="p-3.5 bg-paper border border-line text-slate-700 text-sm">Notice: Unable to reach disaster radar (\${e.message}).</div>\`;
+      }
+    }
+
+    // ==================== IMD CLIMATE HAZARD ATLAS ====================
+    async function searchHazardAtlas() {
+      const city = document.getElementById("hazard-search-input")?.value?.trim() || activeLocation;
+      const box = document.getElementById("hazard-results-box");
+      if (!box) return;
+
+      box.innerHTML = \`<div class="text-muted text-center py-6 text-sm">Querying IMD Climate Hazard Atlas for \${city}...</div>\`;
+
+      try {
+        const backend = getActiveBackendUrl();
+        const res = await fetch(\`\${backend}/api/tools/hazard_atlas?city=\${encodeURIComponent(city)}\`);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        const p = data.hazard_profile;
+
+        if (!p) {
+          box.innerHTML = \`<div class="text-sm text-muted">No specific climatological profile mapped for \${city}. Using Southern Plateau regional standards.</div>\`;
+          return;
+        }
+
+        box.innerHTML = \`
+          <div class="space-y-2.5 text-sm">
+            <div class="flex items-center justify-between border-b border-line pb-1.5 font-bold text-ink">
+              <span>\${p.district}, \${p.state}</span>
+              <span class="font-mono text-xs text-muted">Monsoon Onset: \${p.monsoon_onset_normal}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 bg-white border border-line rounded">
+                <span class="text-muted block text-[10px] font-bold uppercase">HISTORICAL 24H MAX RAIN</span>
+                <span class="font-mono font-bold text-ink text-sm">\${p.max_24h_rainfall_record_mm} mm</span>
+              </div>
+              <div class="p-2.5 bg-white border border-line rounded">
+                <span class="text-muted block text-[10px] font-bold uppercase">CYCLONE RISK INDEX</span>
+                <span class="font-mono font-bold text-sm text-ink">\${p.cyclone_vulnerability}</span>
+              </div>
+            </div>
+            <div class="p-2.5 bg-white border border-line rounded text-xs text-slatebody">
+              <strong class="text-ink">Flood Frequency &amp; Vulnerability:</strong> \${p.flood_history}
+            </div>
+            <div class="text-xs text-muted flex justify-between pt-1">
+              <span>Soil: \${p.soil_type_primary}</span>
+              <span class="font-mono">Annual Rain: \${p.annual_rainfall_normal_mm} mm</span>
             </div>
           </div>
         \`;
-        thread.appendChild(asstDiv);
-      }
-
-      thread.scrollTop = thread.scrollHeight;
-    }
-
-    function copyAdvisory(btn) {
-      try {
-        const text = decodeURIComponent(btn.getAttribute("data-text"));
-        navigator.clipboard.writeText(text);
-        const orig = btn.innerHTML;
-        btn.innerHTML = "<span>✓</span> Copied";
-        setTimeout(() => { btn.innerHTML = orig; }, 1800);
-      } catch(e) {}
-    }
-
-    // Voice Text-To-Speech (Section 4.8)
-    function speakWeatherMessage(btn) {
-      try {
-        const text = decodeURIComponent(btn.getAttribute("data-text"));
-        if (!window.speechSynthesis) {
-          console.warn("Speech synthesis is not supported on this browser.");
-          btn.innerHTML = "<span>⚠️</span> Audio Unavailable";
-          setTimeout(() => { btn.innerHTML = "<span>🔊</span> Listen"; }, 2000);
-          return;
-        }
-        window.speechSynthesis.cancel(); // stop previous
-        const clean = text.split("*").join("").replace(/###/g, "").replace(/##/g, "");
-        const utterance = new SpeechSynthesisUtterance(clean.substring(0, 450));
-        
-        if (currentLanguage === "hi") {
-          utterance.lang = "hi-IN";
-        } else if (currentLanguage === "ta") {
-          utterance.lang = "ta-IN";
-        } else {
-          utterance.lang = "en-IN";
-        }
-        utterance.rate = 1.0;
-        window.speechSynthesis.speak(utterance);
-
-        const orig = btn.innerHTML;
-        btn.innerHTML = "<span>🔊</span> Speaking...";
-        utterance.onend = () => { btn.innerHTML = orig; };
-        utterance.onerror = () => { btn.innerHTML = orig; };
       } catch(e) {
-        console.warn("TTS error:", e);
+        box.innerHTML = \`<div class="text-xs text-slate-700 p-3 bg-paper border border-line rounded">Notice: Unable to query hazard atlas (\${e.message}).</div>\`;
       }
     }
 
-    // Voice Speech-To-Text Dictation (Section 4.8)
+    // ==================== RURAL TELEPHONY GATEWAY ====================
+    function switchRuralTab(tabId) {
+      ["ivr", "sms", "krishi"].forEach(t => {
+        const el = document.getElementById("rural-content-" + t);
+        const btn = document.getElementById("rural-tab-" + t);
+        if (el) el.classList.toggle("hidden", t !== tabId);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = "px-3 py-1.5 font-bold text-ink border-b-2 border-ink -mb-[1px]";
+          } else {
+            btn.className = "px-3 py-1.5 text-muted hover:text-ink";
+          }
+        }
+      });
+    }
+
+    async function connectIvrCall() {
+      const lang = document.getElementById("ivr-lang")?.value || "hi";
+      const query = document.getElementById("ivr-query-input")?.value?.trim() || "क्या आज बारिश होगी?";
+      const box = document.getElementById("ivr-status-box");
+      const btn = document.getElementById("ivr-call-btn");
+
+      btn.disabled = true;
+      box.textContent = "Connecting to 1800-MAUSAM-AI... Dialing PSTN/SIP gateway...";
+
+      try {
+        const backend = getActiveBackendUrl();
+        const res = await fetch(\`\${backend}/api/tools/telephony\`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            channel: "IVR",
+            language: lang,
+            query: query,
+            phone_number: "+91 98400 12345"
+          })
+        });
+        const data = await res.json();
+        box.innerHTML = \`
+          <div class="space-y-1.5">
+            <div class="text-slate-700 font-medium flex items-center justify-between text-xs pb-1 border-b border-line">
+              <span>Voice Channel Connected (1800-MAUSAM)</span>
+              <span class="font-mono text-[11px] text-muted">\${data.ivr_tts_voice}</span>
+            </div>
+            <div class="text-ink font-sans text-sm pt-1">\${data.spoken_response}</div>
+          </div>
+        \`;
+
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(data.spoken_response);
+          utterance.lang = lang === "hi" ? "hi-IN" : lang === "ta" ? "ta-IN" : "en-IN";
+          window.speechSynthesis.speak(utterance);
+        }
+      } catch(e) {
+        box.textContent = "IVR gateway error: " + e.message;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function speakKrishiSakhi() {
+      const guidance = "வணக்கம் விவசாயி அவர்களே. அடுத்த 48 மணி நேரத்திற்கு பலத்த மழை எச்சரிக்கை இல்லை. பயிர்களுக்கு உரம் மற்றும் மருந்து தெளிக்க சாதகமான வானிலை நிலவுகிறது.";
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(guidance);
+        u.lang = "ta-IN";
+        window.speechSynthesis.speak(u);
+      } else {
+        alert("Audio Guidance:\\n\\n" + guidance);
+      }
+    }
+
+    // ==================== SPEECH RECOGNITION (DICTATION) ====================
     let recognitionInstance = null;
     let isRecording = false;
 
     function toggleVoiceRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const micBtn = document.getElementById("voice-mic-btn");
-      const micIcon = document.getElementById("mic-icon");
       const input = document.getElementById("chat-input");
 
       if (!SpeechRecognition) {
-        console.warn("Speech recognition is not supported in this browser.");
         if (input) {
-          const origPlaceholder = input.placeholder;
-          input.placeholder = "Speech dictation unavailable in this browser — type here";
-          setTimeout(() => { input.placeholder = origPlaceholder; }, 3000);
+          input.placeholder = "Speech recognition unavailable in this browser — please type your question.";
         }
         return;
       }
@@ -1555,26 +2764,17 @@ export function getPortalHtml(): string {
       if (isRecording && recognitionInstance) {
         recognitionInstance.stop();
         isRecording = false;
-        micBtn.classList.remove("bg-red-500", "text-white", "animate-pulse");
-        micIcon.textContent = "🎙️";
+        if (micBtn) micBtn.className = "absolute right-3 top-3 text-muted hover:text-ink transition-colors p-1";
         return;
       }
 
       recognitionInstance = new SpeechRecognition();
-      if (currentLanguage === "hi") {
-        recognitionInstance.lang = "hi-IN";
-      } else if (currentLanguage === "ta") {
-        recognitionInstance.lang = "ta-IN";
-      } else {
-        recognitionInstance.lang = "en-IN";
-      }
-
+      recognitionInstance.lang = currentLanguage === "hi" ? "hi-IN" : currentLanguage === "ta" ? "ta-IN" : "en-IN";
       recognitionInstance.interimResults = true;
 
       recognitionInstance.onstart = () => {
         isRecording = true;
-        micBtn.classList.add("bg-red-500", "text-white", "animate-pulse");
-        micIcon.textContent = "⏹️";
+        if (micBtn) micBtn.className = "absolute right-3 top-3 text-ink bg-slate-100 rounded p-1";
       };
 
       recognitionInstance.onresult = (event) => {
@@ -1582,64 +2782,138 @@ export function getPortalHtml(): string {
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           transcript += event.results[i][0].transcript;
         }
-        input.value = transcript;
+        if (input) input.value = transcript;
       };
 
-      recognitionInstance.onerror = (e) => {
-        console.warn("STT error:", e);
+      recognitionInstance.onerror = () => {
         isRecording = false;
-        micBtn.classList.remove("bg-red-500", "text-white", "animate-pulse");
-        micIcon.textContent = "🎙️";
+        if (micBtn) micBtn.className = "absolute right-3 top-3 text-muted hover:text-ink transition-colors p-1";
       };
 
       recognitionInstance.onend = () => {
         isRecording = false;
-        micBtn.classList.remove("bg-red-500", "text-white", "animate-pulse");
-        micIcon.textContent = "🎙️";
+        if (micBtn) micBtn.className = "absolute right-3 top-3 text-muted hover:text-ink transition-colors p-1";
       };
 
       recognitionInstance.start();
     }
 
+    // ==================== TTS ASSISTANT READER ====================
+    function speakWeatherMessage(btn) {
+      try {
+        const text = decodeURIComponent(btn.getAttribute("data-text") || "");
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        const clean = text.replace(/[*#\`_]/g, "").substring(0, 450);
+        const u = new SpeechSynthesisUtterance(clean);
+        u.lang = currentLanguage === "hi" ? "hi-IN" : currentLanguage === "ta" ? "ta-IN" : "en-IN";
+        window.speechSynthesis.speak(u);
+
+        const orig = btn.textContent;
+        btn.textContent = "Speaking...";
+        u.onend = () => { btn.textContent = orig; };
+        u.onerror = () => { btn.textContent = orig; };
+      } catch(e) {
+        console.warn("TTS error:", e);
+      }
+    }
+
+    // ==================== CHATBOT DIALOGUE CONTROLLER ====================
+    function renderWelcomeMessage() {
+      const t = I18N[currentLanguage] || I18N.en;
+      let greeting = "Welcome, <strong>" + userProfile.name + "</strong> (" + userProfile.occupation + "). WeatherGPT is configured with your primary location <strong>" + userProfile.location + "</strong> and operational niche <strong>" + userProfile.niche + "</strong>.";
+      if (currentLanguage === "hi") {
+        greeting = "स्वागत है, <strong>" + userProfile.name + "</strong> (" + userProfile.occupation + ")। वेदरजीपीटी आपके प्राथमिक स्थान <strong>" + userProfile.location + "</strong> और परिचालन विषय <strong>" + userProfile.niche + "</strong> के साथ सक्रिय है।";
+      } else if (currentLanguage === "ta") {
+        greeting = "வணக்கம், <strong>" + userProfile.name + "</strong> (" + userProfile.occupation + "). WeatherGPT உங்கள் முதன்மை இருப்பிடம் <strong>" + userProfile.location + "</strong> மற்றும் செயல்பாட்டுத் துறை <strong>" + userProfile.niche + "</strong> உடன் தயாராக உள்ளது.";
+      }
+
+      return \`
+        <div class="border border-line rounded-lg p-5 bg-paper space-y-2.5 shadow-2xs">
+          <div class="flex items-center justify-between text-xs pb-1.5 border-b border-line">
+            <span class="font-bold text-ink text-sm">\${t.welcomeTitle}</span>
+            <span class="text-xs text-slate-500 font-medium">\${t.ready}</span>
+          </div>
+          <p class="text-slatebody text-sm leading-relaxed">
+            \${greeting}
+          </p>
+          <p class="text-xs text-muted leading-relaxed">
+            \${t.welcomeSub}
+          </p>
+        </div>
+      \`;
+    }
+
     function initChatUI() {
       const thread = document.getElementById("chat-thread");
+      if (!thread) return;
       thread.innerHTML = renderWelcomeMessage();
 
-      if (chatHistory && chatHistory.length > 0) {
-        chatHistory.forEach(item => {
-          appendMessageToThread(item.role, item.text, item.metadata || {});
-        });
-      }
-    }
-
-    function clearChatHistory() {
-      chatHistory = [];
-      localStorage.removeItem("weathergpt_chat_history");
-      initChatUI();
-    }
-
-    function printChatTranscript() {
-      window.print();
-    }
-
-    function quickAsk(promptText) {
-      if (!promptText) return;
-      let decoded = promptText;
-      try {
-        if (typeof promptText === "string" && (promptText.includes("%20") || promptText.includes("%"))) {
-          decoded = decodeURIComponent(promptText);
-        }
-      } catch (e) {
-        decoded = promptText;
-      }
-      const input = document.getElementById("chat-input");
-      if (input) {
-        input.value = decoded;
-        const form = document.getElementById("chat-form");
-        if (form) {
-          form.dispatchEvent(new Event("submit", { cancelable: true }));
+      const saved = localStorage.getItem("weathergpt_chat_history");
+      if (saved) {
+        try {
+          chatHistory = JSON.parse(saved);
+          chatHistory.forEach(item => {
+            appendMessageToThread(item.role, item.text, item.metadata || {});
+          });
+        } catch(e) {
+          chatHistory = [];
         }
       }
+    }
+
+    function appendMessageToThread(role, text, meta) {
+      const thread = document.getElementById("chat-thread");
+      if (!thread) return;
+
+      const isUser = role === "user";
+      const div = document.createElement("div");
+      div.className = isUser ? "flex justify-end" : "flex justify-start";
+
+      const encText = encodeURIComponent(text);
+
+      div.innerHTML = isUser
+        ? \`
+          <div class="max-w-[85%] bg-ink text-white rounded-lg p-4 text-sm space-y-1.5 shadow-xs">
+            <div class="text-[11px] text-slate-300 font-mono flex items-center justify-between gap-4 pb-1 border-b border-slate-700">
+              <span>\${meta.name || userProfile.name}</span>
+              <span>\${meta.city || activeLocation} · \${meta.niche ? meta.niche.split('&')[0].trim() : 'Active'}</span>
+            </div>
+            <div class="leading-relaxed font-sans pt-0.5">\${text}</div>
+          </div>
+        \`
+        : \`
+          <div class="max-w-[95%] bg-white border border-line rounded-lg p-5 text-sm space-y-3 shadow-xs">
+            <div class="flex items-center justify-between text-xs text-muted pb-2 border-b border-line">
+              <span class="font-bold text-ink text-sm">WeatherGPT Synoptic Dispatch</span>
+              <button onclick="speakWeatherMessage(this)" data-text="\${encText}" class="hover:text-ink transition-colors flex items-center gap-1 font-mono text-xs font-semibold px-2 py-0.5 bg-paper rounded border border-line">
+                Listen
+              </button>
+            </div>
+            <div class="leading-relaxed text-slatebody whitespace-pre-line font-sans text-sm">\${formatAssistantResponse(text)}</div>
+            <div class="pt-2 border-t border-line text-xs text-muted flex items-center justify-between">
+              <span>Provenance: BharatFS + IMD Nowcast + SACHET CAP</span>
+              <span class="font-mono">\${new Date().toLocaleTimeString()}</span>
+            </div>
+          </div>
+        \`;
+
+      thread.appendChild(div);
+      thread.scrollTop = thread.scrollHeight;
+    }
+
+    function formatAssistantResponse(raw) {
+      if (!raw) return "";
+      let s = raw;
+      s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/^### (.*$)/gim, '<h4 class="font-bold text-ink text-sm mt-2 mb-1">$1</h4>');
+      s = s.replace(/^## (.*$)/gim, '<h3 class="font-bold text-ink text-base mt-2.5 mb-1">$1</h3>');
+      s = s.replace(/^# (.*$)/gim, '<h2 class="font-bold text-ink text-lg mt-3 mb-1.5">$1</h2>');
+      const bt = String.fromCharCode(96);
+      s = s.replace(new RegExp(bt + "([^" + bt + "]+)" + bt, "g"), '<code class="font-mono text-xs bg-subtle px-1 py-0.5 rounded border border-line text-slate-800">$1</code>');
+      s = s.replace(/^[*-] (.*$)/gim, '<div class="flex items-start gap-2 my-0.5"><span class="text-muted select-none">·</span><span>$1</span></div>');
+      s = s.replace(/^(\d+)\. (.*$)/gim, '<div class="flex items-start gap-2 my-0.5"><span class="font-mono text-xs text-muted select-none">$1.</span><span>$2</span></div>');
+      return s;
     }
 
     async function handleChatSubmit(event) {
@@ -1649,32 +2923,29 @@ export function getPortalHtml(): string {
       if (!userText) return;
 
       input.value = "";
-      const city = getTargetCity();
-      const sector = getSelectedSector();
+      const city = activeLocation;
+      const niche = activeNiche;
+      const occupation = userProfile.occupation;
+      const userName = userProfile.name;
 
-      // Append User message
-      appendMessageToThread("user", userText, { city, sector });
-      chatHistory.push({ role: "user", text: userText, metadata: { city, sector } });
-      saveChatHistory();
+      appendMessageToThread("user", userText, { city, niche, name: userName });
+      chatHistory.push({ role: "user", text: userText, metadata: { city, niche, name: userName } });
+      localStorage.setItem("weathergpt_chat_history", JSON.stringify(chatHistory.slice(-20)));
 
-      // UI States
       const thinking = document.getElementById("chat-thinking");
       const sendBtn = document.getElementById("chat-send-btn");
-      thinking.classList.remove("hidden");
-      sendBtn.disabled = true;
+      if (thinking) thinking.classList.remove("hidden");
+      if (sendBtn) sendBtn.disabled = true;
 
-      // Generate or retrieve persistent conversation session
       let convId = localStorage.getItem("weathergpt_conv_id");
       if (!convId) {
-        convId = "conv_" + Math.random().toString(36).substring(2, 10);
+        convId = "conv_" + Math.random().toString(36).substring(2, 9);
         localStorage.setItem("weathergpt_conv_id", convId);
       }
-      document.getElementById("session-id-display").textContent = "SESSION: " + convId.slice(0, 10);
 
-      // Contextual prompt with role and location if not present
       let finalMessage = userText;
-      if (!userText.toLowerCase().includes(city.toLowerCase()) && !userText.includes("📍")) {
-        finalMessage = userText + " (Target Location: " + city + ", Role Lens: " + sector + ", Preferred Language: " + currentLanguage + ")";
+      if (!userText.toLowerCase().includes(city.toLowerCase())) {
+        finalMessage += \` (Target City: \${city}, Role: \${occupation}, Niche: \${niche}, Language: \${currentLanguage})\`;
       }
 
       const backendUrl = getActiveBackendUrl();
@@ -1686,733 +2957,42 @@ export function getPortalHtml(): string {
           body: JSON.stringify({
             conversation_id: convId,
             message: finalMessage,
-            user_id: "public_citizen"
+            user_id: "user_" + userName.toLowerCase().replace(/[^a-z0-9]/g, "_"),
+            user_name: userName,
+            city: city,
+            niche: niche,
+            occupation: occupation
           })
         });
 
         if (!response.ok) {
-          throw new Error("HTTP error " + response.status + ": " + (await response.text()));
+          throw new Error("HTTP " + response.status + ": " + (await response.text()));
         }
 
         const data = await response.json();
-        const reply = data.reply || "No reply returned from server.";
+        const reply = data.reply || "No response received from meteorological engine.";
 
-        appendMessageToThread("assistant", reply, { city, sector });
-        chatHistory.push({ role: "assistant", text: reply, metadata: { city, sector } });
-        saveChatHistory();
-      } catch (err) {
+        appendMessageToThread("assistant", reply, { city, niche });
+        chatHistory.push({ role: "assistant", text: reply, metadata: { city, niche } });
+        localStorage.setItem("weathergpt_chat_history", JSON.stringify(chatHistory.slice(-20)));
+      } catch(err) {
         console.error("Chat error:", err);
-        const isCloudflareOrStatic = window.location.hostname.includes("pages.dev") || window.location.hostname.includes("cloudflare");
-        const helperNote = isCloudflareOrStatic && !localStorage.getItem("weathergpt_backend_url")
-          ? "\\n\\n💡 Tip for Cloudflare Pages: Click the ⚙️ API button in the navbar to configure your live backend service URL."
-          : "";
-        const errReply = "⚠️ **Connection Notice:** Unable to reach WeatherGPT backend at " + backendUrl + ". " + (err.message || err) + helperNote;
-        appendMessageToThread("assistant", errReply, { city, sector });
+        const errMsg = "Notice: Unable to reach WeatherGPT backend at " + backendUrl + ". " + (err.message || err);
+        appendMessageToThread("assistant", errMsg, { city, niche });
       } finally {
-        thinking.classList.add("hidden");
-        sendBtn.disabled = false;
+        if (thinking) thinking.classList.add("hidden");
+        if (sendBtn) sendBtn.disabled = false;
         input.focus();
       }
     }
 
-    // 5. Role-Based Operational Directives Controller (Section 4.4 & 8.4)
-    const ROLE_DIRECTIVE_SCENARIOS = {
-      cyclone: {
-        en: {
-          event: "Extremely Severe Cyclonic Storm & Storm Surge (Red Alert)",
-          area: "Coastal Odisha & Northern Andhra Pradesh",
-          meta: "Source: NDMA SACHET CAP v1.2 + BharatFS Cyclone Track (±12km ensemble spread)",
-          farmer: {
-            directive: "Emergency harvest of mature paddy within 18 hours; pause all agro-chemical spraying and secure livestock.",
-            checklist: [
-              "Dig 30cm peripheral trenches to stop prolonged root submergence",
-              "Zero pesticide or fertilizer application (drift & immediate washout risk)",
-              "Evacuate livestock to high-ground pucca shelters with stored dry fodder"
-            ],
-            status: "Spraying: SUSPENDED"
-          },
-          fisherman: {
-            directive: "TOTAL SEA BAN: Coastal squalls exceeding 75 km/h with rough sea state. Return to harbor by 18:00 IST.",
-            checklist: [
-              "Total suspension of deep-sea and coastal fishing operations",
-              "Moor fiber boats and catamarans securely above high spring-tide line",
-              "Keep marine VHF tuned to Coast Guard Channel 16 for SAR updates"
-            ],
-            status: "Departure: TOTAL BAN"
-          },
-          city_ops: {
-            directive: "ACTIVATE MUNICIPAL DRAINAGE PROTOCOL: Mobilize heavy dewatering pumps to chronic low-lying wards.",
-            checklist: [
-              "Station 100-HP diesel pumps at known inundation railway underpasses",
-              "Pre-position NDRF and Civil Defense boats in vulnerable wards",
-              "Broadcast real-time road diversion alerts for submerged arterial routes"
-            ],
-            status: "Alert: CODE RED"
-          }
-        },
-        hi: {
-          event: "अत्यंत गंभीर चक्रवाती तूफान और तूफानी लहरें (रेड अलर्ट)",
-          area: "तटीय ओडिशा एवं उत्तरी आंध्र प्रदेश",
-          meta: "स्रोत: एनडीएमए सचेत सीएपी v1.2 + भारत-एफएस चक्रवात पथ (±12 किमी फैलाव)",
-          farmer: {
-            directive: "18 घंटों के भीतर पकी धान की फसल की आपातकालीन कटाई करें; सभी कीटनाशक छिड़काव रोकें और मवेशियों को सुरक्षित रखें।",
-            checklist: [
-              "जड़ों के जलभराव को रोकने के लिए मेड़ों के किनारे 30 सेमी गहरी जल निकासी नालियां बनाएं",
-              "48 घंटों तक किसी भी कीटनाशक या उर्वरक का छिड़काव न करें (हवा में बहने और धुलने का खतरा)",
-              "मवेशियों को सूखे चारे के साथ ऊंचे पक्के आश्रयों में स्थानांतरित करें"
-            ],
-            status: "छिड़काव: स्थगित"
-          },
-          fisherman: {
-            directive: "समुद्र में जाने पर पूर्ण प्रतिबंध: 75 किमी/घंटे से अधिक तेज तूफानी हवाएं। शाम 18:00 बजे तक बंदरगाह लौटें।",
-            checklist: [
-              "गहरे समुद्र और तटीय मछली पकड़ने के सभी कार्य तुरंत स्थगित करें",
-              "फाइबर नौकाओं और नावों को उच्च ज्वार रेखा से ऊपर सुरक्षित बांधें",
-              "तटरक्षक खोज व बचाव हेतु मरीन वीएचएफ चैनल 16 चालू रखें"
-            ],
-            status: "रवानगी: पूर्ण प्रतिबंध"
-          },
-          city_ops: {
-            directive: "नगर निगम जल निकासी प्रोटोकॉल सक्रिय करें: जलभराव वाले निचले वार्डों में भारी पंप तैनात करें।",
-            checklist: [
-              "रेलवे अंडरपास और संवेदनशील चौराहों पर 100-एचपी डीजल पंप तैनात करें",
-              "संवेदनशील वार्डों में एनडीआरएफ और नागरिक सुरक्षा बचाव नौकाएं पहले से तैनात करें",
-              "जलमग्न मुख्य मार्गों के लिए वास्तविक समय में यातायात डायवर्जन जारी करें"
-            ],
-            status: "चेतावनी: कोड रेड"
-          }
-        },
-        ta: {
-          event: "மிக தீவிர புயல் மற்றும் கடல் கொந்தளிப்பு (சிவப்பு எச்சரிக்கை)",
-          area: "கடலோர ஒடிசா மற்றும் வடக்கு ஆந்திர பிரதேசம்",
-          meta: "ஆதாரம்: என்டிஎம்ஏ சச்செட் சிஏபி v1.2 + பாரத்-எஃப்எஸ் புயல் பாதை (±12 கிமீ)",
-          farmer: {
-            directive: "18 மணி நேரத்திற்குள் பழுத்த நெல் பயிரை அவசரமாக அறுவடை செய்யவும்; பூச்சிக்கொல்லி மருந்து தெளிப்பதை நிறுத்தி கால்நடைகளைப் பாதுகாக்கவும்.",
-            checklist: [
-              "வேர் அழுகலைத் தடுக்க வரப்புகளில் 30 செ.மீ வடிகால் வாய்க்கால்களை வெட்டவும்",
-              "பூச்சிக்கொல்லி அல்லது உரமிடுவதை உடனடியாக தவிர்க்கவும் (காற்று மற்றும் மழையால் அடித்துச் செல்லப்படும் அபாயம்)",
-              "கால்நடைகளை மேடான கான்கிரீட் கொட்டகைகளுக்கு மாற்றவும்"
-            ],
-            status: "மருந்து தெளித்தல்: நிறுத்திவைப்பு"
-          },
-          fisherman: {
-            directive: "கடலுக்குச் செல்ல முழு தடை: 75 கிமீ/மணி வேகத்தில் பலத்த சூறாவளி காற்று. மாலை 18:00 மணிக்குள் கரை திரும்புங்கள்.",
-            checklist: [
-              "ஆழ்கடல் மற்றும் கடலோர மீன்பிடி நடவடிக்கைகளை முழுமையாக நிறுத்தவும்",
-              "படகுகளை உயர் அலை வரம்பிற்கு மேல் பாதுகாப்பாக கட்டி வைக்கவும்",
-              "கடலோர காவல்படை சேனல் 16-ஐ தொடர்ந்து கவனிக்கவும்"
-            ],
-            status: "புறப்பாடு: முழு தடை"
-          },
-          city_ops: {
-            directive: "நகராட்சி வடிகால் அவசர திட்டத்தை செயல்படுத்துக: தாழ்வான பகுதிகளில் அதிக திறன் கொண்ட நீர் இறைக்கும் பம்புகளை தயார் செய்க.",
-            checklist: [
-              "தண்ணீர் தேங்கும் ரயில்வே பாலங்கள் அருகே 100-HP பம்புகளை நிறுவவும்",
-              "பாதிக்கப்படக்கூடிய பகுதிகளில் பேரிடர் மீட்புப் படகுகளை முன்கூட்டியே தயார் நிலையில் வைக்கவும்",
-              "போக்குவரத்து மாற்று வழிகள் குறித்த அறிவிப்புகளை வெளியிடவும்"
-            ],
-            status: "எச்சரிக்கை: ரெட் அலர்ட்"
-          }
-        }
-      },
-      flood: {
-        en: {
-          event: "Monsoon Convective Torrential Downpour & Flash Floods",
-          area: "Bengaluru Urban & Hebbal Catchment",
-          meta: "Source: IMD Doppler Radar & Nowcast (14:00 IST) + Hazard Atlas Historical Normals",
-          farmer: {
-            directive: "Drain excess water from horticultural and vegetable beds; delay fertilizer application by 48 hours.",
-            checklist: [
-              "Clear soil drainage furrows to prevent seedling root asphyxiation",
-              "Suspend foliar fungicide sprays until rainfall ceases completely",
-              "Inspect bund structural stability along field margins"
-            ],
-            status: "Spraying: DELAYED"
-          },
-          fisherman: {
-            directive: "INLAND RESERVOIR WARNING: High surface turbulence and sudden surge in lake and reservoir outfalls.",
-            checklist: [
-              "Halt coracle and freshwater artisanal netting on lakes and dams",
-              "Watch for rapid reservoir spillway shutter openings",
-              "Secure nylon gill nets away from flooded shorelines"
-            ],
-            status: "Freshwater: RESTRICTED"
-          },
-          city_ops: {
-            directive: "ACTIVATE WARD SUMP PUMPING: High risk of underpass waterlogging on Outer Ring Road.",
-            checklist: [
-              "Switch on automatic sump pumps at chronic underpasses",
-              "Alert traffic police to divert traffic around flooded lake overflows",
-              "Desilt stormwater drain entry grates from urban debris"
-            ],
-            status: "Alert: CODE ORANGE"
-          }
-        },
-        hi: {
-          event: "मानसून की मूसलाधार बारिश और अचानक बाढ़ का खतरा",
-          area: "बेंगलुरु शहरी एवं हेब्बल जलग्रहण क्षेत्र",
-          meta: "स्रोत: आईएमडी डॉपलर रडार व नाउकास्ट + आपदा एटलस ऐतिहासिक रिकॉर्ड",
-          farmer: {
-            directive: "सब्जियों और बागवानी क्यारियों से अतिरिक्त पानी निकालें; उर्वरक का प्रयोग 48 घंटे टालें।",
-            checklist: [
-              "पौधों की जड़ों को गलने से बचाने के लिए जल निकासी नालियों को तुरंत साफ करें",
-              "बारिश पूरी तरह रुकने तक पत्तियों पर फफूंदनाशक का छिड़काव स्थगित रखें",
-              "खेत की मेड़ों की स्थिरता की जांच करें"
-            ],
-            status: "छिड़काव: स्थगित"
-          },
-          fisherman: {
-            directive: "जलाशय चेतावनी: झीलों और जलाशयों में भारी उफान और तेज बहाव की संभावना।",
-            checklist: [
-              "झीलों और बांधों में छोटी नावों और मछली पकड़ने के जालों का उपयोग रोकें",
-              "जलाशय के स्पिलवे गेट तेजी से खुलने पर सतर्क रहें",
-              "बाढ़ वाले किनारों से नायलॉन के जालों को सुरक्षित ऊंचाई पर रखें"
-            ],
-            status: "जलाशय: प्रतिबंधित"
-          },
-          city_ops: {
-            directive: "वार्ड संप पंपिंग सक्रिय करें: आउटर रिंग रोड और अंडरपासों में गंभीर जलभराव का खतरा।",
-            checklist: [
-              "प्रमुख अंडरपासों पर स्वचालित संप पंप तुरंत चालू करें",
-              "झीलों के ओवरफ्लो होने पर ट्रैफिक पुलिस को मार्ग मोड़ने के निर्देश दें",
-              "तूफानी नालों की जालियों से कचरा साफ करें"
-            ],
-            status: "चेतावनी: कोड ऑरेंज"
-          }
-        },
-        ta: {
-          event: "பருவமழை பெருவெள்ளம் மற்றும் மேகவெடிப்பு எச்சரிக்கை",
-          area: "பெங்களூரு நகர்ப்புறம் மற்றும் ஹெப்பல் வடிநிலம்",
-          meta: "ஆதாரம்: ஐஎம்டி டாப்ளர் ரேடார் மற்றும் வானிலை முன்னறிவிப்பு",
-          farmer: {
-            directive: "தோட்டக்கலை மற்றும் காய்கறி பயிர்களில் இருந்து தேங்கிய நீரை வெளியேற்றவும்; உரமிடுவதை 48 மணி நேரம் தள்ளிப்போடவும்.",
-            checklist: [
-              "நாற்றுகள் அழுகாமல் இருக்க வயல் வடிகால்களை உடனடியாக தூர்வாரவும்",
-              "மழை முழுமையாக நிற்கும் வரை பூஞ்சாணக் கொல்லி மருந்து தெளிக்க வேண்டாம்",
-              "வயல் வரப்புகளின் உறுதியை சரிபார்க்கவும்"
-            ],
-            status: "மருந்து தெளித்தல்: தள்ளிவைப்பு"
-          },
-          fisherman: {
-            directive: "உள்நாட்டு நீர்நிலை எச்சரிக்கை: ஏரிகள் மற்றும் அணைகளில் நீர்மட்டம் உயர்வு.",
-            checklist: [
-              "ஏரிகளில் பரிசல் மற்றும் மீன்பிடி வலைகளைப் பயன்படுத்துவதை தவிர்க்கவும்",
-              "அணை மதகுகள் திறக்கப்படும் அபாயத்தை கண்காணிக்கவும்",
-              "மீன்பிடி வலைகளை பாதுகாப்பான இடங்களுக்கு மாற்றவும்"
-            ],
-            status: "உள்நாட்டு மீன்பிடி: தடை"
-          },
-          city_ops: {
-            directive: "நகர நீர் இறைக்கும் பம்புகளை இயக்கவும்: முக்கிய சாலைகள் மற்றும் சுரங்கப்பாதைகளில் நீர் தேங்கும் அபாயம்.",
-            checklist: [
-              "சுரங்கப்பாதைகளில் தானியங்கி நீர் இறைக்கும் பம்புகளை இயக்கவும்",
-              "போக்குவரத்து நெரிசலைத் தவிர்க்க மாற்று வழிகளை அறிவிக்கவும்",
-              "மழைநீர் வடிகால் வாயில்களில் உள்ள குப்பைகளை அகற்றவும்"
-            ],
-            status: "எச்சரிக்கை: ஆரஞ்சு அலர்ட்"
-          }
-        }
-      },
-      heatwave: {
-        en: {
-          event: "Severe Heatwave & Evapotranspiration Surge (Loo Conditions)",
-          area: "New Delhi & NCR Region",
-          meta: "Source: IMD Heat Action Plan Bulletin + BharatFS Thermal Forecast",
-          farmer: {
-            directive: "Apply nocturnal irrigation (03:00 - 06:00 IST); mulch topsoil to preserve root zone moisture.",
-            checklist: [
-              "Apply straw mulch to conserve 0-6cm topsoil moisture",
-              "Provide shaded shelters and continuous cool water for milch cattle",
-              "Strictly avoid field labor during peak thermal window (11:30 - 15:30)"
-            ],
-            status: "Labor: NOCTURNAL SHIFT"
-          },
-          fisherman: {
-            directive: "AQUACULTURE ADVISORY: Pond water temperature exceeding 33°C. Risk of dissolved oxygen depletion.",
-            checklist: [
-              "Run pond paddle aerators during early dawn hours",
-              "Add freshwater recharge to maintain pond depth > 1.5m",
-              "Reduce feed ration by 30% to prevent unconsumed waste decomposition"
-            ],
-            status: "Aquaculture: HIGH STRESS"
-          },
-          city_ops: {
-            directive: "ACTIVATE HEAT ACTION PLAN (HAP): Open public hydration stations and misting shelters.",
-            checklist: [
-              "Establish ORS kiosks at major transit interchanges",
-              "Ensure uninterrupted municipal power supply to emergency hospital wards",
-              "Enforce mandatory rest breaks for outdoor construction laborers"
-            ],
-            status: "Alert: CODE ORANGE"
-          }
-        },
-        hi: {
-          event: "भीषण लू एवं अत्यधिक वाष्पीकरण की स्थिति",
-          area: "नई दिल्ली एवं राष्ट्रीय राजधानी क्षेत्र (NCR)",
-          meta: "स्रोत: आईएमडी हीट एक्शन प्लान बुलेटिन + भारत-एफएस थर्मल पूर्वानुमान",
-          farmer: {
-            directive: "रात के समय सिंचाई करें (03:00 - 06:00 बजे); नमी बनाए रखने के लिए मिट्टी में पुआल की मल्चिंग करें।",
-            checklist: [
-              "मिट्टी की नमी बचाने के लिए 0-6 सेमी पुआल या पत्तों की मल्चिंग करें",
-              "दुधारू पशुओं के लिए छायादार बाड़े और स्वच्छ शीतल जल की व्यवस्था करें",
-              "दोपहर 11:30 से 15:30 के बीच खेत में शारीरिक श्रम से पूरी तरह बचें"
-            ],
-            status: "श्रम: रात्रि पाली"
-          },
-          fisherman: {
-            directive: "मत्स्य पालन सलाह: तालाब का तापमान 33°C से अधिक। ऑक्सीजन की कमी का गंभीर खतरा।",
-            checklist: [
-              "सुबह तड़के तालाब के पैडल एरेटर चलाकर ऑक्सीजन स्तर बढ़ाएं",
-              "तालाब की गहराई 1.5 मीटर से अधिक बनाए रखने के लिए ताजा पानी डालें",
-              "भोजन की मात्रा में 30% की कटौती करें ताकि अपशिष्ट न सड़े"
-            ],
-            status: "मत्स्य पालन: अत्यधिक तनाव"
-          },
-          city_ops: {
-            directive: "हीट एक्शन प्लान (HAP) लागू करें: सार्वजनिक पेयजल केंद्र और ओआरएस स्टॉल शुरू करें।",
-            checklist: [
-              "बस स्टैंड और मेट्रो स्टेशनों पर ओआरएस और शीतल जल कियोस्क स्थापित करें",
-              "अस्पतालों के आपातकालीन वार्डों में निर्बाध बिजली व कूलिंग सुनिश्चित करें",
-              "निर्माण श्रमिकों के लिए दोपहर में अनिवार्य विश्राम लागू करें"
-            ],
-            status: "चेतावनी: कोड ऑरेंज"
-          }
-        },
-        ta: {
-          event: "கடும் வெப்ப அலை மற்றும் நிலத்தடி நீர் ஆவியாதல் நிலை",
-          area: "புது தில்லி மற்றும் தேசிய தலைநகர் பகுதி (NCR)",
-          meta: "ஆதாரம்: ஐஎம்டி வெப்ப அலை திட்டம் மற்றும் பாரத்-எஃப்எஸ் மாதிரி",
-          farmer: {
-            directive: "இரவு அல்லது விடியற்காலை வேளையில் பாசனம் செய்யவும் (03:00 - 06:00); மண் ஈரப்பதத்தை பாதுகாக்க தழைக்கூளம் இடவும்.",
-            checklist: [
-              "மண்ணின் ஈரப்பதத்தை பாதுகாக்க வைக்கோல் கொண்டு மூடாக்கு இடவும்",
-              "கால்நடைகளுக்கு நிழலான கொட்டகை மற்றும் தொடர்ச்சியான குடிநீர் வசதி அளிக்கவும்",
-              "நண்பகல் 11:30 முதல் 15:30 வரை வெயிலில் கடுமையான வேலை செய்வதைத் தவிர்க்கவும்"
-            ],
-            status: "பணி: இரவு நேர மாற்றம்"
-          },
-          fisherman: {
-            directive: "மீன் பண்ணை வழிகாட்டுதல்: குட்டை நீர் வெப்பநிலை 33°C-க்கு மேல் உயர்வு. ஆக்சிஜன் பற்றாக்குறை ஆபத்து.",
-            checklist: [
-              "விடியற்காலையில் குட்டைகளில் காற்று காற்றோட்ட கருவிகளை இயக்கவும்",
-              "குட்டை ஆழத்தை 1.5 மீட்டருக்கு மேல் வைத்திருக்க புதிய நீரை நிரப்பவும்",
-              "தீவன அளவை 30% குறைத்து நீர் மாசடைவதை தடுக்கவும்"
-            ],
-            status: "மீன்வளர்ப்பு: அதிக வெப்ப அழுத்தம்"
-          },
-          city_ops: {
-            directive: "வெப்ப அலை தணிப்பு திட்டம் (HAP) செயல்படுத்துக: பொது குடிநீர் மற்றும் நிழல் கூடாரங்களை அமைக்கவும்.",
-            checklist: [
-              "முக்கிய போக்குவரத்து மையங்களில் ORS மற்றும் குடிநீர் மையங்களை திறக்கவும்",
-              "மருத்துவமனைகளில் தொடர்ச்சியான மின்சாரம் மற்றும் குளிர்சாதன வசதியை உறுதி செய்க",
-              "கட்டுமானத் தொழிலாளர்களுக்கு நண்பகல் கட்டாய ஓய்வு வழங்கவும்"
-            ],
-            status: "எச்சரிக்கை: ஆரஞ்சு அலர்ட்"
-          }
-        }
-      }
-    };
-
-    function triggerRoleDirectives(scenarioKey) {
-      currentScenario = scenarioKey || currentScenario || "cyclone";
-      const scenarioBundle = ROLE_DIRECTIVE_SCENARIOS[currentScenario] || ROLE_DIRECTIVE_SCENARIOS.cyclone;
-      const data = scenarioBundle[currentLanguage] || scenarioBundle.en;
-
-      // Update Scenario Buttons Active Visual State
-      const btnCyclone = document.getElementById("scenario-btn-cyclone");
-      const btnFlood = document.getElementById("scenario-btn-flood");
-      const btnHeatwave = document.getElementById("scenario-btn-heatwave");
-
-      const inactiveBaseClass = "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 text-[#5B6472] hover:text-[#1B2A44] hover:bg-white/60";
-
-      if (btnCyclone) {
-        btnCyclone.className = (currentScenario === "cyclone") 
-          ? "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#B3261E] text-white shadow-xs" 
-          : inactiveBaseClass;
-      }
-      if (btnFlood) {
-        btnFlood.className = (currentScenario === "flood") 
-          ? "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#B8860B] text-white shadow-xs" 
-          : inactiveBaseClass;
-      }
-      if (btnHeatwave) {
-        btnHeatwave.className = (currentScenario === "heatwave") 
-          ? "px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1.5 bg-[#C97A2B] text-white shadow-xs" 
-          : inactiveBaseClass;
-      }
-
-      const metaEl = document.getElementById("fanout-meta-line");
-      if (metaEl) metaEl.textContent = data.meta;
-
-      // Update Farmer Card
-      const farmDir = document.getElementById("fanout-farmer-directive");
-      if (farmDir) farmDir.textContent = data.farmer.directive;
-      const farmList = document.getElementById("fanout-farmer-checklist");
-      if (farmList) {
-        farmList.innerHTML = data.farmer.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
-      }
-      const farmStat = document.getElementById("fanout-farmer-status");
-      if (farmStat) farmStat.textContent = data.farmer.status;
-
-      // Update Fisherman Card
-      const fishDir = document.getElementById("fanout-fisherman-directive");
-      if (fishDir) fishDir.textContent = data.fisherman.directive;
-      const fishList = document.getElementById("fanout-fisherman-checklist");
-      if (fishList) {
-        fishList.innerHTML = data.fisherman.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
-      }
-      const fishStat = document.getElementById("fanout-fisherman-status");
-      if (fishStat) fishStat.textContent = data.fisherman.status;
-
-      // Update City Ops Card
-      const cityDir = document.getElementById("fanout-city-directive");
-      if (cityDir) cityDir.textContent = data.city_ops.directive;
-      const cityList = document.getElementById("fanout-city-checklist");
-      if (cityList) {
-        cityList.innerHTML = data.city_ops.checklist.map(item => '<li class="flex items-start gap-1.5"><span>•</span><span>' + item + '</span></li>').join("");
-      }
-      const cityStat = document.getElementById("fanout-city-status");
-      if (cityStat) cityStat.textContent = data.city_ops.status;
-
-      // Scroll to workbench
-      const workbench = document.getElementById("fanout-workbench");
-      if (workbench) workbench.scrollIntoView({ behavior: "smooth" });
+    function clearChatHistory() {
+      chatHistory = [];
+      localStorage.removeItem("weathergpt_chat_history");
+      initChatUI();
     }
 
-    // Backwards compatibility alias
-    const triggerShowpieceFanout = triggerRoleDirectives;
-    const FANOUT_SCENARIOS = ROLE_DIRECTIVE_SCENARIOS;
-
-    function openRoleFanoutModal(scenario) {
-      triggerRoleDirectives(scenario || currentScenario || "cyclone");
-      const workbench = document.getElementById("fanout-workbench");
-      if (workbench) {
-        workbench.scrollIntoView({ behavior: "smooth", block: "start" });
-        workbench.classList.add("ring-2", "ring-[#C97A2B]");
-        setTimeout(() => workbench.classList.remove("ring-2", "ring-[#C97A2B]"), 1600);
-      }
-    }
-    const openRoleDirectivesModal = openRoleFanoutModal;
-    window.openRoleFanoutModal = openRoleFanoutModal;
-    window.openRoleDirectivesModal = openRoleDirectivesModal;
-
-    function copyFanoutDirectives(btn) {
-      const farmer = document.getElementById("fanout-farmer-directive").textContent;
-      const fisherman = document.getElementById("fanout-fisherman-directive").textContent;
-      const city = document.getElementById("fanout-city-directive").textContent;
-      const text = "=== WEATHERGPT ROLE-BASED OPERATIONAL DIRECTIVES ===\\n\\n[FARMER]: " + farmer + "\\n\\n[FISHERMAN]: " + fisherman + "\\n\\n[CITY OPS]: " + city;
-      navigator.clipboard.writeText(text);
-      
-      if (btn) {
-        const orig = btn.innerHTML;
-        const msg = currentLanguage === 'hi' ? 'कॉपी हो गया' : (currentLanguage === 'ta' ? 'நகலெடுக்கப்பட்டது' : 'Copied');
-        btn.innerHTML = "<span>✓</span> <span>" + msg + "</span>";
-        setTimeout(() => { btn.innerHTML = orig; }, 1800);
-      }
-    }
-
-    function toggleTickerDetail() {
-      const drawer = document.getElementById("ticker-drawer");
-      const chevron = document.getElementById("ticker-chevron");
-      if (drawer.classList.contains("hidden")) {
-        drawer.classList.remove("hidden");
-        chevron.textContent = "▲";
-      } else {
-        drawer.classList.add("hidden");
-        chevron.textContent = "▼";
-      }
-    }
-
-    // 6. Live SACHET Radar Scanner
-    async function loadDisasterAlerts() {
-      const listEl = document.getElementById("disaster-alerts-list");
-      const badge = document.getElementById("disaster-badge");
-      const lat = document.getElementById("disaster-lat").value;
-      const lon = document.getElementById("disaster-lon").value;
-      const radius = document.getElementById("disaster-radius").value;
-
-      badge.textContent = "SCANNING...";
-      badge.className = "text-[10px] font-bold px-2 py-0.5 bg-yellow-200 text-yellow-900 rounded-xs";
-
-      try {
-        const backendUrl = getActiveBackendUrl();
-        const res = await fetch(backendUrl + "/api/tools/disaster?latitude=" + lat + "&longitude=" + lon + "&radius=" + radius);
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const data = await res.json();
-
-        if (data && data.alerts && data.alerts.length > 0) {
-          badge.textContent = data.alerts.length + " ACTIVE";
-          badge.className = "text-[10px] font-bold px-2 py-0.5 bg-red-100 text-[#B3261E] rounded-xs";
-
-          listEl.innerHTML = data.alerts.map(a => {
-            const isRed = (a.severity || "").toLowerCase().includes("severe") || (a.severity || "").toLowerCase().includes("extreme");
-            const badgeColor = isRed ? "bg-red-200 text-red-900 border border-red-300" : "bg-amber-100 text-amber-900 border border-amber-300";
-            const borderCol = isRed ? "border-[#B3261E]" : "border-[#C97A2B]";
-            const bgCol = isRed ? "bg-red-50/70" : "bg-amber-50/70";
-            const titleCol = isRed ? "text-[#B3261E]" : "text-[#B8860B]";
-
-            return \`
-              <div class="p-2.5 \${bgCol} border-l-4 \${borderCol} border-t border-r border-b border-[#E1E4DD] rounded-r space-y-1.5 transition-all hover:shadow-xs">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-xs \${titleCol} flex items-center gap-1">
-                    <span>\${isRed ? '🔴' : '⚠️'}</span>
-                    \${a.event || a.title || "Severe Weather Advisory"}
-                  </span>
-                  <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded \${badgeColor}">\${a.severity || "Moderate"}</span>
-                </div>
-                <p class="text-[11px] text-slate-800 leading-snug font-normal">\${a.headline || a.description || "Active synoptic advisory issued."}</p>
-                <div class="text-[10px] text-[#5B6472] flex justify-between items-center pt-1 border-t border-black/5">
-                  <span class="font-medium text-slate-600">📍 \${a.area_desc || "Regional Impact"}</span>
-                  <span class="font-mono text-[9px] text-slate-500">\${a.effective ? new Date(a.effective).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Active"}</span>
-                </div>
-              </div>
-            \`;
-          }).join("");
-        } else {
-          badge.textContent = "ALL CLEAR";
-          badge.className = "text-[10px] font-bold px-2 py-0.5 bg-emerald-100 text-[#3F6B4A] rounded-xs";
-          listEl.innerHTML = \`
-            <div class="p-4 bg-emerald-50/70 border border-emerald-200 text-center rounded space-y-1">
-              <div class="flex items-center justify-center gap-1.5 text-xs font-bold text-[#3F6B4A]">
-                <span>✅</span>
-                <span>All Clear in Local Catchment</span>
-              </div>
-              <p class="text-[11px] text-emerald-800">No active NDMA/SACHET severe disaster warnings within \${radius} km radius.</p>
-              <div class="pt-2">
-                <button onclick="document.getElementById('radar-radius').value='500'; loadDisasterAlerts();" class="text-[10px] font-semibold text-[#1B2A44] bg-white border border-[#E1E4DD] hover:bg-slate-50 px-2.5 py-1 rounded shadow-2xs transition-colors">
-                  🔍 Scan Broad Regional Catchment (500 km)
-                </button>
-              </div>
-            </div>
-          \`;
-        }
-      } catch (e) {
-        badge.textContent = "OFFLINE";
-        badge.className = "text-[10px] font-bold px-2 py-0.5 bg-slate-200 text-slate-700 rounded-xs";
-        listEl.innerHTML = \`
-          <div class="text-xs text-slate-500 text-center py-3">
-            SACHET Radar standby. Connecting backend for live RSS sync.
-          </div>
-        \`;
-      }
-    }
-
-    // 7. Synoptic Weather Station Telemetry Inspector
-    async function inspectStation() {
-      const city = document.getElementById("station-city").value.trim() || "Bangalore";
-      const box = document.getElementById("telemetry-box");
-      box.innerHTML = "<div class='text-center py-2 text-[#5B6472]'>Querying synoptic sensors...</div>";
-
-      try {
-        const backendUrl = getActiveBackendUrl();
-        const geoRes = await fetch(backendUrl + "/api/tools/geolocation?city=" + encodeURIComponent(city));
-        const geoData = await geoRes.json();
-        const coords = geoData.result;
-
-        if (!coords || typeof coords !== "object" || !coords.latitude) {
-          box.innerHTML = "<div class='text-red-600'>Could not locate coordinates for " + city + "</div>";
-          return;
-        }
-
-        const wxRes = await fetch(backendUrl + "/api/tools/weather?latitude=" + coords.latitude + "&longitude=" + coords.longitude);
-        const wxData = await wxRes.json();
-        const wx = wxData.result;
-
-        if (wx && wx.hourly) {
-          const temp = wx.hourly.temperature_2m[0] || "--";
-          const feels = wx.hourly.apparent_temperature ? wx.hourly.apparent_temperature[0] : temp;
-          const wind10m = wx.hourly.wind_speed_10m ? wx.hourly.wind_speed_10m[0] : "--";
-          const wind80m = wx.hourly.wind_speed_80m ? wx.hourly.wind_speed_80m[0] : "--";
-          const rain = wx.hourly.precipitation ? wx.hourly.precipitation[0] : 0;
-          const uv = wx.hourly.uv_index ? wx.hourly.uv_index[0] : "--";
-          const soil0 = wx.hourly.soil_temperature_0cm ? wx.hourly.soil_temperature_0cm[0] : "--";
-          const pressure = wx.hourly.pressure_msl ? wx.hourly.pressure_msl[0] : "--";
-
-          box.innerHTML = \`
-            <div class="space-y-2">
-              <div class="flex items-center justify-between font-bold text-xs text-[#1B2A44] pb-1 border-b border-[#E1E4DD]">
-                <span>\${coords.name || city} (\${coords.admin1 || coords.country || "IN"})</span>
-                <span class="text-[#3F6B4A]">LIVE SENSORS</span>
-              </div>
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Temperature:</span>
-                  <span class="font-bold text-sm text-[#1B2A44]">\${temp}°C</span> (Feels: \${feels}°C)
-                </div>
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Precipitation Rate:</span>
-                  <span class="font-bold text-sm text-[#1B2A44]">\${rain} mm/hr</span>
-                </div>
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Wind Velocity:</span>
-                  <span class="font-bold text-xs text-[#1B2A44]">10m: \${wind10m} km/h | 80m: \${wind80m} km/h</span>
-                </div>
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">UV & Soil Profile:</span>
-                  <span class="font-bold text-xs text-[#1B2A44]">UV: \${uv} | Soil 0cm: \${soil0}°C</span>
-                </div>
-              </div>
-              <div class="text-[10px] text-[#5B6472] flex justify-between pt-1">
-                <span>Barometer: \${pressure} hPa</span>
-                <span>Lat: \${coords.latitude.toFixed(2)}, Lon: \${coords.longitude.toFixed(2)}</span>
-              </div>
-            </div>
-          \`;
-        }
-      } catch(e) {
-        box.innerHTML = "<div class='text-xs text-red-600'>Error querying telemetry: " + e.message + "</div>";
-      }
-    }
-
-    // 8. Regulatory Scales Tab Switcher
-    function switchScaleTab(tabKey) {
-      ["uv", "rain", "wmo"].forEach(key => {
-        const btn = document.getElementById("tab-btn-" + key);
-        const content = document.getElementById("scale-content-" + key);
-        if (key === tabKey) {
-          btn.className = "px-3 py-1 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44] text-xs";
-          content.classList.remove("hidden");
-        } else {
-          btn.className = "px-3 py-1 text-[#5B6472] hover:text-[#1B2A44] text-xs";
-          content.classList.add("hidden");
-        }
-      });
-    }
-
-    // 9. Rural Accessibility Suite (IVR Telephony & Krishi Sakhi)
-    function openRuralModal() {
-      document.getElementById("rural-modal").classList.remove("hidden");
-    }
-    function closeRuralModal() {
-      document.getElementById("rural-modal").classList.add("hidden");
-    }
-
-    function switchRuralTab(tabKey) {
-      ["ivr", "sms", "krishi"].forEach(key => {
-        const btn = document.getElementById("rural-tab-" + key);
-        const content = document.getElementById("rural-content-" + key);
-        if (key === tabKey) {
-          btn.className = "px-3 py-1.5 font-bold border-b-2 border-[#1B2A44] text-[#1B2A44]";
-          content.classList.remove("hidden");
-        } else {
-          btn.className = "px-3 py-1.5 text-[#5B6472] hover:text-[#1B2A44]";
-          content.classList.add("hidden");
-        }
-      });
-    }
-
-    async function connectIvrCall() {
-      const lang = document.getElementById("ivr-lang").value;
-      const query = document.getElementById("ivr-query-input").value;
-      const statusBox = document.getElementById("ivr-status-box");
-
-      statusBox.innerHTML = "<span class='text-amber-600 animate-pulse'>DIALING 1800-MAUSAM-AI... CALL CONNECTED. PROCESSING SPEECH...</span>";
-
-      try {
-        const backendUrl = getActiveBackendUrl();
-        const res = await fetch(backendUrl + "/api/tools/telephony", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ channel: "IVR", language: lang, query })
-        });
-        const data = await res.json();
-
-        statusBox.innerHTML = \`
-          <div class="space-y-1">
-            <div class="text-[#3F6B4A] font-bold">✓ CALL LIVE • VOICE SYNTHESIS ACTIVE (\${data.ivr_tts_voice})</div>
-            <div class="text-[#1B2A44] italic">"Caller: \${data.transcribed_query}"</div>
-            <div class="text-[#1B2A44] font-semibold bg-emerald-50 p-1.5 rounded mt-1">"IVR Audio: \${data.spoken_response}"</div>
-          </div>
-        \`;
-
-        // Speak aloud via browser TTS
-        if (window.speechSynthesis) {
-          window.speechSynthesis.cancel();
-          const ut = new SpeechSynthesisUtterance(data.spoken_response);
-          ut.lang = lang === "hi" ? "hi-IN" : (lang === "ta" ? "ta-IN" : "en-IN");
-          ut.rate = 0.95;
-          window.speechSynthesis.speak(ut);
-        }
-      } catch(e) {
-        statusBox.innerHTML = "<span class='text-red-600'>IVR Telephony error: " + e.message + "</span>";
-      }
-    }
-
-    // Backwards compatibility alias
-    const simulateIvrCall = connectIvrCall;
-
-    function speakKrishiSakhi() {
-      const text = "வணக்கம் முருகேசன். அடுத்த 24 மணி நேரத்திற்கு உங்கள் கிராமத்தில் கனமழைக்கு வாய்ப்பு குறைவு. மஞ்சள் பயிரில் வேர் அழுகல் ஏற்படாமல் இருக்க வடிகால் வாய்க்கால்களை சுத்தமாக வைத்திருங்கள்.";
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-        const ut = new SpeechSynthesisUtterance(text);
-        ut.lang = "ta-IN";
-        ut.rate = 0.9;
-        window.speechSynthesis.speak(ut);
-      }
-    }
-
-    // 10. IMD Hazard Atlas Modal & Query
-    function openHazardModal() {
-      document.getElementById("hazard-modal").classList.remove("hidden");
-      searchHazardAtlas();
-    }
-    function closeHazardModal() {
-      document.getElementById("hazard-modal").classList.add("hidden");
-    }
-
-    async function searchHazardAtlas() {
-      const city = document.getElementById("hazard-search-input").value.trim() || "Bengaluru";
-      const box = document.getElementById("hazard-results-box");
-      box.innerHTML = "<div class='text-center py-4 text-[#5B6472]'>Querying IMD Climate Hazard & Vulnerability Atlas...</div>";
-
-      try {
-        const backendUrl = getActiveBackendUrl();
-        const res = await fetch(backendUrl + "/api/tools/hazard_atlas?city=" + encodeURIComponent(city));
-        const data = await res.json();
-        const p = data.hazard_profile;
-
-        if (p) {
-          box.innerHTML = \`
-            <div class="space-y-2">
-              <div class="flex items-center justify-between pb-1 border-b border-[#E1E4DD] font-bold text-[#1B2A44]">
-                <span>\${p.district} (\${p.state})</span>
-                <span class="text-[#B3261E]">\${p.subdivision}</span>
-              </div>
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Monsoon Onset Normal:</span>
-                  <span class="font-bold text-[#1B2A44]">\${p.monsoon_onset_normal}</span>
-                </div>
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Extreme 24h Rain Record:</span>
-                  <span class="font-bold text-[#B3261E]">\${p.extreme_24h_rainfall_record_mm} mm</span> (\${p.extreme_rainfall_record_date})
-                </div>
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Cyclone Vulnerability:</span>
-                  <span class="font-bold text-[#1B2A44]">\${p.cyclone_vulnerability}</span>
-                </div>
-                <div class="p-1.5 bg-white border border-[#E1E4DD] rounded">
-                  <span class="text-[10px] text-[#5B6472] block">Flood Hazard Level:</span>
-                  <span class="font-bold text-[#1B2A44]">\${p.flood_hazard_level}</span>
-                </div>
-              </div>
-              <div class="p-2 bg-white border border-[#E1E4DD] rounded text-[11px] text-[#5B6472]">
-                <strong class="text-[#1B2A44]">Flood History & Vulnerability:</strong> \${p.flood_history}
-              </div>
-              <div class="text-[10px] text-[#5B6472] flex justify-between pt-1">
-                <span>Soil: \${p.soil_type_primary}</span>
-                <span>Annual Rainfall: \${p.annual_rainfall_normal_mm} mm</span>
-              </div>
-            </div>
-          \`;
-        }
-      } catch(e) {
-        box.innerHTML = "<div class='text-xs text-red-600'>Error loading hazard data: " + e.message + "</div>";
-      }
-    }
-
-    // 11. Backend API Routing Modal
+    // ==================== API MODAL ====================
     function openApiModal() {
       document.getElementById("api-modal").classList.remove("hidden");
       document.getElementById("api-url-input").value = getActiveBackendUrl();
@@ -2427,11 +3007,11 @@ export function getPortalHtml(): string {
       try {
         const r = await fetch(url + "/health");
         const json = await r.json();
-        resBox.textContent = "✓ Connected: " + JSON.stringify(json);
-        resBox.className = "p-2.5 bg-emerald-50 border border-emerald-300 text-[11px] font-mono text-emerald-900 min-h-[44px]";
+        resBox.textContent = "[OK] Connected successfully: " + JSON.stringify(json);
+        resBox.className = "p-2.5 bg-paper border border-line text-xs font-mono text-slate-800 min-h-[44px]";
       } catch(e) {
-        resBox.textContent = "✗ Connection failed: " + e.message;
-        resBox.className = "p-2.5 bg-red-50 border border-red-300 text-[11px] font-mono text-red-900 min-h-[44px]";
+        resBox.textContent = "[ERROR] Connection failed: " + e.message;
+        resBox.className = "p-2.5 bg-paper border border-line text-xs font-mono text-slate-700 min-h-[44px]";
       }
     }
     function saveApiEndpoint() {
@@ -2442,132 +3022,32 @@ export function getPortalHtml(): string {
         localStorage.removeItem("weathergpt_backend_url");
       }
       closeApiModal();
-      loadDisasterAlerts();
       inspectStation();
+      loadDisasterAlerts();
     }
 
-    // 12. Floating Atmospheric Dots Background Engine (Lots of small grey floating dots)
-    function initFloatingDotsBackground() {
-      const canvas = document.getElementById("floating-dots-canvas");
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      let width = (canvas.width = window.innerWidth);
-      let height = (canvas.height = window.innerHeight);
-
-      window.addEventListener("resize", () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      // High density of small, soft grey dots for pure white canvas
-      const count = Math.min(Math.floor((width * height) / 5500), 220);
-      const dots = [];
-
-      for (let i = 0; i < count; i++) {
-        dots.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 1.3 + 0.6, // small subtle dots
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35 - 0.08, // gentle buoyant updraft
-          opacity: Math.random() * 0.3 + 0.12,
-          baseOpacity: Math.random() * 0.3 + 0.12,
-          pulseSpeed: Math.random() * 0.015 + 0.005,
-          pulseAngle: Math.random() * Math.PI * 2,
-          color: "148, 163, 184" // elegant neutral slate grey
-        });
-      }
-
-      // Mouse interactive repelling field
-      let mouseX = -1000;
-      let mouseY = -1000;
-      window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-      window.addEventListener("mouseleave", () => {
-        mouseX = -1000;
-        mouseY = -1000;
-      });
-
-      function render() {
-        ctx.clearRect(0, 0, width, height);
-
-        // Draw connecting faint grey filaments between nearby dots
-        for (let i = 0; i < dots.length; i++) {
-          for (let j = i + 1; j < dots.length; j++) {
-            const dx = dots[i].x - dots[j].x;
-            const dy = dots[i].y - dots[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 75) {
-              const alpha = (1 - dist / 75) * 0.08;
-              ctx.strokeStyle = "rgba(148, 163, 184, " + alpha + ")";
-              ctx.lineWidth = 0.5;
-              ctx.beginPath();
-              ctx.moveTo(dots[i].x, dots[i].y);
-              ctx.lineTo(dots[j].x, dots[j].y);
-              ctx.stroke();
-            }
-          }
-        }
-
-        // Draw & update each floating grey dot
-        for (let i = 0; i < dots.length; i++) {
-          const d = dots[i];
-
-          d.x += d.vx;
-          d.y += d.vy;
-
-          d.pulseAngle += d.pulseSpeed;
-          d.opacity = d.baseOpacity + Math.sin(d.pulseAngle) * 0.08;
-
-          const mdx = d.x - mouseX;
-          const mdy = d.y - mouseY;
-          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-          if (mdist < 70 && mdist > 0) {
-            const push = (70 - mdist) / 70 * 0.9;
-            d.x += (mdx / mdist) * push;
-            d.y += (mdy / mdist) * push;
-          }
-
-          if (d.x < -10) d.x = width + 10;
-          if (d.x > width + 10) d.x = -10;
-          if (d.y < -10) d.y = height + 10;
-          if (d.y > height + 10) d.y = -10;
-
-          ctx.beginPath();
-          ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(" + d.color + ", " + Math.max(0.04, d.opacity) + ")";
-          ctx.fill();
-        }
-
-        requestAnimationFrame(render);
-      }
-
-      render();
-    }
-
-    // 13. Clocks & Bootstrapping
+    // ==================== CLOCKS ====================
     function updateClocks() {
       const now = new Date();
       const utc = now.toUTCString().split(" ").slice(4, 5)[0];
       const local = now.toLocaleTimeString();
       const utcEl = document.getElementById("utc-clock");
       const localEl = document.getElementById("local-clock");
+      const prefix = (I18N[currentLanguage] || I18N.en).clockIst;
       if (utcEl) utcEl.textContent = "UTC: " + utc;
-      if (localEl) localEl.textContent = "IST: " + local;
+      if (localEl) localEl.textContent = prefix + local;
     }
 
+    // ==================== BOOTSTRAP ====================
     window.addEventListener("DOMContentLoaded", () => {
-      initFloatingDotsBackground();
-      initChatUI();
-      setInterval(updateClocks, 1000);
+      const savedLang = localStorage.getItem("weathergpt_lang") || "en";
       updateClocks();
-      triggerRoleDirectives(currentScenario || "cyclone");
-      loadDisasterAlerts();
+      setInterval(updateClocks, 1000);
+      setAppLanguage(savedLang);
+      initChatUI();
+      loadSavedUserProfile();
       inspectStation();
+      loadDisasterAlerts();
     });
   </script>
 </body>

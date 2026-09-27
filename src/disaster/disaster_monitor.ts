@@ -9,7 +9,7 @@ const NOTIFIED_ALERTS = new Set<string>();
 
 export function informUserOfDisaster(userId: string, alert: AlertItem) {
   console.log(`[DISASTER MONITOR] Sending disaster notification to ${userId}:`);
-  console.log(`⚠️ ${alert.severity} Weather Alert: ${alert.title}\n${alert.description}\nSource: ${alert.source}`);
+  console.log(`[ALERT] ${alert.severity} Weather Alert: ${alert.title}\n${alert.description}\nSource: ${alert.source}`);
 }
 
 export async function runHourlyCheck() {

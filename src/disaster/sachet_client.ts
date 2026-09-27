@@ -282,41 +282,52 @@ export function isAlertRelevantToLocation(
   return { relevant: false, matchedArea: "National Advisory" };
 }
 
+let cachedSachetItems: any[] | null = null;
+let lastSachetFetchTime = 0;
+const SACHET_CACHE_TTL = 3 * 60 * 1000;
+
 export async function fetchSachetAlerts(
   latitude: number,
   longitude: number,
   radius: number = 50
 ): Promise<Array<{ info: Record<string, any>; identifier: string }> | null> {
   const sachetUrl = process.env.SACHET_API_URL || DEFAULT_SACHET_URL;
+  let items = cachedSachetItems || [];
+
+  if (!cachedSachetItems || (Date.now() - lastSachetFetchTime > SACHET_CACHE_TTL)) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+      const response = await fetch(sachetUrl, {
+        headers: { "User-Agent": "WeatherGPT-DisasterMonitor/1.0" },
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        const xmlText = await response.text();
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: "@_"
+        });
+        const parsedData = parser.parse(xmlText);
+        const channel = parsedData?.rss?.channel;
+        if (channel) {
+          let parsedItems = channel.item || [];
+          if (!Array.isArray(parsedItems)) parsedItems = [parsedItems];
+          cachedSachetItems = parsedItems;
+          lastSachetFetchTime = Date.now();
+          items = parsedItems;
+        }
+      }
+    } catch (e) {
+      // Use cached items or empty if network times out
+      items = cachedSachetItems || [];
+    }
+  }
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(sachetUrl, {
-      headers: { "User-Agent": "WeatherGPT-DisasterMonitor/1.0" },
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const xmlText = await response.text();
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-      attributeNamePrefix: "@_"
-    });
-    const parsedData = parser.parse(xmlText);
-
-    const channel = parsedData?.rss?.channel;
-    if (!channel) return [];
-
-    let items = channel.item || [];
-    if (!Array.isArray(items)) {
-      items = [items];
-    }
 
     const relevantAlerts: Array<{ info: Record<string, any>; identifier: string }> = [];
 

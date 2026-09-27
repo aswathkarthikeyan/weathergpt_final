@@ -126,17 +126,28 @@ The server will start at `http://localhost:3000`.
 
 ## 🌐 Deployment Guide
 
-### Option A: Cloudflare Pages (Frontend / Static Mode)
+### Option A: Vercel / Cloudflare Pages (Frontend / Static Mode)
 
-Cloudflare Pages can host WeatherGPT statically with seamless connection to your backend server.
+You can deploy the frontend directly to **Vercel** or **Cloudflare Pages**:
 
+#### Deploying on Vercel:
+1. Import your GitHub repository into [Vercel](https://vercel.com).
+2. **Build Settings**:
+   - **Framework Preset**: `Other`
+   - **Build Command**: `npm run build:pages`
+   - **Output Directory**: `public`
+3. Click **Deploy**.
+4. The repository includes a pre-configured `vercel.json` with SPA routing and CORS/anti-cache headers.
+5. On your live site, click the **`API`** button in the top navbar and connect your backend URL (e.g. Cloud Run, Railway, Render, or VPS).
+
+#### Deploying on Cloudflare Pages:
 1. In the **Cloudflare Pages Dashboard**, create a new project linked to your Git repository.
 2. Configure **Build Settings**:
    - **Framework preset**: `None` (or `Custom`)
    - **Build command**: `npm run build:pages`
    - **Build output directory**: `public` *(or `dist` or root `/`)*
 3. Deploy the project.
-4. On your live Cloudflare site, click the **`API`** button in the top navigation bar and enter your backend server URL (e.g. Cloud Run, Railway, or VPS) if hosting the Express backend separately.
+4. On your live Cloudflare site, click the **`API`** button in the top navigation bar and enter your backend server URL if hosting the Express backend separately.
 
 ### Option B: Full-Stack Container (Google Cloud Run / VPS / Railway)
 
