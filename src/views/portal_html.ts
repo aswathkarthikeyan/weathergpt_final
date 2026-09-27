@@ -256,7 +256,6 @@ export function getPortalHtml(): string {
           <!-- Terminal Header (Compact Chatbot Header) -->
           <div class="bg-paper px-4 py-2.5 border-b border-line flex items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></span>
               <h2 id="chat-console-title" class="font-semibold text-sm text-ink tracking-tight">
                 Chatbot
               </h2>
@@ -2390,7 +2389,6 @@ export function getPortalHtml(): string {
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-muted mb-2.5 font-medium">
             <div class="flex items-center gap-2">
               <span class="text-ink font-bold tracking-tight uppercase text-[11px]" id="trend-section-title">\${t.trendTitle}</span>
-              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200">D3 Synoptic Curve</span>
             </div>
             <div id="d3-trend-readout" class="font-mono text-xs bg-paper px-2.5 py-1 rounded border border-line flex items-center gap-2 text-slate-700 shadow-2xs">
               <span id="d3-readout-min" class="text-slate-600">Min: <strong class="text-ink">\${min}°C</strong></span>
