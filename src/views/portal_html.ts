@@ -3215,7 +3215,7 @@ export function getPortalHtml(): string {
             "2. **निगरानी**: SACHET/IMD बुलेटिन एवं स्थानीय क्षेत्रीय वेधशाला अद्यतन के अनुसार कार्य योजना बनाएं।",
             "",
             "*स्रोत: भारतएफएस संख्यात्मक मॉडल + आईएमडी नाउकास्ट (सिनेप्टिक विश्लेषण)*"
-          ].join("\n");
+          ].join(String.fromCharCode(10));
         } else if (currentLanguage === "ta") {
           let topicHeading = "வானிலை ஆய்வு மற்றும் பணி வழிகாட்டுதல்";
           let specificAdvice = "";
@@ -3248,7 +3248,7 @@ export function getPortalHtml(): string {
             "2. **களப்பணி**: நேரடி பாரத்எஃப்எஸ் மற்றும் IMD நிலவரங்களை கருத்தில் கொண்டு செயல்படவும்.",
             "",
             "*மூலம்: பாரத்எஃப்எஸ் கணிப்பு + IMD நேரடி வானிலை தொகுப்பு*"
-          ].join("\n");
+          ].join(String.fromCharCode(10));
         } else {
           let topicHeading = "Synoptic Meteorological Assessment";
           let specificAdvice = "";
@@ -3284,7 +3284,7 @@ export function getPortalHtml(): string {
             "2. **Protocol**: Maintain standard field compliance with SACHET early advisories and BharatFS telemetry updates.",
             "",
             "*Source: BharatFS Synoptic Model + IMD Ground Telemetry [Live Analysis]*"
-          ].join("\n");
+          ].join(String.fromCharCode(10));
         }
       }
 
